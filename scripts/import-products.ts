@@ -43,7 +43,7 @@ async function main() {
           product_id: product.id,
         },
       });
-      console.log(`Created price '${price.id}' for p-roduct '${product.id}' on Stripe`);
+      console.log(`Created price '${price.id}' for product '${product.id}' on Stripe`);
     } else {
       console.log(
         `Price '${prices[0].id}' for product '${product.id}' already exists, if you want to update it, delete the price first.`,
