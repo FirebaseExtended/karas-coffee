@@ -1,5 +1,4 @@
 import { FirestoreDataConverter } from 'firebase/firestore';
-import slugify from 'slugify';
 import { Product } from '../types';
 
 export const productConverter: FirestoreDataConverter<Product> = {
