@@ -1,10 +1,10 @@
 export interface Product {
   id: string;
-  slug: string;
   active: boolean;
   description: string;
   images: string[];
   metadata: {
+    price_usd: string;
     origin: string;
     strength: string;
     variety: string;

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { signOut } from '../firebase/auth';
 import { useUser } from '../hooks/useUser';
 import { Cart } from './Cart';
+import { Search } from './Search';
 
 export function Header() {
   const user = useUser();
@@ -18,7 +19,9 @@ export function Header() {
           </h3>
           <p className="text-xs italic text-gray-500 -mt-1">Not so real coffee and swag</p>
         </div>
-        <div className="flex-grow"></div>
+        <div className="flex-grow flex items-center justify-center">
+          <Search />
+        </div>
         <div className="flex space-x-4">
           <Cart />
           <Link to={!!user ? '/account' : '/login'} className="font-semibold text-gray-600 hover:text-gray-900">

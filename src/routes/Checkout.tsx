@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCart } from '../components/Cart';
+import { useCart } from '../hooks/useCart';
 
 export function Checkout() {
   const { cart, clearCart } = useCart();

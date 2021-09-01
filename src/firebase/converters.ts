@@ -1,5 +1,4 @@
 import { FirestoreDataConverter } from 'firebase/firestore';
-import slugify from 'slugify';
 import { Product } from '../types';
 
 export const productConverter: FirestoreDataConverter<Product> = {
@@ -8,7 +7,6 @@ export const productConverter: FirestoreDataConverter<Product> = {
 
     return {
       id: snapshot.id,
-      slug: slugify(data.name, { lower: true }),
       active: !!data.active,
       description: data.description || '',
       images: data.images || [],

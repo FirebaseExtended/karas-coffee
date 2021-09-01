@@ -3,17 +3,17 @@ import { Link } from 'react-router-dom';
 import { ShoppingBagIcon, XIcon } from '@heroicons/react/outline';
 
 import { Product } from '../types';
-import { useCart } from './Cart';
+import { useCart } from '../hooks/useCart';
 
 export type ProductCardProps = {
   product: Product;
 };
 
 export function ProductCard({ product }: ProductCardProps) {
-  const { cart, addToCart, removeFromCart } = useCart();
+  const { addToCart, removeFromCart, getItem } = useCart();
 
-  const href = `/product/${product.slug}`;
-  const inCart = !!cart.find((item) => item.id === product.id);
+  const href = `/product/${product.id}`;
+  const inCart = !!getItem(product);
 
   return (
     <div className="flex flex-col">
@@ -49,7 +49,7 @@ export function ProductCard({ product }: ProductCardProps) {
               {product.name}
             </Link>
           </h3>
-          <h4 className="ml-2">$10</h4>
+          <h4 className="ml-2">${product.metadata.price_usd}</h4>
         </div>
         <div className="mt-4 text-xs flex space-x-3">
           <div className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full">{product.metadata.origin}</div>
