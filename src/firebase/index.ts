@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
+import { getAuth, onAuthStateChanged, Unsubscribe, User } from 'firebase/auth';
 import { collection, getFirestore, orderBy, query } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -14,10 +15,15 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(app);
+export const auth = getAuth(app);
 export const firestore = getFirestore(app);
 
-export const collections = {
-  products: collection(firestore, 'products'),
-};
+function getCollectionName(name: string) {
+  // Leaving here just in-case we want to do dev/prod specific collections.
+  return `${name}`;
+}
 
+export const collections = {
+  products: collection(firestore, getCollectionName('products')),
+};
 
