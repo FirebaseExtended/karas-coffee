@@ -3,17 +3,17 @@ import { Link } from 'react-router-dom';
 import { ShoppingBagIcon, XIcon } from '@heroicons/react/outline';
 
 import { Product } from '../types';
-import { useCart } from './Cart';
+import { useCart } from '../hooks/useCart';
 
 export type ProductCardProps = {
   product: Product;
 };
 
 export function ProductCard({ product }: ProductCardProps) {
-  const { cart, addToCart, removeFromCart } = useCart();
+  const { addToCart, removeFromCart, getItem } = useCart();
 
   const href = `/product/${product.id}`;
-  const inCart = !!cart.find((item) => item.id === product.id);
+  const inCart = !!getItem(product);
 
   return (
     <div className="flex flex-col">

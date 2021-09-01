@@ -5,6 +5,7 @@ import { useLocalStorage } from '@rehooks/local-storage';
 
 import { useUser } from '../hooks/useUser';
 import { Product } from '../types';
+import { useCart } from '../hooks/useCart';
 
 export function Cart() {
   const user = useUser();
@@ -27,12 +28,13 @@ export function Cart() {
 
 export type CartItem = Product & { quantity: number };
 
-type CardContextProps = {
+export type CardContextProps = {
   cart: CartItem[];
   addToCart: (product: Product, quantity?: number) => void;
   setQuantity: (product: Product, quantity: number) => void;
   removeFromCart: (product: Product) => void;
   clearCart: () => void;
+  getItem: (product: Product) => CartItem | undefined;
 };
 
 export const CartContext = createContext<CardContextProps>({
@@ -41,6 +43,9 @@ export const CartContext = createContext<CardContextProps>({
   setQuantity() {},
   removeFromCart() {},
   clearCart() {},
+  getItem() {
+    return undefined;
+  },
 });
 
 type CartProviderProps = {
@@ -72,19 +77,12 @@ export function CartProvider(props: CartProviderProps) {
         clearCart() {
           setCart([]);
         },
+        getItem(product) {
+          return cart.find((p) => p.id === product.id);
+        },
       }}
     >
       {props.children}
     </CartContext.Provider>
   );
-}
-
-export function useCart(): CardContextProps {
-  const context = useContext(CartContext);
-
-  if (!context) {
-    throw new Error('useCart must be used as a child element of CartProvider.');
-  }
-
-  return context;
 }
