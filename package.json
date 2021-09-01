@@ -3,15 +3,17 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "serve": "vite preview"
+    "build": "tsc && rimraf dist && vite build",
+    "serve": "vite preview",
+    "deploy": "npm run build && firebase deploy --only hosting"
   },
   "dependencies": {
     "firebase": "^9.0.1",
     "history": "^5.0.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
-    "react-router-dom": "6.0.0-beta.2"
+    "react-router-dom": "6.0.0-beta.2",
+    "reactfire": "^4.0.0"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",
@@ -25,6 +27,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "postcss": "^8.3.6",
     "prettier": "^2.3.2",
+    "rimraf": "^3.0.2",
     "tailwindcss": "^2.2.9",
     "typescript": "^4.3.2",
     "vite": "^2.5.2"
