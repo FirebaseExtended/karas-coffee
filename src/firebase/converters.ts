@@ -8,7 +8,6 @@ export const productConverter: FirestoreDataConverter<Product> = {
 
     return {
       id: snapshot.id,
-      slug: slugify(data.name, { lower: true }),
       active: !!data.active,
       description: data.description || '',
       images: data.images || [],

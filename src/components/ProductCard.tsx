@@ -12,7 +12,7 @@ export type ProductCardProps = {
 export function ProductCard({ product }: ProductCardProps) {
   const { cart, addToCart, removeFromCart } = useCart();
 
-  const href = `/product/${product.slug}`;
+  const href = `/product/${product.id}`;
   const inCart = !!cart.find((item) => item.id === product.id);
 
   return (

@@ -13,6 +13,7 @@ import { Login } from './routes/Login';
 import { Homepage } from './routes/Homepage';
 import { Checkout } from './routes/Checkout';
 import { Account } from './routes/Account';
+import { Product } from './routes/Product';
 
 export type AppProps = {
   initialUser: User | null;
@@ -28,6 +29,7 @@ export function App(props: AppProps) {
         <main className="mx-auto max-w-7xl px-6">
           <Routes>
             <Route path="/" element={<Homepage />} />
+            <Route path="/product/:id" element={<Product />} />
             {!!user && (
               <>
                 <Route path="/account" element={<Account />} />
