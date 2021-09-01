@@ -9,12 +9,14 @@ export function Product() {
   const product = useProduct(id);
   const { addToCart, removeFromCart, getItem } = useCart();
 
-  if (product.status === 'error') {
-    return <div>Error...</div>;
+  if (product.status === 'loading') {
+    return <div />;
   }
 
-  if (product.status === 'loading') {
-    return <div>Loading...</div>;
+  if (product.status === 'error' || !product.data) {
+    return (
+      <div className="h-64 flex items-center justify-center text-gray-600">Sorry, something went wrong loading this product.</div>
+    );
   }
 
   if (!product.data) {

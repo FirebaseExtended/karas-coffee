@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingBagIcon, XIcon } from '@heroicons/react/outline';
+import { GlobeIcon, QuestionMarkCircleIcon, SunIcon } from '@heroicons/react/solid';
 
 import { Product } from '../types';
 import { useCart } from '../hooks/useCart';
+import { Tooltip } from './Tooltip';
 
 export type ProductCardProps = {
   product: Product;
@@ -43,20 +45,33 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
       </div>
       <div className="mt-4 flex-grow flex flex-col">
-        <div className="flex items-center font-medium">
+        <div className="flex items-center">
           <h3 className="flex-grow truncate">
-            <Link to={href} className="hover:underline">
+            <Link to={href} className="font-bold tracking-wide hover:underline">
               {product.name}
             </Link>
           </h3>
-          <h4 className="ml-2">${product.metadata.price_usd}</h4>
+          <h4 className="ml-2 font-medium">${product.metadata.price_usd}</h4>
         </div>
-        <div className="mt-4 text-xs flex space-x-3">
-          <div className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full">{product.metadata.origin}</div>
-          <div className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full">{product.metadata.variety}</div>
-          <div className="w-6 h-6 flex items-center justify-center bg-gray-100 text-gray-600 rounded-full">
-            {product.metadata.strength}
-          </div>
+        <div className="mt-4 text-xs flex space-x-6 text-gray-600">
+          <Tooltip label="Origin">
+            <div className="flex space-x-1">
+              <GlobeIcon className="w-4 h-4" />
+              <span className="font-bold">{product.metadata.origin}</span>
+            </div>
+          </Tooltip>
+          <Tooltip label="Variety">
+            <div className="flex space-x-1">
+              <QuestionMarkCircleIcon className="w-4 h-4" />
+              <span className="font-bold">{product.metadata.variety}</span>
+            </div>
+          </Tooltip>
+          <Tooltip label="Strength">
+            <div className="flex space-x-1">
+              <SunIcon className="w-4 h-4" />
+              <span className="font-bold">{product.metadata.strength}</span>
+            </div>
+          </Tooltip>
         </div>
         <p className="flex-grow mt-4 text-sm text-gray-500">{product.description}</p>
       </div>

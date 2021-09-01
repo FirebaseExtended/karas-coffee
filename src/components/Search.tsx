@@ -2,7 +2,7 @@ import React, { FocusEventHandler, useEffect, useRef, useState } from 'react';
 import algoliasearch from 'algoliasearch/lite';
 import { InstantSearch, Hits, connectStateResults, connectSearchBox } from 'react-instantsearch-dom';
 import { SearchBoxProvided, Hit } from 'react-instantsearch-core';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Product } from '../types';
 
 const CLIENT = algoliasearch('Z7DKWT901V', 'c529b90d287423b1f926506fb74307ff');
@@ -56,7 +56,7 @@ const SearchBox = connectSearchBox((state: SearchBoxProvided & SearchBoxProps) =
 
 const Results = connectStateResults((state) => {
   const wrapper = (children: React.ReactElement) => (
-    <div className="absolute z-10 mt-2 border bg-white rounded shadow-xl w-[600px] transform translate-x-[-50%] left-[50%]">
+    <div className="absolute z-10 mt-4 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]">
       {children}
     </div>
   );
@@ -71,7 +71,6 @@ const Results = connectStateResults((state) => {
 });
 
 const Row = ({ hit }: { hit: Hit<Product> }) => {
-  console.log(hit);
   return (
     <Link
       to={`/product/${hit.objectID}`}

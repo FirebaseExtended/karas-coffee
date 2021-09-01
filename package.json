@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@heroicons/react": "^1.0.4",
+    "@reach/tooltip": "^0.16.0",
     "@rehooks/local-storage": "2.4.0",
     "algoliasearch": "^4.10.5",
+    "classnames": "^2.3.1",
     "firebase": "^9.0.1",
     "history": "^5.0.1",
     "react": "^17.0.0",
@@ -21,6 +23,7 @@
     "reactfire": "^4.0.0"
   },
   "devDependencies": {
+    "@types/classnames": "^2.3.1",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-instantsearch-dom": "^6.12.0",

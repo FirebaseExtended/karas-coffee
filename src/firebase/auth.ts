@@ -28,10 +28,6 @@ export function getUserOnce(): Promise<User | null> {
   });
 }
 
-export function signOut(): Promise<void> {
-  return auth.signOut();
-}
-
 export function signInWithGitHub(): Promise<UserCredential> {
   const provider = new GithubAuthProvider();
   // Add additional provider scope/data as required.

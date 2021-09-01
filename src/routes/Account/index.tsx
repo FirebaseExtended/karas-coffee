@@ -1,21 +1,47 @@
 import React from 'react';
-import { signOut } from '../../firebase/auth';
+import { NavLink, Outlet } from 'react-router-dom';
 
 export function Account() {
   return (
-    <section className="max-w-3xl mx-auto">
-      <nav>
-        <ul className="flex space-x-3">
-          <li>Account</li>
-          <li>Subscription</li>
-          <li>Orders</li>
-        </ul>
+    <section>
+      <nav className="mb-8">
+        <Menu
+          items={[
+            { to: '/account', label: 'Account' },
+            { to: '/account/subscription', label: 'Subscription' },
+            { to: '/account/orders', label: 'Orders' },
+          ]}
+        />
       </nav>
-      <hr />
       <div>
-        <button onClick={signOut}>Sign Out</button><br />
-        <button onClick={() => null}>Delete Account</button>
+        <Outlet />
       </div>
     </section>
+  );
+}
+
+type MenuProps = {
+  items: {
+    to: string;
+    label: string;
+  }[];
+};
+
+function Menu({ items }: MenuProps) {
+  return (
+    <ul className="flex space-x-1">
+      {items.map((item) => (
+        <li>
+          <NavLink
+            end
+            to={item.to}
+            className="px-2 py-2 border-b-2 border-transparent font-medium text-gray-600 hover:text-gray-900"
+            activeClassName="border-indigo-500 text-gray-900"
+          >
+            {item.label}
+          </NavLink>
+        </li>
+      ))}
+    </ul>
   );
 }
