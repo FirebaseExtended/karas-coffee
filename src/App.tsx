@@ -6,17 +6,18 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 
 import { AuthContext, signOut } from './firebase/auth';
-import { useUser } from './hooks/useUser';
+import { useUserState } from './hooks/useUser';
 
 import { NotFound } from './routes/NotFound';
 import { Login } from './routes/Login';
+import { Homepage } from './routes/Homepage';
 
 export type AppProps = {
   initialUser: User | null;
 };
 
 export function App(props: AppProps) {
-  const user = useUser(props.initialUser);
+  const user = useUserState(props.initialUser);
 
   return (
     <AuthContext.Provider value={user}>
@@ -24,6 +25,7 @@ export function App(props: AppProps) {
         <Header />
         <main className="mx-auto max-w-8xl px-6">
           <Routes>
+            <Route path="/" element={<Homepage />} />
             {!!user && <></>}
             {!user && (
               <>
@@ -32,8 +34,6 @@ export function App(props: AppProps) {
             )}
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <hr />
-          <button onClick={signOut}>Sign Out</button>
         </main>
         <Footer />
       </>

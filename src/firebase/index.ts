@@ -1,9 +1,11 @@
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
-import { getAuth, onAuthStateChanged, Unsubscribe, User } from 'firebase/auth';
-import { collection, getFirestore, orderBy, query } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import { collection, getFirestore } from 'firebase/firestore';
 
-const firebaseConfig = {
+import { productConverter } from './converters';
+
+export const firebaseConfig = {
   apiKey: 'AIzaSyCrbVzj7TfFBPjxardH4JTuYFr38CZealM',
   authDomain: 'karas-coffee.firebaseapp.com',
   projectId: 'karas-coffee',
@@ -24,6 +26,5 @@ function getCollectionName(name: string) {
 }
 
 export const collections = {
-  products: collection(firestore, getCollectionName('products')),
+  products: collection(firestore, getCollectionName('products')).withConverter(productConverter),
 };
-
