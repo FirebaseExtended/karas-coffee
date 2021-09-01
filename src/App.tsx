@@ -11,6 +11,8 @@ import { useUserState } from './hooks/useUser';
 import { NotFound } from './routes/NotFound';
 import { Login } from './routes/Login';
 import { Homepage } from './routes/Homepage';
+import { Checkout } from './routes/Checkout';
+import { Account } from './routes/Account';
 
 export type AppProps = {
   initialUser: User | null;
@@ -23,13 +25,18 @@ export function App(props: AppProps) {
     <AuthContext.Provider value={user}>
       <>
         <Header />
-        <main className="mx-auto max-w-8xl px-6">
+        <main className="mx-auto max-w-7xl px-6">
           <Routes>
             <Route path="/" element={<Homepage />} />
-            {!!user && <></>}
+            {!!user && (
+              <>
+                <Route path="/account" element={<Account />} />
+                <Route path="/checkout" element={<Checkout />} />
+              </>
+            )}
             {!user && (
               <>
-                <Route path="login" element={<Login />} />
+                <Route path="/login" element={<Login />} />
               </>
             )}
             <Route path="*" element={<NotFound />} />

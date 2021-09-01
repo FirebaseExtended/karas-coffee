@@ -1,22 +1,25 @@
 import React from 'react';
+import { ProductCard } from '../components/ProductCard';
 import { useProducts } from '../hooks/useProducts';
 
 export function Homepage() {
   const products = useProducts('name');
-  console.log(products);
+
   return (
     <>
-      <section className="grid grid-cols-4 gap-6">
-        {products.status === 'success' &&
-          products.data.map((product) => (
-            <div key={product.id} className="bg-gray-100 rounded shadow-sm overflow-hidden">
-              <img src={product.images[0]} alt={product.name} className="object-cover w-full h-48" />
-              <h2>{product.name}</h2>
-              <p>{product.description}</p>
-              <div>Strength: {product.metadata.strength}</div>
-            </div>
-          ))}
-      </section>
+      <div>
+        <div>
+          
+        </div>
+        <section className="grid grid-cols-4 gap-x-6 gap-y-12">
+          {products.status === 'success' &&
+            products.data.map((product) => <ProductCard key={product.id} product={product} />)}
+          {products.status === 'success' &&
+            products.data.map((product) => <ProductCard key={product.id} product={product} />)}
+          {products.status === 'success' &&
+            products.data.map((product) => <ProductCard key={product.id} product={product} />)}
+        </section>
+      </div>
     </>
   );
 }

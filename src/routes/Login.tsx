@@ -1,15 +1,18 @@
 import { UserCredential } from 'firebase/auth';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { signInWithGitHub, signInWithGoogle } from '../firebase/auth';
 
 export function Login() {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+
+  const redirect = params.get('redirect');
 
   function handleOAuth(fn: () => Promise<UserCredential>) {
     fn()
       .then(() => {
-        navigate('/');
+        navigate(redirect || '/');
       })
       .catch((error) => {
         console.error(error);

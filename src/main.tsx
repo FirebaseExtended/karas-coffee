@@ -9,6 +9,7 @@ import 'tailwindcss/tailwind.css';
 import { App } from './App';
 import { firebaseConfig, firestore } from './firebase';
 import { getUserOnce } from './firebase/auth';
+import { CartProvider } from './components/Cart';
 
 type Bootstrap = {
   user: User | null;
@@ -27,9 +28,11 @@ bootstrap().then(({ user }) => {
     <React.StrictMode>
       <FirebaseAppProvider firebaseConfig={firebaseConfig}>
         <FirestoreProvider sdk={firestore}>
-          <BrowserRouter>
-            <App initialUser={user} />
-          </BrowserRouter>
+          <CartProvider>
+            <BrowserRouter>
+              <App initialUser={user} />
+            </BrowserRouter>
+          </CartProvider>
         </FirestoreProvider>
       </FirebaseAppProvider>
     </React.StrictMode>,

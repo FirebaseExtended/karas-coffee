@@ -8,12 +8,15 @@
     "deploy": "npm run build && firebase deploy --only hosting"
   },
   "dependencies": {
+    "@heroicons/react": "^1.0.4",
+    "@rehooks/local-storage": "2.4.0",
     "firebase": "^9.0.1",
     "history": "^5.0.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-router-dom": "6.0.0-beta.2",
-    "reactfire": "^4.0.0"
+    "reactfire": "^4.0.0",
+    "slugify": "^1.6.0"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",
