@@ -34,7 +34,7 @@ export function Product() {
             &laquo; Back to products
           </Link>
           <h1 className="mb-2 text-4xl font-extrabold tracking-wide">{product.data.name}</h1>
-          <div className="text-3xl text-gray-600">$10</div>
+          <div className="text-3xl text-gray-600">${product.data.metadata.price_usd}</div>
           <p className="mt-6 text-gray-600">{product.data.description}</p>
           <div>
             {!cartItem && <button onClick={() => addToCart(product.data)}>Add to cart</button>}

@@ -4,6 +4,7 @@ export interface Product {
   description: string;
   images: string[];
   metadata: {
+    price_usd: string;
     origin: string;
     strength: string;
     variety: string;

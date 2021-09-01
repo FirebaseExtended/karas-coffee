@@ -49,7 +49,7 @@ export function ProductCard({ product }: ProductCardProps) {
               {product.name}
             </Link>
           </h3>
-          <h4 className="ml-2">$10</h4>
+          <h4 className="ml-2">${product.metadata.price_usd}</h4>
         </div>
         <div className="mt-4 text-xs flex space-x-3">
           <div className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full">{product.metadata.origin}</div>

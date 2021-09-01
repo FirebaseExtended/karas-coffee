@@ -3,6 +3,7 @@ import algoliasearch from 'algoliasearch/lite';
 import { InstantSearch, Hits, connectStateResults, connectSearchBox } from 'react-instantsearch-dom';
 import { SearchBoxProvided, Hit } from 'react-instantsearch-core';
 import { Link, useNavigate } from 'react-router-dom';
+import { Product } from '../types';
 
 const CLIENT = algoliasearch('Z7DKWT901V', 'c529b90d287423b1f926506fb74307ff');
 
@@ -69,15 +70,24 @@ const Results = connectStateResults((state) => {
   );
 });
 
-const Row = ({ hit }: { hit: Hit }) => {
+const Row = ({ hit }: { hit: Hit<Product> }) => {
   console.log(hit);
   return (
     <Link
       to={`/product/${hit.objectID}`}
-      className="flex px-4 py-4 hover:bg-gray-50"
+      className="flex items-center px-4 py-4 hover:bg-gray-50"
       onClick={(e) => e.stopPropagation()}
     >
-      {hit.name}
+      <div className="w-16 flex-shrink-0 mr-4">
+        <img src={hit.images[0]} alt={hit.name} className="h-16 w-16 rounded object-cover" />
+      </div>
+      <div>
+        <div className="flex items-center font-semibold text-lg">
+          <h3 className="flex-grow">{hit.name}</h3>
+          <div>${hit.metadata.price_usd}</div>
+        </div>
+        <p className="mt-2 text-sm text-gray-500">{hit.description}</p>
+      </div>
     </Link>
   );
 };
