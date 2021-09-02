@@ -4,6 +4,7 @@ import { FormikErrors, useFormik } from 'formik';
 import { Card } from '../components/Card';
 import { Input, Error } from '../components/Form';
 import { auth } from '../firebase';
+import { Button } from '../components/Button';
 
 type FormValues = {
   email: string;
@@ -69,13 +70,9 @@ export function ForgotPassword() {
           />
           {status?.type === 'error' && <Error>{status.message}</Error>}
           {status?.type === 'success' && <p>{status.message}</p>}
-          <button
-            disabled={!formik.isValid}
-            type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
+          <Button disabled={!formik.isValid} loading={formik.isSubmitting} type="submit">
             Send Email
-          </button>
+          </Button>
         </form>
       </Card>
     </section>
