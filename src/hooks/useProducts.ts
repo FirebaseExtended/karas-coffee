@@ -1,12 +1,12 @@
-import { orderBy, OrderByDirection, query, QueryConstraint, where, WhereFilterOp } from 'firebase/firestore';
+import { FieldPath, orderBy, OrderByDirection, query, QueryConstraint, where, WhereFilterOp } from 'firebase/firestore';
 import { useFirestoreCollectionData } from 'reactfire';
 import { collections } from '../firebase';
 
 export type UseProductsConstraints = {
   // Order: [field, direction]
-  orders: [string, OrderByDirection | void][];
+  orders: [FieldPath | string, OrderByDirection | void][];
   // Where: [field, op, value]
-  filters: [string, WhereFilterOp, any][];
+  filters: [FieldPath | string, WhereFilterOp, any][];
 };
 
 export function useProducts({ orders, filters }: UseProductsConstraints) {
