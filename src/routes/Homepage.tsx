@@ -44,7 +44,7 @@ export function Homepage() {
   let order: Order = (params.get('order') as Order) ?? `${orders[0]}-asc`;
 
   if (filter !== 'all') {
-    constraints.filters.push(['type', '==', filter]);
+    constraints.filters.push([new FieldPath('metadata', 'type'), '==', filter]);
   }
 
   const [orderBy, direction] = order.split('-');
