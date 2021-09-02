@@ -1,11 +1,12 @@
 import { XIcon } from '@heroicons/react/solid';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
+
 import { Button } from '../components/Button';
 import { Input } from '../components/Form';
 import { Gallery } from '../components/Gallery';
-import { useCart } from '../hooks/useCart';
 
+import { useCart } from '../hooks/useCart';
 import { useProduct } from '../hooks/useProduct';
 
 export function Product() {
