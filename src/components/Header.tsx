@@ -6,7 +6,7 @@ import { Search } from './Search';
 
 export function Header() {
   const user = useUser();
-  console.log(user);
+
   return (
     <header className="sticky top-0 z-10 bg-white/95 backdrop-filter backdrop-blur-sm">
       <div className="flex items-center h-20 mx-auto max-w-7xl md:px-6">
@@ -23,10 +23,8 @@ export function Header() {
         </div>
         <div className="flex space-x-4">
           <Cart />
-          <Link
-            to={!!user ? '/account' : '/signin'}
-            className="flex items-center font-semibold text-gray-600 hover:text-gray-900"
-          >
+          <HeaderLink to="/shop">Shop</HeaderLink>
+          <HeaderLink to={!!user ? '/account' : '/signin'}>
             {!!user && (
               <>
                 <span>My Account</span>
@@ -34,9 +32,22 @@ export function Header() {
               </>
             )}
             {!user && 'Login'}
-          </Link>
+          </HeaderLink>
         </div>
       </div>
     </header>
+  );
+}
+
+type HeaderLinkProps = {
+  to: string;
+  children: React.ReactNode;
+};
+
+function HeaderLink({ to, children }: HeaderLinkProps) {
+  return (
+    <Link to={to} className="flex items-center font-semibold text-gray-600 hover:text-gray-900">
+      {children}
+    </Link>
   );
 }
