@@ -1,7 +1,7 @@
 import React from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FormikErrors, useFormik } from 'formik';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Card } from '../components/Card';
 import { Input, Error, Divider } from '../components/Form';
 import { SocialProviders } from '../components/SocialProviders';
@@ -13,6 +13,7 @@ type FormValues = {
 };
 
 export function SignIn() {
+  const navigate = useNavigate();
   const [params] = useSearchParams();
   const redirect = params.get('redirect');
 
@@ -32,6 +33,7 @@ export function SignIn() {
       try {
         console.log('Submitting form with values: ', values);
         await signInWithEmailAndPassword(auth, values.email, values.password);
+        navigate(redirect || '/');
       } catch (e) {
         // TODO(ehesp): switch on code to provide user friendly error messages.
         console.error(e);
