@@ -31,7 +31,7 @@ export function App(props: AppProps) {
     <AuthContext.Provider value={user}>
       <>
         <Header />
-        <main className="mx-auto max-w-7xl px-6">
+        <main className="mx-auto max-w-7xl md:px-6">
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="product/:id" element={<Product />} />
