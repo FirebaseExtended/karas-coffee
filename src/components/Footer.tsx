@@ -25,10 +25,14 @@ export function Footer() {
           <a href={'https://firebase.google.com/products/extensions/firestore-stripe-subscriptions'}>Stripe</a>
         </div>
         <div className="flex flex-col space-y-2">
-          <div className="pb-2 uppercase border-b border-black">Sitemap</div>
-          <Link to={'/account'}>Account</Link>
-          <Link to={'/account/subscription'}>Subscription</Link>
-          <Link to={'/account/orders'}>Order</Link>
+          <div className="pb-2 uppercase border-b border-black">Firebase</div>
+          <a href={'https://console.firebase.google.com/'}>Getting started</a>
+          <a href={'https://firebase.google.com/products-build'}>Build</a>
+          <a href={'https://firebase.google.com/products-release'}>Release & Monitor</a>
+          <a href={'https://firebase.google.com/products-engage'}>Engage</a>
+
+          <a href={'https://console.firebase.google.com/project/fir-demo-project/overview'}>Try demo</a>
+          <a href={'https://youtu.be/iosNuIdQoy8'}>Watch video</a>
         </div>
       </div>
       <div className="flex justify-center my-16">Social Links?</div>
