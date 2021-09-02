@@ -53,28 +53,40 @@ export function ProductCard({ product }: ProductCardProps) {
           </h3>
           <h4 className="ml-2 font-medium">${product.metadata.price_usd}</h4>
         </div>
-        <div className="flex mt-4 space-x-6 text-xs text-gray-600">
-          <Tooltip label="Origin">
-            <div className="flex space-x-1">
-              <GlobeIcon className="w-4 h-4" />
-              <span className="font-bold">{product.metadata.origin}</span>
-            </div>
-          </Tooltip>
-          <Tooltip label="Variety">
-            <div className="flex space-x-1">
-              <QuestionMarkCircleIcon className="w-4 h-4" />
-              <span className="font-bold">{product.metadata.variety}</span>
-            </div>
-          </Tooltip>
-          <Tooltip label="Strength">
-            <div className="flex space-x-1">
-              <SunIcon className="w-4 h-4" />
-              <span className="font-bold">{product.metadata.strength}</span>
-            </div>
-          </Tooltip>
+        <div className="mt-4">
+          <ProductMetadata product={product} />
         </div>
         <p className="flex-grow mt-4 text-sm text-gray-500">{product.description}</p>
       </div>
+    </div>
+  );
+}
+
+export type ProductMetadataProps = {
+  product: Product;
+};
+
+export function ProductMetadata({ product }: ProductMetadataProps) {
+  return (
+    <div className="flex space-x-6 text-xs text-gray-600">
+      <Tooltip label="Origin">
+        <div className="flex space-x-1">
+          <GlobeIcon className="w-4 h-4" />
+          <span className="font-bold">{product.metadata.origin}</span>
+        </div>
+      </Tooltip>
+      <Tooltip label="Variety">
+        <div className="flex space-x-1">
+          <QuestionMarkCircleIcon className="w-4 h-4" />
+          <span className="font-bold">{product.metadata.variety}</span>
+        </div>
+      </Tooltip>
+      <Tooltip label="Strength">
+        <div className="flex space-x-1">
+          <SunIcon className="w-4 h-4" />
+          <span className="font-bold">{product.metadata.strength}</span>
+        </div>
+      </Tooltip>
     </div>
   );
 }

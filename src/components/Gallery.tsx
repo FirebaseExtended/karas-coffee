@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import cx from 'classnames';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline';
 

@@ -6,7 +6,7 @@ import { Search } from './Search';
 
 export function Header() {
   const user = useUser();
-
+  console.log(user);
   return (
     <header className="sticky top-0 z-10 bg-white/95 backdrop-filter backdrop-blur-sm">
       <div className="flex items-center h-20 mx-auto max-w-7xl md:px-6">
@@ -23,8 +23,17 @@ export function Header() {
         </div>
         <div className="flex space-x-4">
           <Cart />
-          <Link to={!!user ? '/account' : '/signin'} className="font-semibold text-gray-600 hover:text-gray-900">
-            My Account
+          <Link
+            to={!!user ? '/account' : '/signin'}
+            className="flex items-center font-semibold text-gray-600 hover:text-gray-900"
+          >
+            {!!user && (
+              <>
+                <span>My Account</span>
+                {!!user.photoURL && <img src={user.photoURL} className="w-7 h-7 rounded-full ml-2" />}
+              </>
+            )}
+            {!user && 'Login'}
           </Link>
         </div>
       </div>

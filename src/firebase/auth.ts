@@ -8,6 +8,7 @@ import {
   signInWithPopup,
   UserCredential,
   GoogleAuthProvider,
+  TwitterAuthProvider,
 } from 'firebase/auth';
 
 /**
@@ -39,3 +40,11 @@ export function signInWithGoogle() {
   // Add additional provider scope/data as required.
   return signInWithPopup(auth, provider);
 }
+
+
+export function signInWithTwitter() {
+  const provider = new TwitterAuthProvider();
+  // Add additional provider scope/data as required.
+  return signInWithPopup(auth, provider);
+}
+

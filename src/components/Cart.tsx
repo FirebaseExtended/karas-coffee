@@ -12,10 +12,10 @@ export function Cart() {
   const { cart } = useCart();
 
   // Require the user to sign-in to go to the checkout.
-  const href = user ? '/checkout' : '/login?redirect=/checkout';
+  const href = user ? '/checkout' : '/signin?redirect=/checkout';
 
   return (
-    <Link to={href} className="group relative w-10 h-10 flex items-center justify-center -mt-2">
+    <Link to={href} className="group relative w-10 h-10 flex items-center justify-center">
       <ShoppingCartIcon className="w-6 h-6 text-gray-600 transition-opacity group-hover:opacity-50" />
       {cart.length > 0 && (
         <span className="absolute text-xs font-medium bottom-0 left-0 w-5 h-5 flex items-center justify-center rounded-full bg-white border border-gray-300">
@@ -30,6 +30,7 @@ export type CartItem = Product & { quantity: number };
 
 export type CardContextProps = {
   cart: CartItem[];
+  total: number;
   addToCart: (product: Product, quantity?: number) => void;
   setQuantity: (product: Product, quantity: number) => void;
   removeFromCart: (product: Product) => void;
@@ -39,6 +40,7 @@ export type CardContextProps = {
 
 export const CartContext = createContext<CardContextProps>({
   cart: [],
+  total: 0,
   addToCart() {},
   setQuantity() {},
   removeFromCart() {},
@@ -59,6 +61,7 @@ export function CartProvider(props: CartProviderProps) {
     <CartContext.Provider
       value={{
         cart,
+        total: cart.reduce((total, item) => total + parseInt(item.metadata.price_usd) * item.quantity, 0),
         addToCart(product, quantity = 1) {
           setCart([...cart, { ...product, quantity }]);
         },
