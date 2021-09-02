@@ -18,17 +18,15 @@ export function Divider({ children }: DividerProps) {
   );
 }
 
-export type InputProps = {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
-  value: string;
+  value: string | number;
   onChange: (e: React.ChangeEvent<any>) => void;
-  type?: string;
   label?: string;
-  placeholder?: string;
   error?: string;
-};
+}
 
-export function Input({ id, label, placeholder, value, onChange, type, error }: InputProps) {
+export function Input({ id, label, value, onChange, error, ...props }: InputProps) {
   return (
     <div>
       {!!label && (
@@ -37,7 +35,7 @@ export function Input({ id, label, placeholder, value, onChange, type, error }: 
         </label>
       )}
       <input
-        type={type || 'text'}
+        {...props}
         id={id}
         name={id}
         value={value}
@@ -45,7 +43,6 @@ export function Input({ id, label, placeholder, value, onChange, type, error }: 
           'focus:border-gray-500': !error,
           'border-red-500': !!error,
         })}
-        placeholder={placeholder}
         onChange={onChange}
       />
       {!!error && <Error>{error}</Error>}

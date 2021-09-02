@@ -30,6 +30,7 @@ export type CartItem = Product & { quantity: number };
 
 export type CardContextProps = {
   cart: CartItem[];
+  total: number;
   addToCart: (product: Product, quantity?: number) => void;
   setQuantity: (product: Product, quantity: number) => void;
   removeFromCart: (product: Product) => void;
@@ -39,6 +40,7 @@ export type CardContextProps = {
 
 export const CartContext = createContext<CardContextProps>({
   cart: [],
+  total: 0,
   addToCart() {},
   setQuantity() {},
   removeFromCart() {},
@@ -59,6 +61,7 @@ export function CartProvider(props: CartProviderProps) {
     <CartContext.Provider
       value={{
         cart,
+        total: cart.reduce((total, item) => total + parseInt(item.metadata.price_usd) * item.quantity, 0),
         addToCart(product, quantity = 1) {
           setCart([...cart, { ...product, quantity }]);
         },
