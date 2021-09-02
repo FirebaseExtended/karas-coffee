@@ -1,16 +1,20 @@
-import { sendPasswordResetEmail, signInWithEmailAndPassword, UserCredential } from 'firebase/auth';
-import { FormikErrors, useFormik } from 'formik';
 import React from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { FormikErrors, useFormik } from 'formik';
 import { Card } from '../components/Card';
-import { Input, Error, Divider } from '../components/Form';
-import { SocialProviders } from '../components/SocialProviders';
+import { Input, Error } from '../components/Form';
 import { auth } from '../firebase';
-import { signInWithGitHub, signInWithGoogle } from '../firebase/auth';
 
 type FormValues = {
   email: string;
 };
+
+type FormikStatus =
+  | {
+      type: 'error' | 'success';
+      message: string;
+    }
+  | undefined;
 
 export function ForgotPassword() {
   // Set up formik for login.
@@ -24,16 +28,29 @@ export function ForgotPassword() {
       return errors;
     },
     async onSubmit(values, helpers) {
+      let status: FormikStatus;
+
       try {
         console.log('Submitting form with values: ', values);
         await sendPasswordResetEmail(auth, values.email);
+        status = {
+          type: 'success',
+          message: `A password reset email has been sent to ${values.email}.`,
+        };
       } catch (e) {
         // TODO(ehesp): switch on code to provide user friendly error messages.
         console.error(e);
-        helpers.setStatus(e.message);
+        status = {
+          type: 'error',
+          message: e.message,
+        };
       }
+
+      helpers.setStatus(status);
     },
   });
+
+  const status = formik.status as FormikStatus;
 
   return (
     <section className="max-w-xl mx-auto my-20">
@@ -50,7 +67,8 @@ export function ForgotPassword() {
             onChange={formik.handleChange}
             error={formik.dirty ? formik.errors.email : undefined}
           />
-          {!!formik.status && <Error>{formik.status}</Error>}
+          {status?.type === 'error' && <Error>{status.message}</Error>}
+          {status?.type === 'success' && <p>{status.message}</p>}
           <button
             disabled={!formik.isValid}
             type="submit"
