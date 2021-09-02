@@ -34,10 +34,10 @@ export function SignIn() {
         console.log('Submitting form with values: ', values);
         await signInWithEmailAndPassword(auth, values.email, values.password);
         navigate(redirect || '/');
-      } catch (e) {
+      } catch (e: any) {
         // TODO(ehesp): switch on code to provide user friendly error messages.
         console.error(e);
-        helpers.setStatus(e.message);
+        helpers.setStatus(e?.message || 'Something went wrong.');
       }
     },
   });

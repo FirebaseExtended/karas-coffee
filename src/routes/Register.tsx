@@ -35,10 +35,10 @@ export function Register() {
         console.log('Submitting form with values: ', values);
         await createUserWithEmailAndPassword(auth, values.email, values.password);
         navigate('/');
-      } catch (e) {
+      } catch (e: any) {
         // TODO(ehesp): switch on code to provide user friendly error messages.
         console.error(e);
-        helpers.setStatus(e.message);
+        helpers.setStatus(e?.message || 'Something went wrong.');
       }
     },
   });

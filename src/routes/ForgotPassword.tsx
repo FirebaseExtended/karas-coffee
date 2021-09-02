@@ -37,12 +37,12 @@ export function ForgotPassword() {
           type: 'success',
           message: `A password reset email has been sent to ${values.email}.`,
         };
-      } catch (e) {
+      } catch (e: any) {
         // TODO(ehesp): switch on code to provide user friendly error messages.
         console.error(e);
         status = {
           type: 'error',
-          message: e.message,
+          message: e?.message || 'Something went wrong.',
         };
       }
 
