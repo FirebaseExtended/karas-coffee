@@ -24,7 +24,7 @@ export function Header() {
         <div className="flex space-x-4">
           <Cart />
           <Link to={!!user ? '/account' : '/signin'} className="font-semibold text-gray-600 hover:text-gray-900">
-            My Account
+            {!!user ? 'My Account' : 'Login'}
           </Link>
         </div>
       </div>
