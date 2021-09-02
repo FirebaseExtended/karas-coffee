@@ -25,7 +25,7 @@ export function ProductCard({ product }: ProductCardProps) {
             <img
               src={product.images[0]}
               alt={product.name}
-              className="w-full h-48 object-cover transition-all group-hover:scale-105"
+              className="object-cover w-full h-48 transition-all group-hover:scale-105"
             />
           </Link>
 
@@ -38,13 +38,13 @@ export function ProductCard({ product }: ProductCardProps) {
                 addToCart(product);
               }
             }}
-            className="group absolute top-0 right-0 rounded-tr rounded-bl transition-opacity opacity-0 group-hover:opacity-100 bg-black/90 h-12 w-12 flex items-center justify-center"
+            className="absolute top-0 right-0 flex items-center justify-center w-12 h-12 transition-opacity rounded-tr rounded-bl opacity-0 group group-hover:opacity-100 bg-black/90"
           >
             {inCart ? <XIcon className="w-6 h-6 text-white" /> : <ShoppingBagIcon className="w-6 h-6 text-white" />}
           </div>
         </div>
       </div>
-      <div className="mt-4 flex-grow flex flex-col">
+      <div className="flex flex-col flex-grow p-4 mt-4">
         <div className="flex items-center">
           <h3 className="flex-grow truncate">
             <Link to={href} className="font-bold tracking-wide hover:underline">
@@ -53,7 +53,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </h3>
           <h4 className="ml-2 font-medium">${product.metadata.price_usd}</h4>
         </div>
-        <div className="mt-4 text-xs flex space-x-6 text-gray-600">
+        <div className="flex mt-4 space-x-6 text-xs text-gray-600">
           <Tooltip label="Origin">
             <div className="flex space-x-1">
               <GlobeIcon className="w-4 h-4" />

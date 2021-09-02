@@ -9,16 +9,16 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-10 bg-white/95 backdrop-filter backdrop-blur-sm">
-      <div className="mx-auto max-w-7xl px-6 h-20 flex items-center">
+      <div className="flex items-center h-20 mx-auto max-w-7xl md:px-6">
         <div>
-          <h3 className="font-bold text-xl tracking-wide">
+          <h3 className="text-xl font-bold tracking-wide">
             <Link to="/" className="hover:underline">
               Kara's Coffee
             </Link>
           </h3>
-          <p className="text-xs italic text-gray-500 -mt-1">Not so real coffee and swag</p>
+          <p className="-mt-1 text-xs italic text-gray-500">Not so real coffee and swag</p>
         </div>
-        <div className="flex-grow flex items-center justify-center">
+        <div className="flex items-center justify-center flex-grow">
           <Search />
         </div>
         <div className="flex space-x-4">

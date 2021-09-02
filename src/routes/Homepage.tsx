@@ -101,7 +101,7 @@ export function Homepage() {
             ]}
           />
         </div>
-        <section className="grid grid-cols-4 gap-x-6 gap-y-12">
+        <section className="flex-row md:grid md:flex-col md:grid-cols-4 md:gap-x-6 md:gap-y-12">
           {products.status === 'success' &&
             products.data.map((product) => <ProductCard key={product.id} product={product} />)}
           {products.status === 'success' &&
