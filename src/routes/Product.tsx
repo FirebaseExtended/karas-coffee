@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { Gallery } from '../components/Gallery';
 import { useCart } from '../hooks/useCart';
 
 import { useProduct } from '../hooks/useProduct';
@@ -15,7 +16,9 @@ export function Product() {
 
   if (product.status === 'error' || !product.data) {
     return (
-      <div className="h-64 flex items-center justify-center text-gray-600">Sorry, something went wrong loading this product.</div>
+      <div className="h-64 flex items-center justify-center text-gray-600">
+        Sorry, something went wrong loading this product.
+      </div>
     );
   }
 
@@ -29,7 +32,7 @@ export function Product() {
     <section className="">
       <div className="grid grid-cols-2 gap-12">
         <div>
-          <img src={product.data.images[0]} alt={product.data.name} className="rounded" />
+          <Gallery images={product.data.images} />
         </div>
         <div>
           <Link to="/" className="block mb-4 text-sm text-gray-600 hover:underline">
