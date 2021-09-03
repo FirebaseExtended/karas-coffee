@@ -15,6 +15,9 @@ export const productConverter: FirestoreDataConverter<Product> = {
       images: data.images || [],
       metadata: {
         type: data.metadata?.type ?? '',
+        origin: data.metadata?.origin ?? '',
+        strength: data.metadata?.strength ?? '',
+        variety: data.metadata?.variety ?? '',
         price: data.metadata?.price ?? '',
         price_usd: data.metadata?.price_usd ?? '',
       },
