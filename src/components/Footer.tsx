@@ -13,10 +13,11 @@ export function Footer() {
         <div className="flex flex-col space-y-2">
           <Heading>Extensions</Heading>
           <ul role="list" className="mt-4 space-y-4">
-            <Link to="https://firebase.google.com/products/extensions/firestore-algolia-search">Algolia</Link>
-            <Link to="https://firebase.google.com/products/extensions/storage-resize-images">Resize Images</Link>
+            <Link to="https://firebase.google.com/products/extensions/firestore-algolia-search">Firestore Algolia Search</Link>
+            <Link to="https://firebase.google.com/products/extensions/delete-user-data">Delete User Data</Link>
+            <Link to="https://github.com/conversationai/firestore-perspective-toxicity">Firestore Perspective Toxicity</Link>
             <Link to="https://firebase.google.com/products/extensions/firestore-stripe-subscriptions">
-              Stripe Subscriptions
+              Firestore Stripe Subscriptions
             </Link>
           </ul>
         </div>
