@@ -6,6 +6,7 @@ import { GlobeIcon, QuestionMarkCircleIcon, SunIcon } from '@heroicons/react/sol
 import { Product } from '../types';
 import { useCart } from '../hooks/useCart';
 import { Tooltip } from './Tooltip';
+import { Skeleton } from './Skeleton';
 
 export type ProductCardProps = {
   product: Product;
@@ -87,6 +88,30 @@ export function ProductMetadata({ product }: ProductMetadataProps) {
           <span className="font-bold">{product.metadata.strength}</span>
         </div>
       </Tooltip>
+    </div>
+  );
+}
+
+export function ProductCardSkeleton() {
+  return (
+    <div className="flex flex-col">
+      <Skeleton className="h-48 rounded" />
+      <div className="flex mt-4">
+        <div className="flex-grow">
+          <Skeleton className="w-1/2 h-6" />
+        </div>
+        <Skeleton className="w-10 h-6" />
+      </div>
+      <div className="flex space-x-4 mt-4">
+        <Skeleton className="w-12 h-4" />
+        <Skeleton className="w-12 h-4" />
+        <Skeleton className="w-12 h-4" />
+      </div>
+      <div className="flex flex-col mt-4 space-y-1">
+        <Skeleton className="h-3" />
+        <Skeleton className="h-3 mr-8" />
+        <Skeleton className="h-3 mr-24" />
+      </div>
     </div>
   );
 }
