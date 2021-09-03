@@ -51,5 +51,13 @@ export type Review = {
     id: string;
     display_name: string;
     photo_url?: string;
+  };
+  attribute_scores: {
+    IDENTITY_ATTACK: number;
+    INSULT: number;
+    PROFANITY: number;
+    SEVERE_TOXICITY: number;
+    THREAT: number;
+    TOXICITY: number;
   }
 };

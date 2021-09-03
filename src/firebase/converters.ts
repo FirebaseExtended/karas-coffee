@@ -36,6 +36,7 @@ export const reviewConverter: FirestoreDataConverter<Review> = {
         display_name: data.user.display_name,
         photo_url: data.user.photo_url,
       },
+      attribute_scores: data.attribute_scores,
     };
   },
   toFirestore(review: Review) {

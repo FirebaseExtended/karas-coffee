@@ -30,6 +30,7 @@ export function useReviewMutation(productId: string) {
           display_name: user.displayName ?? user.email ?? user.uid,
           photo_url: user.photoURL ?? '',
         },
+        attribute_scores: null as any, // Unused - created by Extension used to satisfy TypeScript
       });
     },
     [user, productId],

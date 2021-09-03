@@ -1,21 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { XIcon } from '@heroicons/react/solid';
 import { Link, useParams } from 'react-router-dom';
-import { FormikErrors, useFormik } from 'formik';
-import { formatDistance, formatRelative } from 'date-fns';
 
 import { Button } from '../components/Button';
-import { Input, Label, TextArea, Error } from '../components/Form';
+import { Input } from '../components/Form';
 import { Gallery } from '../components/Gallery';
-import { Stars } from '../components/Stars';
-import { Tooltip } from '../components/Tooltip';
 
 import { useCart } from '../hooks/useCart';
 import { useProduct } from '../hooks/useProduct';
 import { useReviewMutation } from '../hooks/useReviewMutation';
-import { useReviews } from '../hooks/useReviews';
+import { useProductReview, useProductReviews } from '../hooks/useReviews';
+import { ReviewCard, ReviewCardSkeleton } from '../components/ReviewCard';
+import { emptyArray } from '../utils';
+import { WriteReviewCard } from '../components/WriteReviewCard';
+import { useUser } from '../hooks/useUser';
 
 export function Product() {
+  const user = useUser();
   const { id } = useParams();
   const product = useProduct(id);
   const { addToCart, removeFromCart, getItem, setQuantity } = useCart();
@@ -81,121 +82,75 @@ export function Product() {
           </div>
         </div>
       </section>
-      <Reviews productId={product.data.id} />
+      <section className="mt-25 max-w-xl mx-auto">
+        {!!user && <Review productId={product.data.id} />}
+        <ListReviews productId={product.data.id} />
+      </section>
     </>
   );
 }
 
-function Reviews({ productId }: { productId: string }) {
+function Review({ productId }: { productId: string }) {
+  const user = useUser()!;
+
+  const review = useProductReview(productId, user.uid);
+  const addReview = useReviewMutation(productId);
+  const [edit, setEdit] = useState<boolean>(false);
+
+  const userReview = review.data?.data();
+
   return (
     <section className="mt-24">
       <div className="max-w-xl mx-auto">
         <h2 className="mb-2 text-4xl font-extrabold tracking-wide">Reviews</h2>
         <div className="mt-8">
-          <WriteAReview productId={productId} />
+          {review.status === 'loading' && <ReviewCardSkeleton />}
+          {!edit && review.status === 'success' && review.data.exists && (
+            <>
+              <ReviewCard review={userReview!} />
+              <div className="mt-4">
+                <Button onClick={() => setEdit(true)}>Edit your review</Button>
+              </div>
+            </>
+          )}
+          {review.status === 'success' && !review.data.exists && (
+            <WriteReviewCard
+              onSubmit={async (values) => {
+                await addReview({
+                  rating: values.stars,
+                  message: values.message,
+                });
+              }}
+            />
+          )}
+          {!!edit && !!userReview && (
+            <>
+              <WriteReviewCard
+                initialMessage={userReview.message}
+                initialStars={userReview.rating}
+                onSubmit={async (values) => {
+                  await addReview({
+                    rating: values.stars,
+                    message: values.message,
+                  });
+                  setEdit(false);
+                }}
+              />
+            </>
+          )}
         </div>
-        <ListReviews productId={productId} />
       </div>
     </section>
   );
 }
 
-type Review = {
-  message: string;
-  stars: number;
-};
-
-function WriteAReview({ productId }: { productId: string }) {
-  const addReview = useReviewMutation(productId);
-
-  const formik = useFormik<Review>({
-    initialValues: {
-      message: '',
-      stars: 0,
-    },
-    validate(values) {
-      const errors: FormikErrors<Review> = {};
-      if (!values.message) errors.message = 'Please provide an email address.';
-      if (values.message && values.message.length < 20) errors.message = 'Please provide longer review.';
-      if (values.message && values.message.length > 500) errors.message = 'Please provide shorter review.';
-      if (values.stars < 1) errors.stars = 'Please provide a rating.';
-      return errors;
-    },
-    async onSubmit(values, helpers) {
-      try {
-        await addReview({
-          rating: values.stars,
-          message: values.message,
-        });
-        helpers.resetForm();
-      } catch (e: any) {
-        // TODO(ehesp): switch on code to provide user friendly error messages.
-        console.error(e);
-        helpers.setStatus(e?.message || 'Something went wrong.');
-      }
-    },
-  });
-
-  return (
-    <form className="space-y-4" onSubmit={formik.handleSubmit}>
-      <TextArea
-        label="Write your own review:"
-        rows={5}
-        id="message"
-        value={formik.values.message}
-        onChange={formik.handleChange}
-        error={formik.dirty ? formik.errors.message : undefined}
-      />
-      <div>
-        <Label id="stars">Rate this product:</Label>
-        <Stars
-          max={5}
-          current={formik.values.stars}
-          size="lg"
-          onSelect={(value) => formik.setFieldValue('stars', value)}
-        />
-        {formik.dirty && !!formik.errors.stars && <Error>{formik.errors.stars}</Error>}
-      </div>
-      <div>
-        <Button disabled={!formik.isValid} loading={formik.isSubmitting} type="submit">
-          Submit Review
-        </Button>
-      </div>
-    </form>
-  );
-}
-
 function ListReviews({ productId }: { productId: string }) {
-  const reviews = useReviews(productId);
-  console.log(reviews);
+  const reviews = useProductReviews(productId);
+
   return (
     <div className="divide-y">
-      {reviews.status === 'success' &&
-        reviews.data.map((review) => (
-          <div key={review.id} className="py-12">
-            <div className="flex items-center">
-              {!!review.user.photo_url && (
-                <img
-                  src={review.user.photo_url}
-                  alt={review.user.display_name}
-                  className="w-10 h-10 rounded-full mr-4 shadow"
-                />
-              )}
-              <div>
-                <h4 className="font-bold track w-64 truncate">{review.user.display_name}</h4>
-                <p className="text-sm text-gray-600">
-                  <Tooltip label={formatRelative(review.created_at, new Date())}>
-                    <span>{formatDistance(review.created_at, new Date(), { addSuffix: true })}</span>
-                  </Tooltip>
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center mt-4">
-              <Stars max={5} current={review.rating} />
-            </div>
-            <p className="mt-4 text-sm leading-relaxed text-gray-600">{review.message}</p>
-          </div>
-        ))}
+      {reviews.status === 'loading' && emptyArray(5).map(() => <ReviewCardSkeleton />)}
+      {reviews.status === 'success' && reviews.data.map((review) => <ReviewCard review={review} />)}
     </div>
   );
 }
