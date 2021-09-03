@@ -90,6 +90,9 @@ function Order() {
     cancel_url: window.location.origin,
   });
 
+  // When we have the sessionId
+  //stripe.redirectToCheckout({ sessionId });
+
   return (
     <div className="sticky p-8 border rounded bg-gray-50 top-20">
       <h2 className="text-lg font-bold text-gray-700">Order Summary</h2>
