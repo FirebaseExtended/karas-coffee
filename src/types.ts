@@ -4,6 +4,7 @@ export interface Product {
   description: string;
   images: string[];
   metadata: {
+    price: string;
     price_usd: string;
     origin: string;
     strength: string;
@@ -12,4 +13,17 @@ export interface Product {
   name: string;
   role: null;
   tax_code: null;
+}
+
+export interface Customer {
+  id: string;
+  checkout_sessions?: Checkout_Sessions;
+}
+
+export interface Checkout_Sessions {
+  mode?: string;
+  price: string;
+  success_url: string;
+  cancel_url: string;
+  sessionId?: string;
 }
