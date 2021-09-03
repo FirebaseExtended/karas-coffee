@@ -15,5 +15,5 @@ const classNameMap: { [key in AlertType]: string } = {
 };
 
 export function Alert({ type, children }: AlertProps) {
-  return <div className={cx('mb-8 border text-sm rounded px-4 py-2', classNameMap[type])}>{children}</div>;
+  return <div className={cx('mb-8 border text-sm rounded px-4 py-2 text-center', classNameMap[type])}>{children}</div>;
 }

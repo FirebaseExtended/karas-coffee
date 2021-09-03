@@ -21,7 +21,8 @@ export function Gallery({ initialIndex = 0, images }: GalleryProps) {
 
     // Scroll the image element into view.
     if (img) {
-      img.scrollIntoView({ behavior: 'smooth', inline: 'end' });
+      // TODO(ehesp): Get left position of image within container and scroll the parent div to that position.
+      // img.scrollIntoView({ behavior: 'smooth', inline: 'nearest' });
     }
   }, [active]);
 

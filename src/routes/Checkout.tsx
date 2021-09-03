@@ -5,12 +5,18 @@ import { Input } from '../components/Form';
 import { useCart } from '../hooks/useCart';
 import { isProductCoffee } from '../types';
 import { ProductCoffeeMetadata } from '../components/ProductCard';
+import { Alert } from '../components/Alert';
 
 export function Checkout() {
   const { cart } = useCart();
 
   return (
-    <section>
+    <section className="mt-8">
+      <div className="max-w-3xl mx-auto">
+        <Alert type="danger">
+          <b>This is a demo application!</b> This is purely for example purposes - do not use real payment information.
+        </Alert>
+      </div>
       <h1 className="mt-8 text-4xl font-extrabold tracking-wide mb-8">Checkout</h1>
       {cart.length === 0 && (
         <>
