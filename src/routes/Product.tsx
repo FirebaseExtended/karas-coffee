@@ -102,10 +102,9 @@ function Review({ productId }: { productId: string }) {
   return (
     <section className="mt-24">
       <div className="max-w-xl mx-auto">
-        <h2 className="mb-2 text-4xl font-extrabold tracking-wide">Reviews</h2>
         <div className="mt-8">
           {review.status === 'loading' && <ReviewCardSkeleton />}
-          {!edit && review.status === 'success' && review.data.exists && (
+          {!edit && review.status === 'success' && !!userReview && (
             <>
               <ReviewCard review={userReview!} />
               <div className="mt-4">
@@ -113,7 +112,7 @@ function Review({ productId }: { productId: string }) {
               </div>
             </>
           )}
-          {review.status === 'success' && !review.data.exists && (
+          {review.status === 'success' && !userReview && (
             <WriteReviewCard
               onSubmit={async (values) => {
                 await addReview({
@@ -147,10 +146,22 @@ function Review({ productId }: { productId: string }) {
 function ListReviews({ productId }: { productId: string }) {
   const reviews = useProductReviews(productId);
 
+  const wrapper = (children: React.ReactNode) => <div className="py-12">{children}</div>;
+
   return (
-    <div className="divide-y">
-      {reviews.status === 'loading' && emptyArray(5).map(() => <ReviewCardSkeleton />)}
-      {reviews.status === 'success' && reviews.data.map((review) => <ReviewCard review={review} />)}
+    <div className="mt-12">
+      <h2 className="mb-2 text-3xl font-extrabold tracking-wide">Reviews</h2>
+      <div className="divide-y">
+        {reviews.status === 'loading' && emptyArray(5).map(() => wrapper(<ReviewCardSkeleton />))}
+        {reviews.status === 'success' && (
+          <>
+            {reviews.data.length === 0 && (
+              <p className="text-gray-600 mt-4">There are no reviews for this product, grab a coffee and be the first to write one!</p>
+            )}
+            {reviews.data.map((review) => wrapper(<ReviewCard review={review} />))}
+          </>
+        )}
+      </div>
     </div>
   );
 }
