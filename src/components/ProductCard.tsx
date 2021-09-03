@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ShoppingBagIcon, XIcon } from '@heroicons/react/outline';
 import { GlobeIcon, QuestionMarkCircleIcon, SunIcon } from '@heroicons/react/solid';
 
-import { Product } from '../types';
+import { isProductCoffee, Product, ProductCoffee } from '../types';
 import { useCart } from '../hooks/useCart';
 import { Tooltip } from './Tooltip';
 import { Skeleton } from './Skeleton';
@@ -54,9 +54,11 @@ export function ProductCard({ product }: ProductCardProps) {
           </h3>
           <h4 className="ml-2 font-medium">${product.metadata.price_usd}</h4>
         </div>
-        <div className="mt-4">
-          <ProductMetadata product={product} />
-        </div>
+        {isProductCoffee(product) && (
+          <div className="mt-4">
+            <ProductCoffeeMetadata product={product} />
+          </div>
+        )}
         <p className="flex-grow mt-4 text-sm text-gray-500">{product.description}</p>
       </div>
     </div>
@@ -64,10 +66,10 @@ export function ProductCard({ product }: ProductCardProps) {
 }
 
 export type ProductMetadataProps = {
-  product: Product;
+  product: ProductCoffee;
 };
 
-export function ProductMetadata({ product }: ProductMetadataProps) {
+export function ProductCoffeeMetadata({ product }: ProductMetadataProps) {
   return (
     <div className="flex space-x-6 text-xs text-gray-600">
       <Tooltip label="Origin">

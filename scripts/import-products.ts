@@ -43,6 +43,10 @@ async function main() {
           product_id: product.id,
         },
       });
+      // Add price id to product metadata - helps us do less firestore requests.
+      await stripe.products.update(product.id, {
+        metadata: { ...stripeObject.metadata, price: price.id },
+      });
       console.log(`Created price '${price.id}' for product '${product.id}' on Stripe`);
     } else {
       console.log(

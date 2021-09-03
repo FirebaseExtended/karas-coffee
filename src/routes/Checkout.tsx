@@ -2,8 +2,9 @@ import React from 'react';
 import { XIcon } from '@heroicons/react/solid';
 import { Button } from '../components/Button';
 import { Input } from '../components/Form';
-import { ProductMetadata } from '../components/ProductCard';
 import { useCart } from '../hooks/useCart';
+import { isProductCoffee } from '../types';
+import { ProductCoffeeMetadata } from '../components/ProductCard';
 
 export function Checkout() {
   const { cart } = useCart();
@@ -44,9 +45,11 @@ function Items() {
             <div className="flex-grow py-1">
               <div className="text-lg font-bold tracking-wide text-gray-600">{item.name}</div>
               <div className="font-bold">${item.metadata.price_usd}</div>
-              <div className="mt-4">
-                <ProductMetadata product={item} />
-              </div>
+              {isProductCoffee(item) && (
+                <div className="mt-4">
+                  <ProductCoffeeMetadata product={item} />
+                </div>
+              )}
               <div className="mt-4 flex items-center">
                 <div className="flex-grow">
                   <Input

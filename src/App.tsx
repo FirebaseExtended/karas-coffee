@@ -19,6 +19,7 @@ import { Subscription } from './routes/Account/Subscription';
 import { Orders } from './routes/Account/Orders';
 import { ForgotPassword } from './routes/ForgotPassword';
 import { Register } from './routes/Register';
+import { Shop } from './routes/Shop';
 
 export type AppProps = {
   initialUser: User | null;
@@ -34,6 +35,7 @@ export function App(props: AppProps) {
         <main className="mx-auto max-w-7xl md:px-6">
           <Routes>
             <Route path="/" element={<Homepage />} />
+            <Route path="shop" element={<Shop />} />
             <Route path="product/:id" element={<Product />} />
             {!!user && (
               <>
