@@ -21,7 +21,7 @@ export function Divider({ children }: DividerProps) {
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
   value: string | number;
-  onChange: (e: React.ChangeEvent<any>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label?: string;
   error?: string;
 }
@@ -29,11 +29,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 export function Input({ id, label, value, onChange, error, ...props }: InputProps) {
   return (
     <div>
-      {!!label && (
-        <label htmlFor={id} className="block text-sm font-medium mb-2">
-          {label}
-        </label>
-      )}
+      {!!label && <Label id={id}>{label}</Label>}
       <input
         {...props}
         id={id}
@@ -47,6 +43,43 @@ export function Input({ id, label, value, onChange, error, ...props }: InputProp
       />
       {!!error && <Error>{error}</Error>}
     </div>
+  );
+}
+
+export interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  id: string;
+  value: string | number;
+  rows: number;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  label?: string;
+  error?: string;
+}
+
+export function TextArea({ id, label, value, onChange, error, ...props }: TextAreaProps) {
+  return (
+    <div>
+      {!!label && <Label id={id}>{label}</Label>}
+      <textarea
+        {...props}
+        id={id}
+        name={id}
+        value={value}
+        className={cx('bg-white w-full px-2 py-1 border rounded focus:outline-none', {
+          'focus:border-gray-500': !error,
+          'border-red-500': !!error,
+        })}
+        onChange={onChange}
+      />
+      {!!error && <Error>{error}</Error>}
+    </div>
+  );
+}
+
+export function Label({ id, children }: { id: string; children: string }) {
+  return (
+    <label htmlFor={id} className="block text-sm font-medium mb-2">
+      {children}
+    </label>
   );
 }
 
