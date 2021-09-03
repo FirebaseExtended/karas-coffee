@@ -109,7 +109,7 @@ export function ProductCardSkeleton() {
         <Skeleton className="w-12 h-4" />
         <Skeleton className="w-12 h-4" />
       </div>
-      <div className="flex flex-col mt-4 space-y-1">
+      <div className="flex flex-col mt-4 space-y-3">
         <Skeleton className="h-3" />
         <Skeleton className="h-3 mr-8" />
         <Skeleton className="h-3 mr-24" />

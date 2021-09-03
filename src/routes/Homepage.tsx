@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ProductCard } from '../components/ProductCard';
+import { ProductCard, ProductCardSkeleton } from '../components/ProductCard';
 import { useProducts } from '../hooks/useProducts';
 import { ProductType } from '../types';
+import { emptyArray } from '../utils';
 
 export function Homepage() {
   return (
@@ -19,7 +20,8 @@ type ShopProps = {
 };
 
 function Shop({ title, type }: ShopProps) {
-  const products = useProducts({ limitTo: 4, orders: [], filters: [['metadata.type', '==', type]] });
+  const limit = 4;
+  const products = useProducts({ limitTo: limit, orders: [], filters: [['metadata.type', '==', type]] });
 
   return (
     <>
@@ -30,6 +32,7 @@ function Shop({ title, type }: ShopProps) {
         </Link>
       </div>
       <section className="flex-row md:grid md:flex-col md:grid-cols-4 md:gap-x-6 md:gap-y-12">
+        {products.status === 'loading' && emptyArray(limit).map((_, i) => <ProductCardSkeleton key={i} />)}
         {products.status === 'success' &&
           products.data.map((product) => <ProductCard key={product.id} product={product} />)}
       </section>
