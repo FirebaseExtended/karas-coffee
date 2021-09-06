@@ -32,6 +32,10 @@ export const collections = {
     collection(firestore, getCollectionName('customers'), customerId, 'checkout_sessions').withConverter(
       sessionConverter,
     ),
+  payments: (customerId: string) =>
+    collection(firestore, getCollectionName('customers'), customerId, 'payments').withConverter(
+      sessionConverter,
+    ),
   productReviews: (productId: string) =>
     collection(firestore, getCollectionName('products'), productId, getCollectionName('reviews')).withConverter(
       reviewConverter,
