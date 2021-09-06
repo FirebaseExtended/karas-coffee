@@ -3,7 +3,7 @@ import { getAnalytics } from 'firebase/analytics';
 import { getAuth } from 'firebase/auth';
 import { collection, getFirestore } from 'firebase/firestore';
 
-import { productConverter, customerConverter, checkoutSessionsConverter } from './converters';
+import { productConverter, customerConverter, sessionConverter, reviewConverter } from './converters';
 
 export const firebaseConfig = {
   apiKey: 'AIzaSyCrbVzj7TfFBPjxardH4JTuYFr38CZealM',
@@ -28,7 +28,10 @@ function getCollectionName(name: string) {
 export const collections = {
   products: collection(firestore, getCollectionName('products')).withConverter(productConverter),
   customers: collection(firestore, getCollectionName('customers')).withConverter(customerConverter),
-  checkoutSessions: collection(firestore, getCollectionName('customers')).withConverter(checkoutSessionsConverter),
+  sessions: (customerId: string) =>
+    collection(firestore, getCollectionName('customers'), customerId, 'checkout_sessions').withConverter(
+      sessionConverter,
+    ),
   productReviews: (productId: string) =>
     collection(firestore, getCollectionName('products'), productId, getCollectionName('reviews')).withConverter(
       reviewConverter,

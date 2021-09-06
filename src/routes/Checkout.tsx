@@ -1,14 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { XIcon } from '@heroicons/react/solid';
 import { Button } from '../components/Button';
-import { Input } from '../components/Form';
+import { Input, Error } from '../components/Form';
 import { useCart } from '../hooks/useCart';
-import { useUser } from '../hooks/useUser';
-
 import { useCheckout } from '../hooks/useCheckout';
+
 import { isProductCoffee } from '../types';
 import { ProductCoffeeMetadata } from '../components/ProductCard';
-import Stripe from '../../scripts/stripe';
 import { Alert } from '../components/Alert';
 
 export function Checkout() {
@@ -90,18 +88,16 @@ function Items() {
 }
 
 function Order() {
-  const user = useUser();
   const { cart, total } = useCart();
-  const sessionID = (Math.random() + 1).toString(36).substring(7);
-  const checkout = useCheckout(user?.uid, sessionID, {
+  const { checkout, error, loading } = useCheckout({
     mode: 'payment',
-    price: cart[0].metadata.price as string,
-    success_url: window.location.origin,
-    cancel_url: window.location.origin,
+    success_url: `${window.location.origin}/account/orders`,
+    cancel_url: window.location.href,
+    line_items: cart.map((item) => ({
+      price: item.metadata.price,
+      quantity: item.quantity,
+    })),
   });
-
-  // When we have the sessionId
-  //stripe.redirectToCheckout({ sessionId });
 
   return (
     <div className="sticky p-8 border rounded bg-gray-50 top-20">
@@ -115,9 +111,14 @@ function Order() {
           value={<span className="text-lg">${total}</span>}
         />
       </div>
-      <Button className="block" onClick={() => checkout()}>
+      <Button className="block" onClick={checkout} loading={loading}>
         Checkout
       </Button>
+      {!!error && (
+        <div className="mt-4">
+          <Error>{error.message}</Error>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,16 +1,71 @@
-import { useCallback } from 'react';
-import { doc, setDoc } from 'firebase/firestore';
+import { useCallback, useEffect, useState } from 'react';
+import { doc, getDoc, onSnapshot, setDoc, Unsubscribe } from 'firebase/firestore';
 
 import { collections } from '../firebase';
-import { Checkout_Sessions } from '../types';
-// import Stripe from '../../scripts/stripe';
+import { useUser } from './useUser';
+import { Session } from '../types';
 
-export function useCheckout(id: string | undefined, sessionID: string, checkout_sessions: Checkout_Sessions) {
-  const checkoutSessionCollection = collections.checkoutSessions;
+export function useCheckout(session: Omit<Session, 'url' | 'customer'>) {
+  const [error, setError] = useState<Error | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const user = useUser();
 
-  const ref = doc(checkoutSessionCollection, `/${id}/checkout_sessions/${sessionID}`);
+  if (!user) {
+    throw new Error('User must be authenticated to use the checkout.');
+  }
 
-  return useCallback(async () => {
-    return setDoc(ref, { ...checkout_sessions }, { merge: true });
-  }, [id]);
+  const uid = user.uid;
+
+  const checkout = useCallback(async () => {
+    setLoading(true);
+    const collection = collections.sessions(uid);
+    const ref = doc(collection);
+
+    try {
+      const customer = await getDoc(doc(collections.customers, uid));
+      const { stripe_id } = customer.data() ?? {};
+
+      if (!stripe_id) {
+        throw new Error('Customer does not exist in the database.');
+      }
+
+      // Declare the unsubscribe function.
+      let unsubscribe: Unsubscribe;
+
+      // Listen to changes to the new ref.
+      unsubscribe = onSnapshot(
+        ref,
+        (snapshot) => {
+          const data = snapshot.data();
+
+          if (data?.url) {
+            unsubscribe?.();
+            window.location.assign(data.url);
+          }
+
+          if (data?.error) {
+            unsubscribe?.();
+            setError(new Error(data.error.message));
+            setLoading(false);
+          }
+        },
+        (e) => {
+          unsubscribe?.();
+          setError(e);
+          setLoading(false);
+        },
+      );
+
+      await setDoc(ref, {
+        ...session,
+        customer: stripe_id,
+      });
+    } catch (e: any) {
+      setError(e);
+    } finally {
+      setLoading(false);
+    }
+  }, [session, uid]);
+
+  return { checkout, loading, error };
 }

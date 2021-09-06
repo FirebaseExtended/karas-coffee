@@ -1,5 +1,5 @@
-import { FirestoreDataConverter } from 'firebase/firestore';
-import { Product, Customer, Checkout_Sessions } from '../types';
+import { FirestoreDataConverter, Timestamp } from 'firebase/firestore';
+import { Product, Customer, Session, Review } from '../types';
 
 export const productConverter: FirestoreDataConverter<Product> = {
   fromFirestore(snapshot): Product {
@@ -28,8 +28,8 @@ export const productConverter: FirestoreDataConverter<Product> = {
   },
 };
 
-export const customerConverter: FirestoreDataConverter<Customer> = {
-  fromFirestore(snapshot): Customer {
+export const reviewConverter: FirestoreDataConverter<Review> = {
+  fromFirestore(snapshot): Review {
     const data = snapshot.data();
 
     return {
@@ -56,6 +56,49 @@ export const customerConverter: FirestoreDataConverter<Customer> = {
         id: review.user.id,
         display_name: review.user.display_name,
         photo_url: review.user.photo_url,
+      },
+    };
+  },
+};
+
+export const customerConverter: FirestoreDataConverter<Customer> = {
+  fromFirestore(snapshot): Customer {
+    const data = snapshot.data();
+
+    return {
+      id: snapshot.id,
+      stripe_id: data.stripeId,
+    };
+  },
+  toFirestore(): Customer {
+    throw new Error('Client does not support updating customers.');
+  },
+};
+
+export const sessionConverter: FirestoreDataConverter<Session> = {
+  fromFirestore(snapshot): Session {
+    const data = snapshot.data();
+
+    return {
+      mode: data.mode,
+      success_url: data.success_url,
+      cancel_url: data.cancel_url,
+      customer: data.customer,
+      line_items: data.line_items,
+      url: data.url,
+      error: data.error,
+    };
+  },
+  toFirestore(session: Session) {
+    return {
+      mode: session.mode,
+      success_url: session.success_url,
+      cancel_url: session.cancel_url,
+      customer: session.customer,
+      line_items: session.line_items,
+      collect_shipping_address: true,
+      metadata: {
+        mode: session.mode,
       },
     };
   },
