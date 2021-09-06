@@ -7,6 +7,7 @@ import { ButtonGroup } from '../components/ButtonGroup';
 import { ProductCard, ProductCardSkeleton } from '../components/ProductCard';
 import { useProducts, UseProductsConstraints } from '../hooks/useProducts';
 import { emptyArray } from '../utils';
+import { Select } from '../components/Form';
 
 // Declare available filters and a type.
 const filters = ['all', 'swag', 'coffee'] as const;
@@ -70,28 +71,42 @@ export function Shop() {
   );
 
   const products = useProducts(constraints);
-  console.log(products);
+
   return (
     <>
       <div>
         <div className="mb-6 flex justify-end space-x-4">
-          <div className="relative w-42">
-            <select
-              value={order}
-              onChange={(e) => updateParamValue('order', e.target.value)}
-              name="order"
-              id="order"
-              className="w-full truncate border text-sm text-indigo-700 font-bold px-4 py-1 pr-8 rounded bg-gray-50 hover:bg-gray-100 appearance-none focus:outline-none focus:border-gray-500"
-            >
-              <option value="name-asc">Name: A-Z (ASC)</option>
-              <option value="name-desc">Name: Z-A (DESC)</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-              <option value="strength-asc">Strength: Low to High</option>
-              <option value="strength-desc">Strength: High to Low</option>
-            </select>
-            <ChevronDownIcon className="w-5 h-5 text-indigo-700 absolute top-[6px] right-2" />
-          </div>
+          <Select
+            value={order}
+            onChange={(e) => updateParamValue('order', e.target.value)}
+            id="order"
+            options={[
+              {
+                value: 'name-asc',
+                label: 'Name: A-Z',
+              },
+              {
+                value: 'name-desc',
+                label: 'Name: Z-A',
+              },
+              {
+                value: 'price-asc',
+                label: 'Price: Low to High',
+              },
+              {
+                value: 'price-desc',
+                label: 'Price: High to Low',
+              },
+              {
+                value: 'strength-asc',
+                label: 'Strength: Low to High',
+              },
+              {
+                value: 'strength-desc',
+                label: 'Strength: High to Low',
+              },
+            ]}
+          />
           <ButtonGroup<Filter>
             active={filter}
             onClick={(id) => updateParamValue('filter', id)}
