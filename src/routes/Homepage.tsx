@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Button } from '../components/Button';
 import { ProductCard, ProductCardSkeleton } from '../components/ProductCard';
 import { useProducts } from '../hooks/useProducts';
 import { ProductType } from '../types';
@@ -8,9 +9,43 @@ import { emptyArray } from '../utils';
 export function Homepage() {
   return (
     <>
+      <Subscribe />
       <Shop title="Shop Coffee" type="coffee" />
       <Shop title="Shop Swag" type="swag" />
     </>
+  );
+}
+
+function Subscribe() {
+  return (
+    <section>
+      <div className="mt-6 bg-gray-900 h-[400px] rounded overflow-hidden">
+        <div className="grid grid-cols-2">
+          <div className="p-12">
+            <h1 className="text-white font-extrabold text-7xl">Become your own Barista.</h1>
+            <p className="mt-8 text-white text-lg">
+              Subscribe today to gain exclusive access to blogs, videos & recipes so you can become your own
+              professional barista.
+            </p>
+            <div className="mt-8 w-64">
+              <Button>Subscribe Now</Button>
+            </div>
+          </div>
+          <div className="relative">
+            <img
+              src="https://images.unsplash.com/photo-1515442261605-65987783cb6a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+              alt=""
+              className="absolute top-0 right-0 block h-64 rounded-bl ring-4 ring-white shadow"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1620360289812-0abdae69d6d2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
+              alt=""
+              className="w-64 absolute left-10 top-16 ring-4 ring-white rounded z-10 shadow"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 

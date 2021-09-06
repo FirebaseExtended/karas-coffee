@@ -16,19 +16,6 @@ type ProductRecordMetadata = {
   price_usd: string;
 };
 
-export interface Customer {
-  id: string;
-  checkout_sessions?: Checkout_Sessions;
-}
-
-export interface Checkout_Sessions {
-  mode?: string;
-  price: string;
-  success_url: string;
-  cancel_url: string;
-  sessionId?: string;
-}
-
 export type ProductCoffee = {
   metadata: {
     type: 'coffee';
@@ -72,5 +59,26 @@ export type Review = {
     SEVERE_TOXICITY: number;
     THREAT: number;
     TOXICITY: number;
-  }
+  };
 };
+
+export interface Customer {
+  id: string;
+  stripe_id: string;
+}
+
+export interface Session {
+  mode: 'payment' | 'subscription';
+  success_url: string;
+  cancel_url: string;
+  customer: string; // Stripe customer id
+  line_items?: {
+    price: string;
+    quantity: number;
+  }[];
+  // Updated via extension
+  url?: string;
+  error?: {
+    message: string;
+  };
+}
