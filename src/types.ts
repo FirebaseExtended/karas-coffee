@@ -16,6 +16,19 @@ type ProductRecordMetadata = {
   price_usd: string;
 };
 
+export interface Customer {
+  id: string;
+  checkout_sessions?: Checkout_Sessions;
+}
+
+export interface Checkout_Sessions {
+  mode?: string;
+  price: string;
+  success_url: string;
+  cancel_url: string;
+  sessionId?: string;
+}
+
 export type ProductCoffee = {
   metadata: {
     type: 'coffee';

@@ -1,5 +1,5 @@
-import { DocumentData, FirestoreDataConverter, Timestamp } from 'firebase/firestore';
-import { Product, Review } from '../types';
+import { FirestoreDataConverter } from 'firebase/firestore';
+import { Product, Customer, Checkout_Sessions } from '../types';
 
 export const productConverter: FirestoreDataConverter<Product> = {
   fromFirestore(snapshot): Product {
@@ -7,13 +7,20 @@ export const productConverter: FirestoreDataConverter<Product> = {
 
     return {
       id: snapshot.id,
-      active: !!data.active,
-      description: data.description || '',
-      images: data.images || [],
-      metadata: data.metadata,
       name: data.name || '',
       role: data.role,
       tax_code: data.tax_code,
+      active: !!data.active,
+      description: data.description || '',
+      images: data.images || [],
+      metadata: {
+        type: data.metadata?.type ?? '',
+        origin: data.metadata?.origin ?? '',
+        strength: data.metadata?.strength ?? '',
+        variety: data.metadata?.variety ?? '',
+        price: data.metadata?.price ?? '',
+        price_usd: data.metadata?.price_usd ?? '',
+      },
     };
   },
   toFirestore() {
@@ -21,8 +28,8 @@ export const productConverter: FirestoreDataConverter<Product> = {
   },
 };
 
-export const reviewConverter: FirestoreDataConverter<Review> = {
-  fromFirestore(snapshot): Review {
+export const customerConverter: FirestoreDataConverter<Customer> = {
+  fromFirestore(snapshot): Customer {
     const data = snapshot.data();
 
     return {

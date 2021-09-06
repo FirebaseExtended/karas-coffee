@@ -3,8 +3,12 @@ import { XIcon } from '@heroicons/react/solid';
 import { Button } from '../components/Button';
 import { Input } from '../components/Form';
 import { useCart } from '../hooks/useCart';
+import { useUser } from '../hooks/useUser';
+
+import { useCheckout } from '../hooks/useCheckout';
 import { isProductCoffee } from '../types';
 import { ProductCoffeeMetadata } from '../components/ProductCard';
+import Stripe from '../../scripts/stripe';
 import { Alert } from '../components/Alert';
 
 export function Checkout() {
@@ -20,7 +24,7 @@ export function Checkout() {
       <h1 className="mt-8 text-4xl font-extrabold tracking-wide mb-8">Checkout</h1>
       {cart.length === 0 && (
         <>
-          <div className="h-64 flex items-center justify-center text-gray-600">Your cart is currently empty.</div>
+          <div className="flex items-center justify-center h-64 text-gray-600">Your cart is currently empty.</div>
         </>
       )}
       {cart.length > 0 && (
@@ -44,8 +48,8 @@ function Items() {
     <section>
       <div className="divide-y">
         {cart.map((item) => (
-          <div className="flex space-x-4 py-8">
-            <div className="w-64 flex-shrink-0">
+          <div className="flex py-8 space-x-4">
+            <div className="flex-shrink-0 w-64">
               <img src={item.images[0]} alt={item.name} className="rounded shadow" />
             </div>
             <div className="flex-grow py-1">
@@ -56,7 +60,7 @@ function Items() {
                   <ProductCoffeeMetadata product={item} />
                 </div>
               )}
-              <div className="mt-4 flex items-center">
+              <div className="flex items-center mt-4">
                 <div className="flex-grow">
                   <Input
                     id={`quantity-${item.id}`}
@@ -73,7 +77,7 @@ function Items() {
                     }}
                   />
                 </div>
-                <div className="w-10 flex-shrink-0 flex items-center justify-center">
+                <div className="flex items-center justify-center flex-shrink-0 w-10">
                   <XIcon role="button" className="w-5 h-5 mt-7 hover:opacity-50" onClick={() => removeFromCart(item)} />
                 </div>
               </div>
@@ -86,12 +90,23 @@ function Items() {
 }
 
 function Order() {
-  const { total } = useCart();
+  const user = useUser();
+  const { cart, total } = useCart();
+  const sessionID = (Math.random() + 1).toString(36).substring(7);
+  const checkout = useCheckout(user?.uid, sessionID, {
+    mode: 'payment',
+    price: cart[0].metadata.price as string,
+    success_url: window.location.origin,
+    cancel_url: window.location.origin,
+  });
+
+  // When we have the sessionId
+  //stripe.redirectToCheckout({ sessionId });
 
   return (
-    <div className="bg-gray-50 rounded border p-8 sticky top-20">
+    <div className="sticky p-8 border rounded bg-gray-50 top-20">
       <h2 className="text-lg font-bold text-gray-700">Order Summary</h2>
-      <div className="divide-y my-4">
+      <div className="my-4 divide-y">
         <OrderRow label="Subtotal" value={`$${total}`} />
         <OrderRow label="Shipping" value="$0" />
         <OrderRow label="Tax" value="$0" />
@@ -100,7 +115,9 @@ function Order() {
           value={<span className="text-lg">${total}</span>}
         />
       </div>
-      <Button className="block">Checkout</Button>
+      <Button className="block" onClick={() => checkout()}>
+        Checkout
+      </Button>
     </div>
   );
 }
@@ -113,7 +130,7 @@ type OrderRowProps = {
 function OrderRow({ label, value }: OrderRowProps) {
   return (
     <div className="flex items-center py-2">
-      <div className="flex-grow text-gray-600 text-sm">{label}</div>
+      <div className="flex-grow text-sm text-gray-600">{label}</div>
       <div className="font-bold">{value}</div>
     </div>
   );
