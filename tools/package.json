@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "import-products": "ts-node import-products.ts"
+    "stripe:import-products": "ts-node stripe-import-products.ts",
+    "firebase:deploy-firestore-rules": "firebase deploy --only firestore:rules",
+    "firebase:start-emulators": "firebase emulators:start --only auth,firestore"
   },
   "author": "",
   "license": "ISC",

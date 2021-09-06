@@ -4,8 +4,9 @@ import { ChevronDownIcon } from '@heroicons/react/solid';
 import { FieldPath } from 'firebase/firestore';
 
 import { ButtonGroup } from '../components/ButtonGroup';
-import { ProductCard } from '../components/ProductCard';
+import { ProductCard, ProductCardSkeleton } from '../components/ProductCard';
 import { useProducts, UseProductsConstraints } from '../hooks/useProducts';
+import { emptyArray } from '../utils';
 
 // Declare available filters and a type.
 const filters = ['all', 'swag', 'coffee'] as const;
@@ -69,7 +70,7 @@ export function Shop() {
   );
 
   const products = useProducts(constraints);
-  console.log(products)
+  console.log(products);
   return (
     <>
       <div>
@@ -102,10 +103,7 @@ export function Shop() {
           />
         </div>
         <section className="flex-row md:grid md:flex-col md:grid-cols-4 md:gap-x-6 md:gap-y-12">
-          {products.status === 'success' &&
-            products.data.map((product) => <ProductCard key={product.id} product={product} />)}
-          {products.status === 'success' &&
-            products.data.map((product) => <ProductCard key={product.id} product={product} />)}
+          {products.status === 'loading' && emptyArray(8).map((_, i) => <ProductCardSkeleton key={i} />)}
           {products.status === 'success' &&
             products.data.map((product) => <ProductCard key={product.id} product={product} />)}
         </section>

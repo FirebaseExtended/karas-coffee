@@ -34,29 +34,29 @@ export const customerConverter: FirestoreDataConverter<Customer> = {
 
     return {
       id: snapshot.id,
-      checkout_sessions: data.checkout_sessions,
+      created_at: (data.created_at as Timestamp).toDate(),
+      product_id: data.product_id,
+      rating: data.rating ?? 0,
+      message: data.message ?? '',
+      user: {
+        id: data.user.id,
+        display_name: data.user.display_name,
+        photo_url: data.user.photo_url,
+      },
+      attribute_scores: data.attribute_scores,
     };
   },
-  toFirestore(snapshot): Customer {
-    console.log('Snappy >>>>>', snapshot);
-    return snapshot as Customer;
-  },
-};
-
-export const checkoutSessionsConverter: FirestoreDataConverter<Checkout_Sessions> = {
-  fromFirestore(snapshot): Checkout_Sessions {
-    const data = snapshot.data();
-
+  toFirestore(review: Review) {
     return {
-      sessionId: data.sessionId,
-      mode: data.mode,
-      price: data.checkout_sessions,
-      success_url: data.success_url,
-      cancel_url: data.cancel_url,
+      created_at: review.created_at,
+      product_id: review.product_id,
+      rating: review.rating ?? 0,
+      message: review.message ?? '',
+      user: {
+        id: review.user.id,
+        display_name: review.user.display_name,
+        photo_url: review.user.photo_url,
+      },
     };
-  },
-  toFirestore(snapshot) {
-    console.log('Snappy >>>>>', snapshot);
-    return snapshot as Checkout_Sessions;
   },
 };

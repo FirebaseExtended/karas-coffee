@@ -29,4 +29,8 @@ export const collections = {
   products: collection(firestore, getCollectionName('products')).withConverter(productConverter),
   customers: collection(firestore, getCollectionName('customers')).withConverter(customerConverter),
   checkoutSessions: collection(firestore, getCollectionName('customers')).withConverter(checkoutSessionsConverter),
+  productReviews: (productId: string) =>
+    collection(firestore, getCollectionName('products'), productId, getCollectionName('reviews')).withConverter(
+      reviewConverter,
+    ),
 };

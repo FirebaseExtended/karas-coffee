@@ -1,0 +1,55 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /customers/{uid} {
+      allow read, write: if request.auth.uid == uid;
+      match /checkout_sessions/{id} {
+        allow read, write: if request.auth.uid == uid;
+      }
+      match /subscriptions/{id} {
+        allow read: if request.auth.uid == uid;
+      }
+    }
+
+    match /products/{product_id} {
+      allow read: if true;
+
+      match /prices/{price_id} {
+        allow read: if true;
+      }
+
+      match /reviews/{review_id} {
+        allow read: if true;
+        allow write: if 
+          // Only this users review should be writable.
+          request.auth.uid == review_id &&
+
+          // Ensure the write has only these fields.
+          request.resource.data.keys().hasOnly([
+            'created_at',
+            'message',
+            'product_id',
+            'rating',
+						'user'
+          ]) &&
+
+          // Ensure the user map is valid.
+          request.resource.data.user is map &&
+          request.resource.data.user.keys().hasOnly([
+            'display_name',
+            'id',
+            'photo_url'
+          ]) && 
+          request.resource.data.user.id == request.auth.uid &&
+
+          // Ensure rating is an int in the range 0 to 5.
+          request.resource.data.rating is int &&
+          request.resource.data.rating >= 0 &&
+          request.resource.data.rating <= 5 &&
+
+          // Ensure product id matches this path.
+          request.resource.data.product_id == product_id
+      }
+    }
+  }
+}
