@@ -159,6 +159,23 @@ export const merchandise: Product[] = [
         'This iconic French press (or cafetière) is a must for your coffee making experience with heat-resistant borosilicate glass that won’t alter or impair your coffee’s natural flavor.',
     },
   },
+  {
+    id: 'pitcher',
+    name: 'Pitcher',
+    images: [
+      'https://images.unsplash.com/photo-1537817236549-8265e0da25d5?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
+      'https://images.unsplash.com/photo-1620360289928-dacf4e46f604?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
+      'https://images.unsplash.com/photo-1495862433577-132cf20d7902?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
+    ], // TODO: Add image
+    price_usd: 20,
+    description:
+      'Hard wearing and durable pitcher for busy coffee shops and caterers. Measuring lines are etched on the inside so that it is easy to add the correct amount of milk for each serving of latte, cappuccino or hot chocolate',
+    metadata: {
+      type: 'swag',
+      description:
+        'Hard wearing and durable pitcher for busy coffee shops and caterers. Measuring lines are etched on the inside so that it is easy to add the correct amount of milk for each serving of latte, cappuccino or hot chocolate',
+    },
+  },
 ];
 
 export const products: Product[] = [...merchandise, ...coffees];
