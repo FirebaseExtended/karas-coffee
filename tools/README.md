@@ -1,9 +1,9 @@
 ## Coffee Scripts
 
-A collection of scripts to manage this project.
+A collection of scripts and tools to manage this project.
 
 ```bash
-cd scripts
+cd tools
 yarn
 ```
 
