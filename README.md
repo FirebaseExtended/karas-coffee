@@ -8,3 +8,9 @@ A demo ecommerce application showcasing Firebase Extensions and other Firebase p
 ```bash
 yarn dev
 ```
+
+### Deploying to Firebase Hosting
+
+```bash
+yarn deploy
+```
