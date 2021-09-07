@@ -13,6 +13,8 @@ yarn
 yarn stripe:import-products
 ```
 
+Note: this script requires you create a `tools/.env` file with your `STRIPE_SECRET_KEY` set in it.
+
 ### Deploy Firestore Rules
 
 ```bash
