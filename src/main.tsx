@@ -28,11 +28,9 @@ bootstrap().then(({ user }) => {
     <React.StrictMode>
       <FirebaseAppProvider firebaseConfig={firebaseConfig}>
         <FirestoreProvider sdk={firestore}>
-          <CartProvider>
-            <BrowserRouter>
-              <App initialUser={user} />
-            </BrowserRouter>
-          </CartProvider>
+          <BrowserRouter>
+            <App initialUser={user} />
+          </BrowserRouter>
         </FirestoreProvider>
       </FirebaseAppProvider>
     </React.StrictMode>,

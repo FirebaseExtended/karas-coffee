@@ -5,7 +5,7 @@ import { collections } from '../firebase';
 import { useUser } from './useUser';
 import { Session } from '../types';
 
-export function useCheckout(session: Omit<Session, 'url' | 'customer'>) {
+export function useCheckout() {
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const user = useUser();
@@ -16,7 +16,7 @@ export function useCheckout(session: Omit<Session, 'url' | 'customer'>) {
 
   const uid = user.uid;
 
-  const checkout = useCallback(async () => {
+  const checkout = useCallback(async (session: Omit<Session, 'url' | 'customer'>) => {
     setLoading(true);
     const collection = collections.sessions(uid);
     const ref = doc(collection);
@@ -62,10 +62,9 @@ export function useCheckout(session: Omit<Session, 'url' | 'customer'>) {
       });
     } catch (e: any) {
       setError(e);
-    } finally {
       setLoading(false);
     }
-  }, [session, uid]);
+  }, [uid]);
 
   return { checkout, loading, error };
 }

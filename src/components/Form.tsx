@@ -1,5 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
+import { ChevronDownIcon } from '@heroicons/react/solid';
 
 export type DividerProps = {
   children: string;
@@ -41,6 +42,40 @@ export function Input({ id, label, value, onChange, error, ...props }: InputProp
         })}
         onChange={onChange}
       />
+      {!!error && <Error>{error}</Error>}
+    </div>
+  );
+}
+
+export interface SelectProps extends React.InputHTMLAttributes<HTMLSelectElement> {
+  id: string;
+  value: string;
+  options: { value: string; label: string }[];
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  label?: string;
+  error?: string;
+}
+
+export function Select({ id, label, value, options, onChange, error, ...props }: SelectProps) {
+  return (
+    <div>
+      {!!label && <Label id={id}>{label}</Label>}
+      <div className="relative w-42">
+        <select
+          value={value}
+          onChange={onChange}
+          name="order"
+          id="order"
+          className="w-full truncate border text-sm text-indigo-700 font-bold px-4 py-1 pr-8 rounded bg-gray-50 hover:bg-gray-100 appearance-none focus:outline-none focus:border-gray-500"
+        >
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <ChevronDownIcon className="w-5 h-5 text-indigo-700 absolute top-[6px] right-2" />
+      </div>
       {!!error && <Error>{error}</Error>}
     </div>
   );

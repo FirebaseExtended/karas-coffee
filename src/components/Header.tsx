@@ -31,7 +31,7 @@ export function Header() {
                 {!!user.photoURL && <img src={user.photoURL} className="w-7 h-7 rounded-full ml-2" />}
               </>
             )}
-            {!user && 'Login'}
+            {!user && 'Sign In'}
           </HeaderLink>
         </div>
       </div>

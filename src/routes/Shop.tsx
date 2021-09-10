@@ -1,12 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ChevronDownIcon } from '@heroicons/react/solid';
 import { FieldPath } from 'firebase/firestore';
 
-import { ButtonGroup } from '../components/ButtonGroup';
 import { ProductCard, ProductCardSkeleton } from '../components/ProductCard';
 import { useProducts, UseProductsConstraints } from '../hooks/useProducts';
 import { emptyArray } from '../utils';
+import { Select } from '../components/Form';
+
+// TODO(ehesp): Cleanup swag filtering if it needs to be hidden.
 
 // Declare available filters and a type.
 const filters = ['all', 'swag', 'coffee'] as const;
@@ -38,7 +39,7 @@ export function Shop() {
   };
 
   // Extract the filter and validate it.
-  let filter: Filter = (params.get('filter') as Filter) ?? filters[0];
+  let filter: Filter = (params.get('filter') as Filter) ?? 'coffee';
   if (!filters.includes(filter)) filter = filters[0];
 
   // Extract the order and validate it.
@@ -70,29 +71,43 @@ export function Shop() {
   );
 
   const products = useProducts(constraints);
-  console.log(products);
+
   return (
     <>
       <div>
         <div className="mb-6 flex justify-end space-x-4">
-          <div className="relative w-42">
-            <select
-              value={order}
-              onChange={(e) => updateParamValue('order', e.target.value)}
-              name="order"
-              id="order"
-              className="w-full truncate border text-sm text-indigo-700 font-bold px-4 py-1 pr-8 rounded bg-gray-50 hover:bg-gray-100 appearance-none focus:outline-none focus:border-gray-500"
-            >
-              <option value="name-asc">Name: A-Z (ASC)</option>
-              <option value="name-desc">Name: Z-A (DESC)</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-              <option value="strength-asc">Strength: Low to High</option>
-              <option value="strength-desc">Strength: High to Low</option>
-            </select>
-            <ChevronDownIcon className="w-5 h-5 text-indigo-700 absolute top-[6px] right-2" />
-          </div>
-          <ButtonGroup<Filter>
+          <Select
+            value={order}
+            onChange={(e) => updateParamValue('order', e.target.value)}
+            id="order"
+            options={[
+              {
+                value: 'name-asc',
+                label: 'Name: A-Z',
+              },
+              {
+                value: 'name-desc',
+                label: 'Name: Z-A',
+              },
+              {
+                value: 'price-asc',
+                label: 'Price: Low to High',
+              },
+              {
+                value: 'price-desc',
+                label: 'Price: High to Low',
+              },
+              {
+                value: 'strength-asc',
+                label: 'Strength: Low to High',
+              },
+              {
+                value: 'strength-desc',
+                label: 'Strength: High to Low',
+              },
+            ]}
+          />
+          {/* <ButtonGroup<Filter>
             active={filter}
             onClick={(id) => updateParamValue('filter', id)}
             buttons={[
@@ -100,7 +115,7 @@ export function Shop() {
               { id: 'swag', children: 'Swag' },
               { id: 'coffee', children: 'Coffee' },
             ]}
-          />
+          /> */}
         </div>
         <section className="flex-row md:grid md:flex-col md:grid-cols-4 md:gap-x-6 md:gap-y-12">
           {products.status === 'loading' && emptyArray(8).map((_, i) => <ProductCardSkeleton key={i} />)}

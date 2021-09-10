@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useFormik } from 'formik';
+
 import { XIcon } from '@heroicons/react/solid';
 import { Button } from '../components/Button';
 import { Input, Error } from '../components/Form';
@@ -8,6 +10,8 @@ import { useCheckout } from '../hooks/useCheckout';
 import { isProductCoffee } from '../types';
 import { ProductCoffeeMetadata } from '../components/ProductCard';
 import { Alert } from '../components/Alert';
+import { Address, AddressFormValues } from '../components/Address';
+import { useUser } from '../hooks/useUser';
 
 export function Checkout() {
   const { cart } = useCart();
@@ -88,30 +92,65 @@ function Items() {
 }
 
 function Order() {
+  const user = useUser();
   const { cart, total } = useCart();
-  const { checkout, error, loading } = useCheckout({
-    mode: 'payment',
-    success_url: `${window.location.origin}/account/orders`,
-    cancel_url: window.location.href,
-    line_items: cart.map((item) => ({
-      price: item.metadata.price,
-      quantity: item.quantity,
-    })),
+
+  const { checkout, error, loading } = useCheckout();
+
+  // TODO(ehesp): Add address validation
+  const formik = useFormik<AddressFormValues>({
+    initialValues: {
+      name: user?.displayName || '',
+      line1: '',
+      line2: '',
+      city: '',
+      state: '',
+      postal_code: '',
+    },
+    async onSubmit(values) {
+      await checkout({
+        mode: 'subscription',
+        success_url: `${window.location.origin}/account/subscriptions`,
+        cancel_url: window.location.href,
+        line_items: cart.map((item) => ({
+          price: item.metadata.price,
+          quantity: item.quantity,
+        })),
+        shipping: {
+          name: values.name,
+          address: {
+            country: 'US', // TODO(ehesp): allow users to select country
+            line1: values.line1,
+            line2: values.line2,
+            city: values.city,
+            postal_code: values.postal_code,
+            state: values.state,
+          },
+        },
+      });
+    },
   });
 
   return (
-    <div className="sticky p-8 border rounded bg-gray-50 top-20">
-      <h2 className="text-lg font-bold text-gray-700">Order Summary</h2>
-      <div className="my-4 divide-y">
-        <OrderRow label="Subtotal" value={`$${total}`} />
-        <OrderRow label="Shipping" value="$0" />
-        <OrderRow label="Tax" value="$0" />
-        <OrderRow
-          label={<span className="text-lg font-bold text-gray-900">Order Total</span>}
-          value={<span className="text-lg">${total}</span>}
-        />
+    <form onSubmit={formik.handleSubmit} className="sticky p-8 border rounded bg-gray-50 top-20 space-y-4">
+      <div>
+        <h2 className="text-lg font-bold text-gray-700 mb-2">Shipping Address</h2>
+        <Address values={formik.values} onChange={formik.handleChange} errors={formik.errors} />
       </div>
-      <Button className="block" onClick={checkout} loading={loading}>
+      <div>
+        <h2 className="text-lg font-bold text-gray-700">Order Summary</h2>
+        <div className="my-4 divide-y">
+          <OrderRow label="Subtotal" value={`$${total}`} />
+          <OrderRow label="Shipping" value="$0" />
+          <OrderRow label="Tax" value="$0" />
+          <OrderRow
+            label={<span className="text-lg font-bold text-gray-900">Order Total</span>}
+            value={<span className="text-lg">${total}</span>}
+          />
+        </div>
+      </div>
+
+      <Button type="submit" className="block" loading={loading} disabled={!formik.isValid}>
         Checkout
       </Button>
       {!!error && (
@@ -119,7 +158,7 @@ function Order() {
           <Error>{error.message}</Error>
         </div>
       )}
-    </div>
+    </form>
   );
 }
 
