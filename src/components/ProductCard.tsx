@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingBagIcon, XIcon } from '@heroicons/react/outline';
 import { GlobeIcon, QuestionMarkCircleIcon, SunIcon } from '@heroicons/react/solid';
 
@@ -7,12 +7,15 @@ import { isProductCoffee, Product, ProductCoffee } from '../types';
 import { useCart } from '../hooks/useCart';
 import { Tooltip } from './Tooltip';
 import { Skeleton } from './Skeleton';
+import { useUser } from '../hooks/useUser';
 
 export type ProductCardProps = {
   product: Product;
 };
 
 export function ProductCard({ product }: ProductCardProps) {
+  const user = useUser();
+  const navigate = useNavigate();
   const { addToCart, removeFromCart, getItem } = useCart();
 
   const href = `/product/${product.id}`;
@@ -33,10 +36,14 @@ export function ProductCard({ product }: ProductCardProps) {
           <div
             role="button"
             onClick={() => {
-              if (inCart) {
-                removeFromCart(product);
+              if (user) {
+                if (inCart) {
+                  removeFromCart(product);
+                } else {
+                  addToCart(product);
+                }
               } else {
-                addToCart(product);
+                navigate('/signin');
               }
             }}
             className="absolute top-0 right-0 flex items-center justify-center w-12 h-12 transition-opacity rounded-tr rounded-bl opacity-0 group group-hover:opacity-100 bg-black/90"

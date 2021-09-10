@@ -1,11 +1,12 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { ShoppingCartIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
-import { useLocalStorage } from '@rehooks/local-storage';
+import { doc, onSnapshot, setDoc, Unsubscribe } from '@firebase/firestore';
 
 import { useUser } from '../hooks/useUser';
 import { Product } from '../types';
 import { useCart } from '../hooks/useCart';
+import { collections } from '../firebase';
 
 export function Cart() {
   const user = useUser();
@@ -55,7 +56,28 @@ type CartProviderProps = {
 };
 
 export function CartProvider(props: CartProviderProps) {
-  const [cart, setCart] = useLocalStorage<CartItem[]>('cart', []);
+  const user = useUser();
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const ref = doc(collections.cart, user?.uid ?? '-');
+
+  useEffect(() => {
+    let unsubscribe: Unsubscribe;
+    if (user) {
+      unsubscribe = onSnapshot(ref, (snapshot) => {
+        if (snapshot.exists()) {
+          setCart(snapshot.data().items as CartItem[]);
+        }
+      });
+    } else {
+      setCart([]);
+    }
+
+    return () => unsubscribe?.();
+  }, [user]);
+
+  function syncCart(items: CartItem[]) {
+    setDoc(ref, { items }, { merge: true });
+  }
 
   return (
     <CartContext.Provider
@@ -63,22 +85,23 @@ export function CartProvider(props: CartProviderProps) {
         cart,
         total: cart.reduce((total, item) => total + parseInt(item.metadata.price_usd) * item.quantity, 0),
         addToCart(product, quantity = 1) {
-          setCart([...cart, { ...product, quantity }]);
+          syncCart([...cart, { ...product, quantity }]);
         },
         setQuantity(product, quantity) {
-          const _clone = [...cart];
-          const index = _clone.findIndex((item) => item.id === product.id);
+          const items = [...cart];
+          const index = items.findIndex((item) => item.id === product.id);
 
           if (index > -1) {
-            _clone[index].quantity = quantity;
-            setCart(_clone);
+            items[index].quantity = quantity;
           }
+
+          syncCart(items);
         },
         removeFromCart(product) {
-          setCart(cart.filter((p) => p.id !== product.id));
+          syncCart(cart.filter((p) => p.id !== product.id));
         },
         clearCart() {
-          setCart([]);
+          syncCart([]);
         },
         getItem(product) {
           return cart.find((p) => p.id === product.id);

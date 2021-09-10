@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ChevronDownIcon } from '@heroicons/react/solid';
 import { FieldPath } from 'firebase/firestore';
 
-import { ButtonGroup } from '../components/ButtonGroup';
 import { ProductCard, ProductCardSkeleton } from '../components/ProductCard';
 import { useProducts, UseProductsConstraints } from '../hooks/useProducts';
 import { emptyArray } from '../utils';
 import { Select } from '../components/Form';
+
+// TODO(ehesp): Cleanup swag filtering if it needs to be hidden.
 
 // Declare available filters and a type.
 const filters = ['all', 'swag', 'coffee'] as const;
@@ -39,7 +39,7 @@ export function Shop() {
   };
 
   // Extract the filter and validate it.
-  let filter: Filter = (params.get('filter') as Filter) ?? filters[0];
+  let filter: Filter = (params.get('filter') as Filter) ?? 'coffee';
   if (!filters.includes(filter)) filter = filters[0];
 
   // Extract the order and validate it.
@@ -107,7 +107,7 @@ export function Shop() {
               },
             ]}
           />
-          <ButtonGroup<Filter>
+          {/* <ButtonGroup<Filter>
             active={filter}
             onClick={(id) => updateParamValue('filter', id)}
             buttons={[
@@ -115,7 +115,7 @@ export function Shop() {
               { id: 'swag', children: 'Swag' },
               { id: 'coffee', children: 'Coffee' },
             ]}
-          />
+          /> */}
         </div>
         <section className="flex-row md:grid md:flex-col md:grid-cols-4 md:gap-x-6 md:gap-y-12">
           {products.status === 'loading' && emptyArray(8).map((_, i) => <ProductCardSkeleton key={i} />)}

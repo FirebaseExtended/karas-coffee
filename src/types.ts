@@ -76,6 +76,17 @@ export interface Session {
     price: string;
     quantity: number;
   }[];
+  shipping?: {
+    name: string;
+    address: {
+      country: string;
+      line1: string;
+      line2?: string;
+      city: string;
+      postal_code: string;
+      state: string;
+    };
+  };
   // Updated via extension
   url?: string;
   error?: {

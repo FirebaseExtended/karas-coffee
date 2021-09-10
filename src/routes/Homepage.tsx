@@ -11,7 +11,6 @@ export function Homepage() {
     <>
       <Subscribe />
       <Shop title="Shop Coffee" type="coffee" />
-      <Shop title="Shop Swag" type="swag" />
     </>
   );
 }

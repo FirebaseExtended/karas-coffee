@@ -85,6 +85,7 @@ export const sessionConverter: FirestoreDataConverter<Session> = {
       cancel_url: data.cancel_url,
       customer: data.customer,
       line_items: data.line_items,
+      shipping: data.shipping,
       url: data.url,
       error: data.error,
     };
@@ -96,6 +97,7 @@ export const sessionConverter: FirestoreDataConverter<Session> = {
       cancel_url: session.cancel_url,
       customer: session.customer,
       line_items: session.line_items,
+      shipping: session.shipping,
       collect_shipping_address: true,
       metadata: {
         mode: session.mode,

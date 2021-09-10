@@ -20,24 +20,15 @@ export const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const firestore = getFirestore(app);
 
-function getCollectionName(name: string) {
-  // Leaving here just in-case we want to do dev/prod specific collections.
-  return `${name}`;
-}
-
 export const collections = {
-  products: collection(firestore, getCollectionName('products')).withConverter(productConverter),
-  customers: collection(firestore, getCollectionName('customers')).withConverter(customerConverter),
+  products: collection(firestore, 'products').withConverter(productConverter),
+  customers: collection(firestore, 'customers').withConverter(customerConverter),
+  // TODO(ehesp): Add converter once schema agreed.
+  cart: collection(firestore, 'cart'),
   sessions: (customerId: string) =>
-    collection(firestore, getCollectionName('customers'), customerId, 'checkout_sessions').withConverter(
-      sessionConverter,
-    ),
+    collection(firestore, 'customers', customerId, 'checkout_sessions').withConverter(sessionConverter),
   payments: (customerId: string) =>
-    collection(firestore, getCollectionName('customers'), customerId, 'payments').withConverter(
-      sessionConverter,
-    ),
+    collection(firestore, 'customers', customerId, 'payments').withConverter(sessionConverter),
   productReviews: (productId: string) =>
-    collection(firestore, getCollectionName('products'), productId, getCollectionName('reviews')).withConverter(
-      reviewConverter,
-    ),
+    collection(firestore, 'products', productId, 'reviews').withConverter(reviewConverter),
 };
