@@ -24,11 +24,11 @@ export function Header() {
         <div className="flex space-x-4">
           <Cart />
           <HeaderLink to="/shop">Shop</HeaderLink>
-          <HeaderLink to={!!user ? '/account' : '/signin'}>
-            {!!user && (
+          <HeaderLink to={user.isSuccess && !!user.data ? '/account' : '/signin'}>
+            {user.isSuccess && !!user && (
               <>
                 <span>My Account</span>
-                {!!user.photoURL && <img src={user.photoURL} className="w-7 h-7 rounded-full ml-2" />}
+                {!!user.data!.photoURL && <img src={user.data!.photoURL} className="w-7 h-7 rounded-full ml-2" />}
               </>
             )}
             {!user && 'Sign In'}

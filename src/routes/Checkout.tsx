@@ -100,7 +100,7 @@ function Order() {
   // TODO(ehesp): Add address validation
   const formik = useFormik<AddressFormValues>({
     initialValues: {
-      name: user?.displayName || '',
+      name: user.data?.displayName || '',
       line1: '',
       line2: '',
       city: '',

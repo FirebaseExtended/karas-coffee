@@ -10,12 +10,6 @@ import {
   GoogleAuthProvider,
   TwitterAuthProvider,
 } from 'firebase/auth';
-
-/**
- * Global auth context for the application.
- */
-export const AuthContext = createContext<User | null>(null);
-
 /**
  * Gets a user instance once and unsubscribes from future changes.
  */

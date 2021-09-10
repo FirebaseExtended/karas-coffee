@@ -118,9 +118,8 @@ export function Shop() {
           /> */}
         </div>
         <section className="flex-row md:grid md:flex-col md:grid-cols-4 md:gap-x-6 md:gap-y-12">
-          {products.status === 'loading' && emptyArray(8).map((_, i) => <ProductCardSkeleton key={i} />)}
-          {products.status === 'success' &&
-            products.data.map((product) => <ProductCard key={product.id} product={product} />)}
+          {products.isLoading && emptyArray(8).map((_, i) => <ProductCardSkeleton key={i} />)}
+          {products.isSuccess && products.data.map((product) => <ProductCard key={product.id} product={product} />)}
         </section>
       </div>
     </>

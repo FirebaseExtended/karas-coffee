@@ -1,29 +1,27 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 
 import { auth } from '../firebase';
-import { AuthContext } from '../firebase/auth';
+import { getUserOnce } from '../firebase/auth';
+import { useQuery, useQueryClient } from 'react-query';
 
 /**
- * Returns the current user from context.
- * @returns User | null
+ * Subscribes to the current user.
  */
-export function useUser(): User | null {
-  return useContext(AuthContext);
-}
-
-/**
- * Subscribes to the user's authentication state.
- *
- * @param initialUser The initial state of the user.
- * @returns User | null
- */
-export function useUserState(initialUser: User | null): User | null {
-  const [user, setUser] = useState<User | null>(initialUser);
+export function useUser() {
+  const client = useQueryClient();
 
   useEffect(() => {
-    return onAuthStateChanged(auth, setUser);
+    return onAuthStateChanged(auth, (user) => {
+      const exists = client.getQueryData('user');
+
+      if (exists && !user) {
+        client.setQueryData<User | null>('user', null);
+      } else if (!exists && !!user) {
+        client.setQueryData<User | null>('user', user);
+      }
+    });
   }, []);
 
-  return user;
+  return useQuery<User | null>('user', getUserOnce);
 }

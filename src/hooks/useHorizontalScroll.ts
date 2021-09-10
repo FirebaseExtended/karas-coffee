@@ -1,5 +1,8 @@
 import { useEffect, useRef } from 'react';
 
+/**
+ * Given an element, any mousewheel scrolling will be applied horizontally.
+ */
 export function useHorizontalScroll() {
   const ref = useRef<HTMLDivElement>(null);
   function onScroll(e: WheelEvent) {

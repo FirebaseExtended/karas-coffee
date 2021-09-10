@@ -1,6 +1,15 @@
-import { FieldPath, orderBy, OrderByDirection, query, QueryConstraint, limit, where, WhereFilterOp } from 'firebase/firestore';
-import { useFirestoreCollectionData } from 'reactfire';
+import {
+  FieldPath,
+  orderBy,
+  OrderByDirection,
+  query,
+  QueryConstraint,
+  limit,
+  where,
+  WhereFilterOp,
+} from 'firebase/firestore';
 import { collections } from '../firebase';
+import { useFirestoreQuery } from './useFirestore';
 
 export type UseProductsConstraints = {
   limitTo?: number;
@@ -15,7 +24,7 @@ export function useProducts({ limitTo, orders, filters }: UseProductsConstraints
   const constraints: QueryConstraint[] = [];
 
   if (limitTo) {
-    constraints.push(limit(limitTo))
+    constraints.push(limit(limitTo));
   }
 
   if (orders) {
@@ -30,5 +39,7 @@ export function useProducts({ limitTo, orders, filters }: UseProductsConstraints
     }
   }
 
-  return useFirestoreCollectionData(query(collection, ...constraints));
+  return useFirestoreQuery('products', query(collection, ...constraints), {
+    subscribe: true,
+  });
 }

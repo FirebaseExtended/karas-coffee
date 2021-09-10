@@ -21,11 +21,11 @@ export function Product() {
   const product = useProduct(id);
   const { addToCart, removeFromCart, getItem, setQuantity } = useCart();
 
-  if (product.status === 'loading') {
+  if (product.isLoading) {
     return <div />;
   }
 
-  if (product.status === 'error' || !product.data) {
+  if (product.isError || !product.data) {
     return (
       <div className="h-64 flex items-center justify-center text-gray-600">
         Sorry, something went wrong loading this product.
@@ -64,7 +64,7 @@ export function Product() {
                         let quantity = parseInt(e.target.value);
                         if (isNaN(quantity) || quantity < 1) quantity = 1;
                         if (quantity > 100) quantity = 100;
-                        setQuantity(product.data, quantity);
+                        setQuantity(product.data!, quantity);
                       }}
                     />
                   </div>
@@ -72,12 +72,12 @@ export function Product() {
                     <XIcon
                       role="button"
                       className="w-5 h-5 mt-7 hover:opacity-50"
-                      onClick={() => removeFromCart(product.data)}
+                      onClick={() => removeFromCart(product.data!)}
                     />
                   </div>
                 </div>
               )}
-              {!cartItem && <Button onClick={() => addToCart(product.data)}>Add to cart</Button>}
+              {!cartItem && <Button onClick={() => addToCart(product.data!)}>Add to cart</Button>}
             </div>
           </div>
         </div>
@@ -91,13 +91,13 @@ export function Product() {
 }
 
 function Review({ productId }: { productId: string }) {
-  const user = useUser()!;
+  const user = useUser();
 
-  const review = useProductReview(productId, user.uid);
+  const review = useProductReview(productId, user.data!.uid);
   const addReview = useReviewMutation(productId);
   const [edit, setEdit] = useState<boolean>(false);
 
-  const userReview = review.data?.data();
+  const userReview = review.data;
 
   return (
     <section className="mt-24">
@@ -115,7 +115,7 @@ function Review({ productId }: { productId: string }) {
           {review.status === 'success' && !userReview && (
             <WriteReviewCard
               onSubmit={async (values) => {
-                await addReview({
+                await addReview.mutateAsync({
                   rating: values.stars,
                   message: values.message,
                 });
@@ -128,7 +128,7 @@ function Review({ productId }: { productId: string }) {
                 initialMessage={userReview.message}
                 initialStars={userReview.rating}
                 onSubmit={async (values) => {
-                  await addReview({
+                  await addReview.mutateAsync({
                     rating: values.stars,
                     message: values.message,
                   });
