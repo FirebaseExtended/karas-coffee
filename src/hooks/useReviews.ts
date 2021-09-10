@@ -3,7 +3,7 @@ import { useFirestoreCollectionData, useFirestoreDoc } from 'reactfire';
 import { collections } from '../firebase';
 import { Review } from '../types';
 
-export const TOXICITY_THRESHOLD = 0.75;
+export const TOXICITY_THRESHOLD = 0.60;
 
 function useReviews<T>(collection: CollectionReference<T>) {
   const constraints: QueryConstraint[] = [];

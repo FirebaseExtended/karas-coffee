@@ -4,3 +4,10 @@ node_modules
 dist
 dist-ssr
 *.local
+
+
+# functions
+functions/lib/**/*.js
+functions/lib/**/*.js.map
+functions/typings/
+functions/node_modules/

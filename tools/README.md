@@ -1,9 +1,9 @@
 ## Coffee Scripts
 
-A collection of scripts to manage this project.
+A collection of scripts and tools to manage this project.
 
 ```bash
-cd scripts
+cd tools
 yarn
 ```
 
@@ -12,6 +12,8 @@ yarn
 ```bash
 yarn stripe:import-products
 ```
+
+Note: this script requires you create a `tools/.env` file with your `STRIPE_SECRET_KEY` set in it.
 
 ### Deploy Firestore Rules
 
