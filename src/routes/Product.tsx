@@ -27,7 +27,7 @@ export function Product() {
 
   if (product.isError || !product.data) {
     return (
-      <div className="h-64 flex items-center justify-center text-gray-600">
+      <div className="flex items-center justify-center h-64 text-gray-600">
         Sorry, something went wrong loading this product.
       </div>
     );
@@ -51,7 +51,7 @@ export function Product() {
             <p className="mt-6 text-gray-600">{product.data.description}</p>
             <div className="mt-6">
               {!!cartItem && (
-                <div className="mt-4 flex items-center">
+                <div className="flex items-center mt-4">
                   <div className="flex-grow">
                     <Input
                       id={`quantity-${product.data.id}`}
@@ -68,7 +68,7 @@ export function Product() {
                       }}
                     />
                   </div>
-                  <div className="w-10 flex-shrink-0 flex items-center justify-center">
+                  <div className="flex items-center justify-center flex-shrink-0 w-10">
                     <XIcon
                       role="button"
                       className="w-5 h-5 mt-7 hover:opacity-50"
@@ -82,7 +82,7 @@ export function Product() {
           </div>
         </div>
       </section>
-      <section className="mt-25 max-w-xl mx-auto">
+      <section className="max-w-xl mx-auto mt-25">
         {!!user && <Review productId={product.data.id} />}
         <ListReviews productId={product.data.id} />
       </section>
@@ -93,7 +93,9 @@ export function Product() {
 function Review({ productId }: { productId: string }) {
   const user = useUser();
 
-  const review = useProductReview(productId, user.data!.uid);
+  if (!user?.data) return null;
+
+  const review = useProductReview(productId, user?.data!.uid);
   const addReview = useReviewMutation(productId);
   const [edit, setEdit] = useState<boolean>(false);
 
@@ -156,7 +158,9 @@ function ListReviews({ productId }: { productId: string }) {
         {reviews.status === 'success' && (
           <>
             {reviews.data.length === 0 && (
-              <p className="text-gray-600 mt-4">There are no reviews for this product, grab a coffee and be the first to write one!</p>
+              <p className="mt-4 text-gray-600">
+                There are no reviews for this product, grab a coffee and be the first to write one!
+              </p>
             )}
             {reviews.data.map((review) => wrapper(<ReviewCard review={review} />))}
           </>

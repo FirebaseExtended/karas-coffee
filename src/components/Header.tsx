@@ -28,7 +28,7 @@ export function Header() {
             {user.isSuccess && !!user && (
               <>
                 <span>My Account</span>
-                {!!user.data!.photoURL && <img src={user.data!.photoURL} className="w-7 h-7 rounded-full ml-2" />}
+                {!!user.data?.photoURL && <img src={user.data?.photoURL} className="ml-2 rounded-full w-7 h-7" />}
               </>
             )}
             {!user && 'Sign In'}
