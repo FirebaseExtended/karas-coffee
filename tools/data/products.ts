@@ -9,6 +9,7 @@ interface Product {
         strength: string;
         origin: string;
         type: 'coffee';
+        weight: string;
         description: string;
         variety: string;
       }
@@ -18,20 +19,21 @@ interface Product {
       };
 }
 
-export const coffees: Product[] = [
+export const coffeeBags: Product[] = [
   {
     id: 'loja',
     name: 'Loja',
     images: [
-      'https://images.unsplash.com/photo-1497515114629-f71d768fd07c?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
+      'https://images.unsplash.com/photo-1562051036-e0eea191d42f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
     ],
-    price_usd: 12,
+    price_usd: 3,
     description:
       'A fairly acidic coffee with a medium body and a predictable flavor typical of South American coffees.',
     metadata: {
       strength: '3',
       origin: 'Ecuador',
       type: 'coffee',
+      weight: '500g',
       description:
         'A fairly acidic coffee with a medium body and a predictable flavor typical of South American coffees.',
       variety: 'Caturra',
@@ -41,15 +43,16 @@ export const coffees: Product[] = [
     id: 'lizarb',
     name: 'Lizarb',
     images: [
-      'https://images.unsplash.com/photo-1511537190424-bbbab87ac5eb?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
+      'https://images.unsplash.com/photo-1562051036-e0eea191d42f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
     ],
-    price_usd: 9,
+    price_usd: 5,
     description:
       'Lizarb Brazilian coffee has a relatively low acidity, and exhibits a nutty sweet flavor, with a chocolaty roast taste. ',
     metadata: {
       strength: '7',
       origin: 'Brazil',
       type: 'coffee',
+      weight: '500g',
       description:
         'Lizarb Brazilian coffee has a relatively low acidity, and exhibits a nutty sweet flavor, with a chocolaty roast taste. ',
       variety: 'Novo',
@@ -59,14 +62,15 @@ export const coffees: Product[] = [
     id: 'chipinga',
     name: 'Chipinga',
     images: [
-      'https://images.unsplash.com/photo-1525088553748-01d6e210e00b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
+      'https://images.unsplash.com/photo-1562051036-e0eea191d42f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
     ],
-    price_usd: 7,
+    price_usd: 2,
     description: 'Chipinga coffee is a medium-bodied with a medium density and lively berry-like or citrusy acidity.',
     metadata: {
       variety: 'Caltimor',
       origin: 'Zimbabwe',
       type: 'coffee',
+      weight: '500g',
       strength: '5',
       description: 'Chipinga coffee is a medium-bodied with a medium density and lively berry-like or citrusy acidity.',
     },
@@ -75,14 +79,15 @@ export const coffees: Product[] = [
     id: 'kahawa',
     name: 'Kahawa',
     images: [
-      'https://images.unsplash.com/photo-1552346988-bf70b50d3c98?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
+      'https://images.unsplash.com/photo-1562051036-e0eea191d42f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
     ],
-    price_usd: 10,
+    price_usd: 4,
     description: 'Kenyan coffee beans have distinctly bright taste with complex tones of fruit and berry.',
     metadata: {
       strength: '9',
       origin: 'Kenya',
       type: 'coffee',
+      weight: '500g',
       description: 'Kenyan coffee beans have distinctly bright taste with complex tones of fruit and berry.',
       variety: 'Arabica',
     },
@@ -91,15 +96,16 @@ export const coffees: Product[] = [
     id: 'sulawesi-toraja',
     name: 'Sulawesi Toraja',
     images: [
-      'https://images.unsplash.com/photo-1498603536246-15572faa67a6?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
+      'https://images.unsplash.com/photo-1562051036-e0eea191d42f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
     ],
-    price_usd: 17,
+    price_usd: 1,
     description:
       'A well balanced coffee that exhibits tasting notes of dark chocolate and ripe fruit with a low-toned yet vibrant acidity.',
     metadata: {
       strength: '10',
       origin: 'Sulawesi',
       type: 'coffee',
+      weight: '500g',
       description:
         'A well balanced coffee that exhibits tasting notes of dark chocolate and ripe fruit with a low-toned yet vibrant acidity.',
       variety: 'Arabica',
@@ -178,4 +184,4 @@ export const merchandise: Product[] = [
   },
 ];
 
-export const products: Product[] = [...merchandise, ...coffees];
+export const products: Product[] = [...merchandise, ...coffeeBags];
