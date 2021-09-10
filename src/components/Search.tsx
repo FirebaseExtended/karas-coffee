@@ -66,22 +66,25 @@ const Results = connectStateResults((state) => {
   }
 
   return wrapper(
-    <div className="p-20 flex items-center justify-center text-gray-600">Sorry, no results were found</div>,
+    <div className="flex items-center justify-center p-20 text-gray-600">Sorry, no results were found</div>,
   );
 });
 
 const Row = ({ hit }: { hit: Hit<Product> }) => {
+  // Filter out stripe shipping product data.
+  if (hit.objectID === 'shipping_countries') return null;
+
   return (
     <Link
       to={`/product/${hit.objectID}`}
       className="flex items-center px-4 py-4 hover:bg-gray-50"
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="w-16 flex-shrink-0 mr-4">
-        <img src={hit.images[0]} alt={hit.name} className="h-16 w-16 rounded object-cover" />
+      <div className="flex-shrink-0 w-16 mr-4">
+        <img src={hit.images[0]} alt={hit.name} className="object-cover w-16 h-16 rounded" />
       </div>
       <div>
-        <div className="flex items-center font-semibold text-lg">
+        <div className="flex items-center text-lg font-semibold">
           <h3 className="flex-grow">{hit.name}</h3>
           <div>${hit.metadata.price_usd}</div>
         </div>
