@@ -77,7 +77,7 @@ export function Product() {
                   </div>
                 </div>
               )}
-              {!cartItem && <Button onClick={() => addToCart(product.data!)}>Add to cart</Button>}
+              {!cartItem && !!user.data && <Button onClick={() => addToCart(product.data!)}>Add to cart</Button>}
             </div>
           </div>
         </div>
