@@ -31,8 +31,17 @@ async function main() {
       });
     }
 
-    const { data: prices } = await stripe.prices.list({ product: product.id });
+    const { data: prices } = await stripe.prices.list({ product: product.id, active: true });
     const priceExists = prices.length > 0;
+    let recurring = {};
+    if (product.metadata.type == 'coffee') {
+      recurring = {
+        recurring: {
+          interval: 'month',
+          interval_count: 1,
+        },
+      };
+    }
     if (!priceExists) {
       const price = await stripe.prices.create({
         currency: 'usd',
@@ -42,6 +51,7 @@ async function main() {
           ...stripeObject.metadata,
           product_id: product.id,
         },
+        ...recurring,
       });
       // Add price id to product metadata - helps us do less firestore requests.
       await stripe.products.update(product.id, {
