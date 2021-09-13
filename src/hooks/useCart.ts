@@ -1,9 +1,9 @@
-import { doc, setDoc } from 'firebase/firestore';
-import { useMutation, useQueryClient } from 'react-query';
+import { useFirestoreDocumentData, useFirestoreDocumentMutation } from '@react-query-firebase/firestore';
+import { doc } from 'firebase/firestore';
+import { useQueryClient } from 'react-query';
 
 import { collections } from '../firebase';
 import { Product } from '../types';
-import { useFirestoreDocument, useFirestoreDocumentKey } from './useFirestore';
 import { useUser } from './useUser';
 
 export type CartItem = Product & { quantity: number };
@@ -23,19 +23,25 @@ export function useCart(): UseCart {
   const user = useUser();
   const ref = doc(collections.cart, user.data?.uid ?? '-');
 
-  const queryKeyName = 'cart';
-  const queryKey = useFirestoreDocumentKey(queryKeyName);
-  const cart = useFirestoreDocument(queryKeyName, ref);
+  const cart = useFirestoreDocumentData(
+    'cart',
+    ref,
+    { subscribe: true },
+    {
+      enabled: !!user,
+    },
+  );
 
   const cartItems = (!user ? [] : cart.data?.items ?? []) as CartItem[];
 
-  const mutation = useMutation<void, Error, CartItem[]>(
-    async (items) => {
-      await setDoc(ref, { items }, { merge: true });
+  const mutation = useFirestoreDocumentMutation(
+    ref,
+    {
+      merge: true,
     },
     {
       onSuccess() {
-        client.invalidateQueries(queryKey);
+        client.invalidateQueries('cart');
       },
     },
   );

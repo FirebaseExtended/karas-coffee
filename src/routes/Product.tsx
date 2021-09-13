@@ -156,7 +156,9 @@ function ListReviews({ productId }: { productId: string }) {
         {reviews.status === 'success' && (
           <>
             {reviews.data.length === 0 && (
-              <p className="text-gray-600 mt-4">There are no reviews for this product, grab a coffee and be the first to write one!</p>
+              <p className="text-gray-600 mt-4">
+                There are no reviews for this product, grab a coffee and be the first to write one!
+              </p>
             )}
             {reviews.data.map((review) => wrapper(<ReviewCard review={review} />))}
           </>

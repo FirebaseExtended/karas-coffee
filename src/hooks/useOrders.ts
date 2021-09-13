@@ -1,6 +1,6 @@
+import { useFirestoreQueryData } from '@react-query-firebase/firestore';
 import { orderBy, query, QueryConstraint, where } from 'firebase/firestore';
 import { collections } from '../firebase';
-import { useFirestoreQuery } from './useFirestore';
 import { useUser } from './useUser';
 
 export function useOrders() {
@@ -16,5 +16,5 @@ export function useOrders() {
   constraints.push(where('metadata.mode', '==', 'payment'));
   constraints.push(orderBy('created'));
 
-  return useFirestoreQuery('orders', query(collection, ...constraints));
+  return useFirestoreQueryData('orders', query(collection, ...constraints));
 }

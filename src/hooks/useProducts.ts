@@ -1,3 +1,4 @@
+import { useFirestoreQueryData } from '@react-query-firebase/firestore';
 import {
   FieldPath,
   orderBy,
@@ -9,7 +10,6 @@ import {
   WhereFilterOp,
 } from 'firebase/firestore';
 import { collections } from '../firebase';
-import { useFirestoreQuery } from './useFirestore';
 
 export type UseProductsConstraints = {
   limitTo?: number;
@@ -39,7 +39,7 @@ export function useProducts({ limitTo, orders, filters }: UseProductsConstraints
     }
   }
 
-  return useFirestoreQuery('products', query(collection, ...constraints), {
+  return useFirestoreQueryData('products', query(collection, ...constraints), {
     subscribe: true,
   });
 }

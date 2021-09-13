@@ -1,6 +1,6 @@
+import { useFirestoreDocumentData, useFirestoreQueryData } from '@react-query-firebase/firestore';
 import { doc, FieldPath, orderBy, query, QueryConstraint, where } from 'firebase/firestore';
 import { collections } from '../firebase';
-import { useFirestoreDocument, useFirestoreQuery } from './useFirestore';
 
 export const TOXICITY_THRESHOLD = 0.6;
 
@@ -15,7 +15,7 @@ export function useProductReviews(productId: string) {
   // Ensure the record has all the toxicity fields.
   constraints.push(where(new FieldPath('attribute_scores', 'TOXICITY'), '<', TOXICITY_THRESHOLD));
 
-  return useFirestoreQuery(`reviews-${productId}`, query(collection, ...constraints), {
+  return useFirestoreQueryData(['reviews', productId], query(collection, ...constraints), {
     subscribe: true,
   });
 }
@@ -23,7 +23,7 @@ export function useProductReviews(productId: string) {
 export function useProductReview(productId: string, reviewId: string) {
   const collection = collections.productReviews(productId);
 
-  return useFirestoreDocument(`reviews-${productId}-${reviewId}`, doc(collection, reviewId), {
+  return useFirestoreDocumentData(['reviews', productId, reviewId], doc(collection, reviewId), {
     subscribe: true,
   });
 }

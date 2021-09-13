@@ -41,7 +41,7 @@ export function useReviewMutation(productId: string) {
     },
     {
       onSuccess(reviewId) {
-        client.invalidateQueries(`reviews-${productId}-${reviewId}`);
+        client.invalidateQueries(['reviews', productId, reviewId]);
       },
     },
   );
