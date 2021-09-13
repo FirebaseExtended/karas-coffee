@@ -28,23 +28,15 @@ export function useCart(): UseCart {
     ref,
     { subscribe: true },
     {
-      enabled: !!user,
+      enabled: user.isSuccess && !!user.data,
     },
   );
 
   const cartItems = (!user ? [] : cart.data?.items ?? []) as CartItem[];
 
-  const mutation = useFirestoreDocumentMutation(
-    ref,
-    {
-      merge: true,
-    },
-    {
-      onSuccess() {
-        client.invalidateQueries('cart');
-      },
-    },
-  );
+  const mutation = useFirestoreDocumentMutation(ref, {
+    merge: true,
+  });
 
   return {
     cart: cartItems,

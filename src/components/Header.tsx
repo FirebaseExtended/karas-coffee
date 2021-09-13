@@ -25,13 +25,13 @@ export function Header() {
           <Cart />
           <HeaderLink to="/shop">Shop</HeaderLink>
           <HeaderLink to={user.isSuccess && !!user.data ? '/account' : '/signin'}>
-            {user.isSuccess && !!user && (
+            {user.isSuccess && !!user.data && (
               <>
                 <span>My Account</span>
                 {!!user.data?.photoURL && <img src={user.data?.photoURL} className="ml-2 rounded-full w-7 h-7" />}
               </>
             )}
-            {!user && 'Sign In'}
+            {user.isSuccess && !user.data && 'Sign In'}
           </HeaderLink>
         </div>
       </div>

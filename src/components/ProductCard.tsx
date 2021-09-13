@@ -36,7 +36,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <div
             role="button"
             onClick={() => {
-              if (user) {
+              if (user.data) {
                 if (inCart) {
                   removeFromCart(product);
                 } else {
