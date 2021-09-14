@@ -154,7 +154,7 @@ function ListReviews({ productId }: { productId: string }) {
     <div className="mt-12">
       <h2 className="mb-2 text-3xl font-extrabold tracking-wide">Reviews</h2>
       <div className="divide-y">
-        {reviews.status === 'loading' && emptyArray(5).map(() => wrapper(<ReviewCardSkeleton />))}
+        {reviews.status === 'loading' && emptyArray(5).map((_, i) => wrapper(<ReviewCardSkeleton key={i} />))}
         {reviews.status === 'success' && (
           <>
             {reviews.data.length === 0 && (
@@ -162,7 +162,7 @@ function ListReviews({ productId }: { productId: string }) {
                 There are no reviews for this product, grab a coffee and be the first to write one!
               </p>
             )}
-            {reviews.data.map((review) => wrapper(<ReviewCard review={review} />))}
+            {reviews.data.map((review) => wrapper(<ReviewCard key={review.id} review={review} />))}
           </>
         )}
       </div>

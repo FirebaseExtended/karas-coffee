@@ -9,6 +9,7 @@ import {
   where,
   WhereFilterOp,
 } from 'firebase/firestore';
+import { QueryKey } from 'react-query';
 import { collections } from '../firebase';
 
 export type UseProductsConstraints = {
@@ -19,7 +20,7 @@ export type UseProductsConstraints = {
   filters: [FieldPath | string, WhereFilterOp, any][];
 };
 
-export function useProducts({ limitTo, orders, filters }: UseProductsConstraints) {
+export function useProducts(key: QueryKey, { limitTo, orders, filters }: UseProductsConstraints) {
   const collection = collections.products;
   const constraints: QueryConstraint[] = [];
 
@@ -39,7 +40,7 @@ export function useProducts({ limitTo, orders, filters }: UseProductsConstraints
     }
   }
 
-  return useFirestoreQueryData('products', query(collection, ...constraints), {
+  return useFirestoreQueryData(key, query(collection, ...constraints), {
     subscribe: true,
   });
 }

@@ -41,7 +41,7 @@ export function useCart(): UseCart {
     },
     {
       onMutate(data) {
-        client.setQueryData('cart', data)
+        client.setQueryData('cart', data);
       },
     },
   );
@@ -52,7 +52,10 @@ export function useCart(): UseCart {
 
   return {
     cart: cartItems,
-    total: cartItems.length,
+    total: cartItems.reduce((total, item) => {
+      const price = parseInt(item.metadata.price_usd);
+      return total + price * item.quantity;
+    }, 0),
     addToCart(product, quantity = 1) {
       mutate([...cartItems, { ...product, quantity }]);
     },

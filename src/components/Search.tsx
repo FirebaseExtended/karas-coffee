@@ -71,8 +71,11 @@ const Results = connectStateResults((state) => {
 });
 
 const Row = ({ hit }: { hit: Hit<Product> }) => {
-  // Filter out stripe shipping product data.
+  // TODO(ehesp): remove once https://github.com/stripe/stripe-firebase-extensions/pull/248/files lands
   if (hit.objectID === 'shipping_countries') return null;
+
+  // Don't show subscription items
+  if (hit.metadata.type === 'subscription') return null;
 
   return (
     <Link

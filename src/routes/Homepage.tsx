@@ -10,7 +10,8 @@ export function Homepage() {
   return (
     <>
       <Subscribe />
-      <Shop title="Shop Coffee" type="coffee" />
+      <Shop title="Coffee Shop" type="coffee" />
+      <Shop title="Swag Shop" type="swag" />
     </>
   );
 }
@@ -55,7 +56,7 @@ type ShopProps = {
 
 function Shop({ title, type }: ShopProps) {
   const limit = 4;
-  const products = useProducts({ limitTo: limit, orders: [], filters: [['metadata.type', '==', type]] });
+  const products = useProducts(['homepage', type], { limitTo: limit, orders: [], filters: [['metadata.type', '==', type]] });
 
   return (
     <>
