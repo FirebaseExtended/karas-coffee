@@ -9,7 +9,7 @@
     "deploy": "npm run build && firebase deploy --only hosting"
   },
   "dependencies": {
-    "@react-query-firebase/firestore": "^0.1.1",
+    "@react-query-firebase/firestore": "^0.2.0",
     "@heroicons/react": "^1.0.4",
     "@reach/tooltip": "^0.16.0",
     "algoliasearch": "^4.10.5",

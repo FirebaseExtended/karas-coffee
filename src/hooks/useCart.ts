@@ -34,15 +34,27 @@ export function useCart(): UseCart {
 
   const cartItems = (!user ? [] : cart.data?.items ?? []) as CartItem[];
 
-  const mutation = useFirestoreDocumentMutation(ref, {
-    merge: true,
-  });
+  const mutation = useFirestoreDocumentMutation(
+    ref,
+    {
+      merge: true,
+    },
+    {
+      onMutate(data) {
+        client.setQueryData('cart', data)
+      },
+    },
+  );
+
+  function mutate(items: CartItem[]) {
+    return mutation.mutate({ items });
+  }
 
   return {
     cart: cartItems,
     total: cartItems.length,
     addToCart(product, quantity = 1) {
-      mutation.mutate([...cartItems, { ...product, quantity }]);
+      mutate([...cartItems, { ...product, quantity }]);
     },
     setQuantity(product, quantity) {
       const items = [...cartItems];
@@ -52,13 +64,13 @@ export function useCart(): UseCart {
         items[index].quantity = quantity;
       }
 
-      mutation.mutate(items);
+      mutate(items);
     },
     removeFromCart(product) {
-      mutation.mutate(cartItems.filter((p) => p.id !== product.id));
+      mutate(cartItems.filter((p) => p.id !== product.id));
     },
     clearCart() {
-      mutation.mutate([]);
+      mutate([]);
     },
     getItem(product) {
       return cartItems.find((p) => p.id === product.id);
