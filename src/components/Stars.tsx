@@ -26,6 +26,7 @@ export function Stars({ max, current = 0, size = 'base', onSelect }: StarsProps)
       {emptyArray(max).map((_, i) => {
         return (
           <StarIcon
+            key={i}
             role={onSelect ? 'button' : 'none'}
             fill="currentColor"
             onMouseOver={() => setSelection(i + 1)}

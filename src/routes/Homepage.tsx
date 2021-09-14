@@ -10,7 +10,8 @@ export function Homepage() {
   return (
     <>
       <Subscribe />
-      <Shop title="Shop Coffee" type="coffee" />
+      <Shop title="Coffee Shop" type="coffee" />
+      <Shop title="Swag Shop" type="swag" />
     </>
   );
 }
@@ -55,7 +56,7 @@ type ShopProps = {
 
 function Shop({ title, type }: ShopProps) {
   const limit = 4;
-  const products = useProducts({ limitTo: limit, orders: [], filters: [['metadata.type', '==', type]] });
+  const products = useProducts(['homepage', type], { limitTo: limit, orders: [], filters: [['metadata.type', '==', type]] });
 
   return (
     <>
@@ -66,8 +67,8 @@ function Shop({ title, type }: ShopProps) {
         </Link>
       </div>
       <section className="flex-row md:grid md:flex-col md:grid-cols-4 md:gap-x-6 md:gap-y-12">
-        {products.status === 'loading' && emptyArray(limit).map((_, i) => <ProductCardSkeleton key={i} />)}
-        {products.status === 'success' &&
+        {!products.isSuccess && emptyArray(limit).map((_, i) => <ProductCardSkeleton key={i} />)}
+        {products.isSuccess &&
           products.data.map((product) => <ProductCard key={product.id} product={product} />)}
       </section>
     </>

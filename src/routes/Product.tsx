@@ -21,13 +21,13 @@ export function Product() {
   const product = useProduct(id);
   const { addToCart, removeFromCart, getItem, setQuantity } = useCart();
 
-  if (product.status === 'loading') {
+  if (product.isLoading) {
     return <div />;
   }
 
-  if (product.status === 'error' || !product.data) {
+  if (product.isError || !product.data) {
     return (
-      <div className="h-64 flex items-center justify-center text-gray-600">
+      <div className="flex items-center justify-center h-64 text-gray-600">
         Sorry, something went wrong loading this product.
       </div>
     );
@@ -51,7 +51,7 @@ export function Product() {
             <p className="mt-6 text-gray-600">{product.data.description}</p>
             <div className="mt-6">
               {!!cartItem && (
-                <div className="mt-4 flex items-center">
+                <div className="flex items-center mt-4">
                   <div className="flex-grow">
                     <Input
                       id={`quantity-${product.data.id}`}
@@ -64,25 +64,25 @@ export function Product() {
                         let quantity = parseInt(e.target.value);
                         if (isNaN(quantity) || quantity < 1) quantity = 1;
                         if (quantity > 100) quantity = 100;
-                        setQuantity(product.data, quantity);
+                        setQuantity(product.data!, quantity);
                       }}
                     />
                   </div>
-                  <div className="w-10 flex-shrink-0 flex items-center justify-center">
+                  <div className="flex items-center justify-center flex-shrink-0 w-10">
                     <XIcon
                       role="button"
                       className="w-5 h-5 mt-7 hover:opacity-50"
-                      onClick={() => removeFromCart(product.data)}
+                      onClick={() => removeFromCart(product.data!)}
                     />
                   </div>
                 </div>
               )}
-              {!cartItem && <Button onClick={() => addToCart(product.data)}>Add to cart</Button>}
+              {!cartItem && !!user.data && <Button onClick={() => addToCart(product.data!)}>Add to cart</Button>}
             </div>
           </div>
         </div>
       </section>
-      <section className="mt-25 max-w-xl mx-auto">
+      <section className="max-w-xl mx-auto mt-25">
         {!!user && <Review productId={product.data.id} />}
         <ListReviews productId={product.data.id} />
       </section>
@@ -91,13 +91,15 @@ export function Product() {
 }
 
 function Review({ productId }: { productId: string }) {
-  const user = useUser()!;
+  const user = useUser();
 
-  const review = useProductReview(productId, user.uid);
+  if (!user?.data) return null;
+
+  const review = useProductReview(productId, user?.data!.uid);
   const addReview = useReviewMutation(productId);
   const [edit, setEdit] = useState<boolean>(false);
 
-  const userReview = review.data?.data();
+  const userReview = review.data;
 
   return (
     <section className="mt-24">
@@ -115,7 +117,7 @@ function Review({ productId }: { productId: string }) {
           {review.status === 'success' && !userReview && (
             <WriteReviewCard
               onSubmit={async (values) => {
-                await addReview({
+                await addReview.mutateAsync({
                   rating: values.stars,
                   message: values.message,
                 });
@@ -128,7 +130,7 @@ function Review({ productId }: { productId: string }) {
                 initialMessage={userReview.message}
                 initialStars={userReview.rating}
                 onSubmit={async (values) => {
-                  await addReview({
+                  await addReview.mutateAsync({
                     rating: values.stars,
                     message: values.message,
                   });
@@ -152,13 +154,15 @@ function ListReviews({ productId }: { productId: string }) {
     <div className="mt-12">
       <h2 className="mb-2 text-3xl font-extrabold tracking-wide">Reviews</h2>
       <div className="divide-y">
-        {reviews.status === 'loading' && emptyArray(5).map(() => wrapper(<ReviewCardSkeleton />))}
+        {reviews.status === 'loading' && emptyArray(5).map((_, i) => wrapper(<ReviewCardSkeleton key={i} />))}
         {reviews.status === 'success' && (
           <>
             {reviews.data.length === 0 && (
-              <p className="text-gray-600 mt-4">There are no reviews for this product, grab a coffee and be the first to write one!</p>
+              <p className="mt-4 text-gray-600">
+                There are no reviews for this product, grab a coffee and be the first to write one!
+              </p>
             )}
-            {reviews.data.map((review) => wrapper(<ReviewCard review={review} />))}
+            {reviews.data.map((review) => wrapper(<ReviewCard key={review.id} review={review} />))}
           </>
         )}
       </div>

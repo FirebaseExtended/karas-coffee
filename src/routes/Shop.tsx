@@ -6,8 +6,7 @@ import { ProductCard, ProductCardSkeleton } from '../components/ProductCard';
 import { useProducts, UseProductsConstraints } from '../hooks/useProducts';
 import { emptyArray } from '../utils';
 import { Select } from '../components/Form';
-
-// TODO(ehesp): Cleanup swag filtering if it needs to be hidden.
+import { ButtonGroup } from '../components/ButtonGroup';
 
 // Declare available filters and a type.
 const filters = ['all', 'swag', 'coffee'] as const;
@@ -39,7 +38,7 @@ export function Shop() {
   };
 
   // Extract the filter and validate it.
-  let filter: Filter = (params.get('filter') as Filter) ?? 'coffee';
+  let filter: Filter = (params.get('filter') as Filter) ?? 'all';
   if (!filters.includes(filter)) filter = filters[0];
 
   // Extract the order and validate it.
@@ -47,6 +46,9 @@ export function Shop() {
 
   if (filter !== 'all') {
     constraints.filters.push([new FieldPath('metadata', 'type'), '==', filter]);
+  } else {
+    constraints.filters.push([new FieldPath('metadata', 'type'), '!=', 'subscription']);
+    constraints.orders.push(['metadata.type', undefined]);
   }
 
   const [orderBy, direction] = order.split('-');
@@ -70,7 +72,7 @@ export function Shop() {
     [filter, order],
   );
 
-  const products = useProducts(constraints);
+  const products = useProducts('shop', constraints);
 
   return (
     <>
@@ -107,7 +109,7 @@ export function Shop() {
               },
             ]}
           />
-          {/* <ButtonGroup<Filter>
+          <ButtonGroup<Filter>
             active={filter}
             onClick={(id) => updateParamValue('filter', id)}
             buttons={[
@@ -115,12 +117,11 @@ export function Shop() {
               { id: 'swag', children: 'Swag' },
               { id: 'coffee', children: 'Coffee' },
             ]}
-          /> */}
+          />
         </div>
         <section className="flex-row md:grid md:flex-col md:grid-cols-4 md:gap-x-6 md:gap-y-12">
-          {products.status === 'loading' && emptyArray(8).map((_, i) => <ProductCardSkeleton key={i} />)}
-          {products.status === 'success' &&
-            products.data.map((product) => <ProductCard key={product.id} product={product} />)}
+          {products.isLoading && emptyArray(8).map((_, i) => <ProductCardSkeleton key={i} />)}
+          {products.isSuccess && products.data.map((product) => <ProductCard key={product.id} product={product} />)}
         </section>
       </div>
     </>

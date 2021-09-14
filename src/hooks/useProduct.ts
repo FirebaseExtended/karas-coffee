@@ -1,10 +1,12 @@
-import { doc, orderBy, OrderByDirection, query } from 'firebase/firestore';
-import { useFirestoreDocDataOnce } from 'reactfire';
-import { collections, firestore } from '../firebase';
+import { useFirestoreDocumentData } from '@react-query-firebase/firestore';
+import { doc } from 'firebase/firestore';
+import { collections } from '../firebase';
 
 export function useProduct(id: string) {
   const collection = collections.products;
   const ref = doc(collection, id);
 
-  return useFirestoreDocDataOnce(ref);
+  return useFirestoreDocumentData(['product', id], ref, {
+    subscribe: true,
+  });
 }

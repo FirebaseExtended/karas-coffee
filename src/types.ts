@@ -1,4 +1,4 @@
-export type ProductType = 'swag' | 'coffee';
+export type ProductType = 'swag' | 'coffee' | 'subscription';
 
 type ProductRecord = {
   id: string;
@@ -31,7 +31,13 @@ export type ProductSwag = {
   } & ProductRecordMetadata;
 } & ProductRecord;
 
-export type Product = ProductCoffee | ProductSwag;
+export type ProductSubscription = {
+  metadata: {
+    type: 'subscription';
+  } & ProductRecordMetadata;
+} & ProductRecord;
+
+export type Product = ProductCoffee | ProductSwag | ProductSubscription;
 
 export function isProductCoffee(product: Product): product is ProductCoffee {
   return product.metadata.type === 'coffee';
@@ -39,6 +45,10 @@ export function isProductCoffee(product: Product): product is ProductCoffee {
 
 export function isProductSwag(product: Product): product is ProductSwag {
   return product.metadata.type === 'swag';
+}
+
+export function isProductSubscription(product: Product): product is ProductSubscription {
+  return product.metadata.type === 'subscription';
 }
 
 export type Review = {

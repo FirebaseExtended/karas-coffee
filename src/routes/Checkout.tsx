@@ -50,7 +50,7 @@ function Items() {
     <section>
       <div className="divide-y">
         {cart.map((item) => (
-          <div className="flex py-8 space-x-4">
+          <div key={item.id} className="flex py-8 space-x-4">
             <div className="flex-shrink-0 w-64">
               <img src={item.images[0]} alt={item.name} className="rounded shadow" />
             </div>
@@ -100,7 +100,7 @@ function Order() {
   // TODO(ehesp): Add address validation
   const formik = useFormik<AddressFormValues>({
     initialValues: {
-      name: user?.displayName || '',
+      name: user.data?.displayName || '',
       line1: '',
       line2: '',
       city: '',
@@ -109,8 +109,8 @@ function Order() {
     },
     async onSubmit(values) {
       await checkout({
-        mode: 'subscription',
-        success_url: `${window.location.origin}/account/subscriptions`,
+        mode: 'payment',
+        success_url: `${window.location.origin}/account/orders`,
         cancel_url: window.location.href,
         line_items: cart.map((item) => ({
           price: item.metadata.price,

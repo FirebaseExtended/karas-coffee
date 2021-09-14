@@ -1,38 +1,39 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import { User } from 'firebase/auth';
-import { FirebaseAppProvider, FirestoreProvider } from 'reactfire';
+import { loadBundle } from 'firebase/firestore';
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 import 'tailwindcss/tailwind.css';
 
 import { App } from './App';
-import { firebaseConfig, firestore } from './firebase';
+import { firestore } from './firebase';
 import { getUserOnce } from './firebase/auth';
-import { CartProvider } from './components/Cart';
 
-type Bootstrap = {
-  user: User | null;
-};
+const client = new QueryClient();
 
-async function bootstrap(): Promise<Bootstrap> {
-  const user = await getUserOnce();
+async function bootstrap(): Promise<void> {
+  client.setQueryData('user', await getUserOnce());
 
-  // TODO(ehesp): Preload firestore bundles.
+  // Define any bundles to pre-load.
+  const bundles = await Promise.all([fetch('/bundles/shop')]);
 
-  return { user };
+  // Load the bundles into Firestore.
+  await Promise.all(bundles.map((bundle) => loadBundle(firestore, bundle.body!)));
 }
 
-bootstrap().then(({ user }) => {
+bootstrap().then(() => {
   ReactDOM.render(
     <React.StrictMode>
-      <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-        <FirestoreProvider sdk={firestore}>
-          <BrowserRouter>
-            <App initialUser={user} />
-          </BrowserRouter>
-        </FirestoreProvider>
-      </FirebaseAppProvider>
+      <BrowserRouter>
+        <QueryClientProvider client={client}>
+          <>
+            <App />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </>
+        </QueryClientProvider>
+      </BrowserRouter>
     </React.StrictMode>,
     document.getElementById('root'),
   );
