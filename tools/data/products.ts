@@ -204,4 +204,4 @@ export const merchandise: Product[] = [
   },
 ];
 
-export const products: Product[] = [...merchandise, ...coffeeBags];
+export const products: Product[] = [...subscriptions, ...merchandise, ...coffeeBags];
