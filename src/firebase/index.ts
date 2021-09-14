@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { getAuth } from 'firebase/auth';
 import { collection, getFirestore } from 'firebase/firestore';
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 
 import { productConverter, customerConverter, sessionConverter, reviewConverter } from './converters';
 
@@ -19,6 +20,10 @@ export const app = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const firestore = getFirestore(app);
+export const appCheck = initializeAppCheck(app, {
+  provider: new ReCaptchaV3Provider('6LdTwWccAAAAAM4QOoaqFiVW9j6yy9AOetWVCzeN'),
+  isTokenAutoRefreshEnabled: true,
+});
 
 export const collections = {
   products: collection(firestore, 'products').withConverter(productConverter),
