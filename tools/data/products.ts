@@ -16,8 +16,28 @@ interface Product {
     | {
         type: 'swag';
         description: string;
+      }
+    | {
+        type: 'subscription';
+        description: string;
       };
 }
+
+export const subscriptions: Product[] = [
+  {
+    id: 'coffee-club',
+    name: "Kara's Coffee Club",
+    images: [
+      'https://images.unsplash.com/photo-1618381297523-e6c0ab13a5b2?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
+    ],
+    price_usd: 5,
+    description: "Subcribe to Kara's Coffee Club for recipies, coffees and more.",
+    metadata: {
+      type: 'subscription',
+      description: "Subcribe to Kara's Coffee Club for recipies, coffees and more.",
+    },
+  },
+];
 
 export const coffeeBags: Product[] = [
   {
@@ -156,7 +176,7 @@ export const merchandise: Product[] = [
       'https://images.unsplash.com/photo-1583577012061-d69d2dbc900a?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
       'https://images.unsplash.com/photo-1598639298075-9f62f1fc5463?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
     ], // TODO: Add image
-    price_usd: 33,
+    price_usd: 12,
     description:
       'This iconic French press (or cafetière) is a must for your coffee making experience with heat-resistant borosilicate glass that won’t alter or impair your coffee’s natural flavor.',
     metadata: {
@@ -173,7 +193,7 @@ export const merchandise: Product[] = [
       'https://images.unsplash.com/photo-1620360289928-dacf4e46f604?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
       'https://images.unsplash.com/photo-1495862433577-132cf20d7902?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640',
     ], // TODO: Add image
-    price_usd: 20,
+    price_usd: 17,
     description:
       'Hard wearing and durable pitcher for busy coffee shops and caterers. Measuring lines are etched on the inside so that it is easy to add the correct amount of milk for each serving of latte, cappuccino or hot chocolate',
     metadata: {

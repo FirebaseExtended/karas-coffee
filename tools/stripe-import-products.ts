@@ -34,7 +34,7 @@ async function main() {
     const { data: prices } = await stripe.prices.list({ product: product.id, active: true });
     const priceExists = prices.length > 0;
     let recurring = {};
-    if (product.metadata.type == 'coffee') {
+    if (product.metadata.type == 'subscription') {
       recurring = {
         recurring: {
           interval: 'month',
