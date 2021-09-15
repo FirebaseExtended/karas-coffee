@@ -31,7 +31,7 @@ function Menu({ items }: MenuProps) {
   return (
     <ul className="flex space-x-1">
       {items.map((item) => (
-        <li>
+        <li key={item.to}>
           <NavLink
             end
             to={item.to}

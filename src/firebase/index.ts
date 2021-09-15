@@ -34,8 +34,7 @@ export const collections = {
   cart: collection(firestore, 'cart'),
   sessions: (customerId: string) =>
     collection(firestore, 'customers', customerId, 'checkout_sessions').withConverter(sessionConverter),
-  payments: (customerId: string) =>
-    collection(firestore, 'customers', customerId, 'payments').withConverter(sessionConverter),
+  payments: (customerId: string) => collection(firestore, 'customers', customerId, 'payments'),
   productReviews: (productId: string) =>
     collection(firestore, 'products', productId, 'reviews').withConverter(reviewConverter),
 };
