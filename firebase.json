@@ -4,8 +4,12 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
-        "source": "**",
+        "source": "/bundle/**",
         "function": "ext-firestore-bundle-server-serve"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
       }
     ]
   }
