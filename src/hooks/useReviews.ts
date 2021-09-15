@@ -1,5 +1,9 @@
+import { getDownloadURL } from '@firebase/storage';
 import { useFirestoreDocumentData, useFirestoreQueryData } from '@react-query-firebase/firestore';
-import { collection, doc, FieldPath, orderBy, query, QueryConstraint, where } from 'firebase/firestore';
+import { collection, doc, FieldPath, onSnapshot, orderBy, query, QueryConstraint, where } from 'firebase/firestore';
+import { ref } from 'firebase/storage';
+import { useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from 'react-query';
 import { app, collections, firestore, storage } from '../firebase';
 
 export const TOXICITY_THRESHOLD = 0.6;
@@ -29,20 +33,47 @@ export function useProductReview(productId: string, reviewId: string) {
 }
 
 export function useProductReviewImages(productId: string, userId: string) {
-  const ref = collection(
-    firestore,
-    'gcs-mirror',
-    'karas-coffee.appspot.com',
-    'prefixes',
-    userId,
-    'prefixes',
-    'reviews',
-    'prefixes',
-    productId,
-    'items',
-  );
+  const client = useQueryClient();
+  const key = ['reviews', productId, 'images', userId];
 
-  return useFirestoreQueryData(['reviews', productId, 'images', userId], ref, {
-    subscribe: true,
-  });
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const items = collection(
+      firestore,
+      'gcs-mirror',
+      'karas-coffee.appspot.com',
+      'prefixes',
+      userId,
+      'prefixes',
+      'reviews',
+      'prefixes',
+      productId,
+      'items',
+    );
+
+    return onSnapshot(items, async (snapshot) => {
+      const ids = snapshot.docs.map((doc) => doc.data().gcsMetadata.name);
+
+      const urls = await Promise.all(
+        ids.map((id) => {
+          return getDownloadURL(ref(storage, id));
+        }),
+      );
+
+      client.setQueryData(key, urls);
+      setReady(true);
+    });
+  }, [userId, productId]);
+
+  return useQuery<Array<string>>(
+    key,
+    () => {
+      const data = client.getQueryData<Array<string>>(key);
+      return data || [];
+    },
+    {
+      enabled: ready,
+    },
+  );
 }

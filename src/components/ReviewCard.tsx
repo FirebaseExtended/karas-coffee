@@ -13,7 +13,7 @@ export type ReviewCardProps = {
 
 export function ReviewCard({ review }: ReviewCardProps) {
   const images = useProductReviewImages(review.product_id, review.user.id);
-  console.log(images)
+
   return (
     <div key={review.id}>
       {!review.attribute_scores && <Alert type="success">Your comment is currently pending review.</Alert>}
@@ -41,6 +41,14 @@ export function ReviewCard({ review }: ReviewCardProps) {
         <Stars max={5} current={review.rating} />
       </div>
       <p className="mt-4 text-sm leading-relaxed text-gray-600">{review.message}</p>
+      <div className="mt-4 flex items-center flex-wrap space-x-3">
+        {images.isSuccess &&
+          images.data!.map((url) => (
+            <a href={url} target="_blank">
+              <img src={url} alt="" className="h-20 mb-1" />
+            </a>
+          ))}
+      </div>
     </div>
   );
 }
