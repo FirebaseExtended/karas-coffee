@@ -120,6 +120,7 @@ function Review({ productId }: { productId: string }) {
                 await addReview.mutateAsync({
                   rating: values.stars,
                   message: values.message,
+                  files: values.files,
                 });
               }}
             />

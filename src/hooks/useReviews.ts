@@ -1,6 +1,6 @@
 import { useFirestoreDocumentData, useFirestoreQueryData } from '@react-query-firebase/firestore';
-import { doc, FieldPath, orderBy, query, QueryConstraint, where } from 'firebase/firestore';
-import { collections } from '../firebase';
+import { collection, doc, FieldPath, orderBy, query, QueryConstraint, where } from 'firebase/firestore';
+import { app, collections, firestore, storage } from '../firebase';
 
 export const TOXICITY_THRESHOLD = 0.6;
 
@@ -24,6 +24,25 @@ export function useProductReview(productId: string, reviewId: string) {
   const collection = collections.productReviews(productId);
 
   return useFirestoreDocumentData(['reviews', productId, reviewId], doc(collection, reviewId), {
+    subscribe: true,
+  });
+}
+
+export function useProductReviewImages(productId: string, userId: string) {
+  const ref = collection(
+    firestore,
+    'gcs-mirror',
+    'karas-coffee.appspot.com',
+    'prefixes',
+    userId,
+    'prefixes',
+    'reviews',
+    'prefixes',
+    productId,
+    'items',
+  );
+
+  return useFirestoreQueryData(['reviews', productId, 'images', userId], ref, {
     subscribe: true,
   });
 }

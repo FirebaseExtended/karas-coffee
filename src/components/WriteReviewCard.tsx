@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormikErrors, FormikHelpers, useFormik } from 'formik';
+import { useFilePicker } from 'use-file-picker';
 import { Label, TextArea, Error } from './Form';
 import { Stars } from './Stars';
 import { Button } from './Button';
@@ -7,6 +8,7 @@ import { Button } from './Button';
 type FormValues = {
   message: string;
   stars: number;
+  files: File[];
 };
 
 export type WriteReviewCardProps = {
@@ -16,10 +18,18 @@ export type WriteReviewCardProps = {
 };
 
 export function WriteReviewCard({ initialMessage, initialStars, onSubmit }: WriteReviewCardProps) {
+  const [openFilePicker, files] = useFilePicker({
+    accept: 'image/*',
+    multiple: true,
+    limitFilesConfig: { max: 5 },
+    maxFileSize: 10,
+  });
+
   const formik = useFormik<FormValues>({
     initialValues: {
       message: initialMessage ?? '',
       stars: initialStars ?? 0,
+      files: [],
     },
     validate(values) {
       const errors: FormikErrors<FormValues> = {};
@@ -41,6 +51,10 @@ export function WriteReviewCard({ initialMessage, initialStars, onSubmit }: Writ
     },
   });
 
+  useEffect(() => {
+    formik.setFieldValue('files', [...formik.values.files, ...files.plainFiles]);
+  }, [files.plainFiles]);
+
   return (
     <form className="space-y-4" onSubmit={formik.handleSubmit}>
       <TextArea
@@ -51,15 +65,39 @@ export function WriteReviewCard({ initialMessage, initialStars, onSubmit }: Writ
         onChange={formik.handleChange}
         error={formik.dirty ? formik.errors.message : undefined}
       />
-      <div>
-        <Label id="stars">Rate this product:</Label>
-        <Stars
-          max={5}
-          current={formik.values.stars}
-          size="lg"
-          onSelect={(value) => formik.setFieldValue('stars', value)}
-        />
-        {formik.dirty && !!formik.errors.stars && <Error>{formik.errors.stars}</Error>}
+      <div className="flex items-center">
+        <div className="flex-grow">
+          <Label id="stars">Rate this product:</Label>
+          <Stars
+            max={5}
+            current={formik.values.stars}
+            size="lg"
+            onSelect={(value) => formik.setFieldValue('stars', value)}
+          />
+          {formik.dirty && !!formik.errors.stars && <Error>{formik.errors.stars}</Error>}
+        </div>
+        <button type="button" className="text-sm text-indigo-500 hover:underline" onClick={openFilePicker}>
+          Attach Images &rarr;
+        </button>
+      </div>
+      <div className="divide-y">
+        {formik.values.files.map((file, index) => (
+          <div key={file.name + index} className="flex items-center text-sm text-gray-500 py-1">
+            <img src={URL.createObjectURL(file)} alt={file.name} className="h-16 mr-2" />
+            <div className="flex-grow">{file.name}</div>
+            <button
+              type="button"
+              className="hover:underline hover:text-gray-800 text-xs"
+              onClick={() => {
+                const files = [...formik.values.files];
+                files.splice(index, 1);
+                formik.setFieldValue('files', files);
+              }}
+            >
+              Remove
+            </button>
+          </div>
+        ))}
       </div>
       <div>
         <Button disabled={!formik.isValid} loading={formik.isSubmitting} type="submit">

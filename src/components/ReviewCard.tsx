@@ -1,6 +1,6 @@
 import { formatDistance, formatRelative } from 'date-fns';
 import React from 'react';
-import { TOXICITY_THRESHOLD } from '../hooks/useReviews';
+import { TOXICITY_THRESHOLD, useProductReviewImages } from '../hooks/useReviews';
 import { Review } from '../types';
 import { Alert } from './Alert';
 import { Skeleton } from './Skeleton';
@@ -12,6 +12,8 @@ export type ReviewCardProps = {
 };
 
 export function ReviewCard({ review }: ReviewCardProps) {
+  const images = useProductReviewImages(review.product_id, review.user.id);
+  console.log(images)
   return (
     <div key={review.id}>
       {!review.attribute_scores && <Alert type="success">Your comment is currently pending review.</Alert>}
