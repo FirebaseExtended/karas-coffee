@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import cx from 'classnames';
 import { ChevronRightIcon } from '@heroicons/react/outline';
+import { format } from 'date-fns';
 import { useOrders } from '../../hooks/useOrders';
 import { emptyArray } from '../../utils';
 import { Skeleton } from '../../components/Skeleton';
@@ -48,7 +49,9 @@ export function Orders() {
                   />
                 </button>
                 <div className="flex-grow">
-                  <div className="font-bold">Friday 2nd July</div>
+                  <div className="font-bold">
+                    {format(new Date(order.created * 1000), 'eeee, do LLLL, y')}
+                  </div>
                   {!!order.shipping && (
                     <div className="text-sm text-gray-600">
                       {[
