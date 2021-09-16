@@ -23,7 +23,7 @@ export function Checkout() {
           <b>This is a demo application!</b> This is purely for example purposes - do not use real payment information.
         </Alert>
       </div>
-      <h1 className="mt-8 text-4xl font-extrabold tracking-wide mb-8">Checkout</h1>
+      <h1 className="mt-8 mb-8 text-4xl font-extrabold tracking-wide">Checkout</h1>
       {cart.length === 0 && (
         <>
           <div className="flex items-center justify-center h-64 text-gray-600">Your cart is currently empty.</div>
@@ -127,14 +127,15 @@ function Order() {
             state: values.state,
           },
         },
+        collect_shipping_address: true,
       });
     },
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} className="sticky p-8 border rounded bg-gray-50 top-20 space-y-4">
+    <form onSubmit={formik.handleSubmit} className="sticky p-8 space-y-4 border rounded bg-gray-50 top-20">
       <div>
-        <h2 className="text-lg font-bold text-gray-700 mb-2">Shipping Address</h2>
+        <h2 className="mb-2 text-lg font-bold text-gray-700">Shipping Address</h2>
         <Address values={formik.values} onChange={formik.handleChange} errors={formik.errors} />
       </div>
       <div>

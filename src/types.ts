@@ -87,6 +87,7 @@ export interface Session {
     price: string;
     quantity: number;
   }[];
+  price?: string;
   shipping?: {
     name: string;
     address: {
@@ -98,6 +99,7 @@ export interface Session {
       state: string;
     };
   };
+  collect_shipping_address: boolean;
   // Updated via extension
   url?: string;
   error?: {
