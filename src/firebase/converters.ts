@@ -1,5 +1,5 @@
 import { FirestoreDataConverter, Timestamp } from 'firebase/firestore';
-import { Product, Customer, Session, Review } from '../types';
+import { Product, Customer, Session, Review, Subscription } from '../types';
 
 export const productConverter: FirestoreDataConverter<Product> = {
   fromFirestore(snapshot): Product {
@@ -105,6 +105,23 @@ export const sessionConverter: FirestoreDataConverter<Session> = {
       metadata: {
         mode: session.mode,
       },
+    };
+  },
+};
+
+export const subscriptionConverter: FirestoreDataConverter<Subscription> = {
+  fromFirestore(snapshot): Subscription {
+    const data = snapshot.data();
+
+    return {
+      status: data.status,
+      items: data.items,
+    };
+  },
+  toFirestore(subscription: Subscription) {
+    return {
+      status: subscription.status,
+      items: subscription.items || [],
     };
   },
 };

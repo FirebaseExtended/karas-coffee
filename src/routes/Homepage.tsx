@@ -90,8 +90,7 @@ function Shop({ title, type }: ShopProps) {
       </div>
       <section className="flex-row md:grid md:flex-col md:grid-cols-4 md:gap-x-6 md:gap-y-12">
         {!products.isSuccess && emptyArray(limit).map((_, i) => <ProductCardSkeleton key={i} />)}
-        {products.isSuccess &&
-          products.data.map((product) => <ProductCard key={product.id} product={product} />)}
+        {products.isSuccess && products.data.map((product) => <ProductCard key={product.id} product={product} />)}
       </section>
     </>
   );

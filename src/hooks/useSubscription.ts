@@ -1,9 +1,10 @@
 import { collections } from '../firebase';
 import { useUser } from './useUser';
-import { QueryConstraint, query, where, FieldPath, documentId } from 'firebase/firestore';
+import { QueryConstraint, query, where, limit } from 'firebase/firestore';
 import { useFirestoreQueryData } from '@react-query-firebase/firestore';
+import { Subscription } from '../types';
 
-export function useSubscription(id: string) {
+export function useSubscription() {
   const user = useUser();
 
   if (!user.data) {
@@ -14,10 +15,23 @@ export function useSubscription(id: string) {
 
   const constraints: QueryConstraint[] = [];
 
-  constraints.push(where(documentId(), '==', id));
+  // constraints.push(where('product', '==', '/products/coffee-club'));
   constraints.push(where('status', '==', 'active'));
+  constraints.push(where('status', '==', 'active'));
+  constraints.push(limit(1));
 
-  return useFirestoreQueryData(id, query(collection, ...constraints), {
-    subscribe: false,
-  });
+  return useFirestoreQueryData<Subscription, Subscription | null>(
+    'orders',
+    query(collection, ...constraints),
+    undefined,
+    {
+      select(subscriptions) {
+        if (subscriptions.length === 0) {
+          return null;
+        }
+
+        return subscriptions[0];
+      },
+    },
+  );
 }

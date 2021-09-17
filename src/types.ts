@@ -106,3 +106,12 @@ export interface Session {
     message: string;
   };
 }
+
+export interface Subscription {
+  status: boolean;
+  items?: {
+    plan: {
+      product: string;
+    };
+  }[];
+}
