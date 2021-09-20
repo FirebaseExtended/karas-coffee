@@ -884,10 +884,10 @@
     prop-types "^15.7.2"
     tslib "^2.3.0"
 
-"@react-query-firebase/firestore@^0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@react-query-firebase/firestore/-/firestore-0.2.5.tgz#1a342cfda4b33d36f8a7e6b35041a8732c8df86d"
-  integrity sha512-0yvnP+i7+1gB1sKZsDpdZ+EyhnYHL1lojHC3l8ZwqRDtEgsJp64dXuNRVhBh6qbKNqqncO5w/gdSm2Ce8KsUFg==
+"@react-query-firebase/firestore@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@react-query-firebase/firestore/-/firestore-0.3.0.tgz#3be6c0cd31c8f0990af295ac15522b0d79c32181"
+  integrity sha512-khQVmDrsARSnLyADMSrTnuNqjR+y6LN3hRWvtQNK2o6PshMfpyhgGs5ueHbG48d7cTABWdR5ExLPaJNL+8J2Qw==
 
 "@rollup/pluginutils@^4.1.1":
   version "4.1.1"

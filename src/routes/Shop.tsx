@@ -72,7 +72,16 @@ export function Shop() {
     [filter, order],
   );
 
-  const products = useProducts('shop', constraints);
+  const products = useProducts(
+    [
+      'shop',
+      {
+        type: filter,
+        order: [orderBy, direction],
+      },
+    ],
+    constraints,
+  );
 
   return (
     <>
