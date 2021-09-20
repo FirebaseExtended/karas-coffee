@@ -10,14 +10,14 @@ export function useCheckout() {
   const [loading, setLoading] = useState<boolean>(false);
   const user = useUser();
 
-  if (!user.data) {
-    throw new Error('User must be authenticated to use the checkout.');
-  }
-
-  const uid = user.data.uid;
+  const uid = user.data?.uid;
 
   const checkout = useCallback(
     async (session: Omit<Session, 'url' | 'customer'>) => {
+      if (!uid) {
+        return;
+      }
+
       setLoading(true);
       const collection = collections.sessions(uid);
       const ref = doc(collection);

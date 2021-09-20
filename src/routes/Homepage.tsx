@@ -11,11 +11,15 @@ import { useSubscription } from '../hooks/useSubscription';
 import { useContent } from '../hooks/useContent';
 import { ContentCard, ContentCardSkeleton } from '../components/ContentCard';
 import { Heading } from '../components/Heading';
+import { useUser } from '../hooks/useUser';
 
 export function Homepage() {
+  const user = useUser();
+
   return (
     <>
-      <Hero />
+      {!!user.data && <Hero />}
+      {!user.data && <Subscribe />}
       <Shop title="Coffee Shop" type="coffee" />
       <Shop title="Swag Shop" type="swag" />
     </>
