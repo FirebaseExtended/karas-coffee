@@ -11,6 +11,7 @@ import {
   sessionConverter,
   reviewConverter,
   subscriptionConverter,
+  contentConverter,
 } from './converters';
 
 export const firebaseConfig = {
@@ -45,4 +46,5 @@ export const collections = {
     collection(firestore, 'customers', customerId, 'subscriptions').withConverter(subscriptionConverter),
   productReviews: (productId: string) =>
     collection(firestore, 'products', productId, 'reviews').withConverter(reviewConverter),
+  content: collection(firestore, 'content').withConverter(contentConverter),
 };

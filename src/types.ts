@@ -1,3 +1,5 @@
+import { Timestamp } from '@firebase/firestore';
+
 export type ProductType = 'swag' | 'coffee' | 'subscription';
 
 type ProductRecord = {
@@ -114,4 +116,13 @@ export interface Subscription {
       product: string;
     };
   }[];
+}
+
+export interface Content {
+  id: string;
+  title: string;
+  hero: string;
+  excerpt: string;
+  created_at: Timestamp;
+  content: string;
 }

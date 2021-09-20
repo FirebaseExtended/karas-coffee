@@ -7,14 +7,60 @@ import { ProductType } from '../types';
 import { emptyArray } from '../utils';
 
 import { useCheckout } from '../hooks/useCheckout';
+import { useSubscription } from '../hooks/useSubscription';
+import { useContent } from '../hooks/useContent';
+import { ContentCard, ContentCardSkeleton } from '../components/ContentCard';
+import { Heading } from '../components/Heading';
 
 export function Homepage() {
   return (
     <>
-      <Subscribe />
+      <Hero />
       <Shop title="Coffee Shop" type="coffee" />
       <Shop title="Swag Shop" type="swag" />
     </>
+  );
+}
+
+function Hero() {
+  const subscription = useSubscription();
+
+  if (!subscription.isSuccess) {
+    return (
+      <section className="grid grid-cols-2 gap-6 mt-4">
+        {emptyArray(4).map((_, i) => (
+          <ContentCardSkeleton key={i} />
+        ))}
+      </section>
+    );
+  }
+
+  if (!subscription.data) {
+    return <Subscribe />;
+  }
+
+  return <Content />;
+}
+
+function Content() {
+  const content = useContent('homepage', 4);
+
+  return (
+    <div>
+      <Heading
+        actions={[
+          <Link key="content" to="/content" className="text-indigo-700 hover:underline">
+            View all content
+          </Link>,
+        ]}
+      >
+        Your daily coffee content
+      </Heading>
+      <section className="grid grid-cols-2 gap-6 mt-4">
+        {content.isLoading && emptyArray(4).map((_, i) => <ContentCardSkeleton key={i} />)}
+        {content.isSuccess && content.data.map((content) => <ContentCard key={content.title} content={content} />)}
+      </section>
+    </div>
   );
 }
 
@@ -24,10 +70,11 @@ function Subscribe() {
   const addSubscription = async () =>
     await checkout({
       mode: 'subscription',
-      success_url: `${window.location.origin}/account/orders`,
+      success_url: `${window.location.origin}/account/subscription`,
       cancel_url: window.location.href,
       line_items: [
         {
+          // TODO(ehesp): Make const or handle multiple subscription products
           price: 'price_1JZYqLDPaZ24HcpvFAXEs4WJ',
           quantity: 1,
         },
@@ -46,7 +93,9 @@ function Subscribe() {
               professional barista.
             </p>
             <div className="w-64 mt-8">
-              <Button onClick={() => addSubscription()}>{!loading ? 'Subscribe Now' : 'Subscribing....'}</Button>
+              <Button onClick={() => addSubscription()} loading={loading}>
+                Subscribe Now
+              </Button>
             </div>
           </div>
           <div className="relative">
@@ -82,12 +131,15 @@ function Shop({ title, type }: ShopProps) {
 
   return (
     <>
-      <div className="flex items-center my-8">
-        <h2 className="flex-grow text-3xl font-extrabold tracking-wide">{title}</h2>
-        <Link to="/shop" className="text-indigo-700 hover:underline">
-          View all products
-        </Link>
-      </div>
+      <Heading
+        actions={[
+          <Link key="shop" to="/shop" className="text-indigo-700 hover:underline">
+            View all products
+          </Link>,
+        ]}
+      >
+        {title}
+      </Heading>
       <section className="flex-row md:grid md:flex-col md:grid-cols-4 md:gap-x-6 md:gap-y-12">
         {!products.isSuccess && emptyArray(limit).map((_, i) => <ProductCardSkeleton key={i} />)}
         {products.isSuccess && products.data.map((product) => <ProductCard key={product.id} product={product} />)}

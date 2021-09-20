@@ -10,7 +10,7 @@ import { NotFound } from './routes/NotFound';
 import { SignIn } from './routes/SignIn';
 import { Homepage } from './routes/Homepage';
 import { Checkout } from './routes/Checkout';
-import { Account } from './routes/Account';
+import { AccountOutlet } from './routes/Account';
 import { Product } from './routes/Product';
 import { Overview } from './routes/Account/Overview';
 import { Subscription } from './routes/Account/Subscription';
@@ -18,6 +18,8 @@ import { Orders } from './routes/Account/Orders';
 import { ForgotPassword } from './routes/ForgotPassword';
 import { Register } from './routes/Register';
 import { Shop } from './routes/Shop';
+import { ContentList, ContentOutlet } from './routes/Content';
+import { Content } from './routes/Content/Content';
 
 export function App() {
   const user = useUser();
@@ -30,10 +32,14 @@ export function App() {
           <Route path="/" element={<Homepage />} />
           <Route path="shop" element={<Shop />} />
           <Route path="product/:id" element={<Product />} />
+          <Route path="content" element={<ContentOutlet />}>
+            <Route index element={<ContentList />} />
+            <Route path=":id" element={<Content />} />
+          </Route>
           {!!user.data && (
             <>
-              <Route path="account" element={<Account />}>
-                <Route path="/" element={<Overview />} />
+              <Route path="account" element={<AccountOutlet />}>
+                <Route index element={<Overview />} />
                 <Route path="subscription" element={<Subscription />} />
                 <Route path="orders" element={<Orders />} />
               </Route>

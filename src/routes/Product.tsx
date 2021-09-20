@@ -18,7 +18,7 @@ import { useUser } from '../hooks/useUser';
 export function Product() {
   const user = useUser();
   const { id } = useParams();
-  const product = useProduct(id);
+  const product = useProduct(id!);
   const { addToCart, removeFromCart, getItem, setQuantity } = useCart();
 
   if (product.isLoading) {

@@ -884,10 +884,10 @@
     prop-types "^15.7.2"
     tslib "^2.3.0"
 
-"@react-query-firebase/firestore@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@react-query-firebase/firestore/-/firestore-0.2.2.tgz#e44964d92a9ad3be9e48865183c6a300bba8fb23"
-  integrity sha512-jO8YM919LPVBCudndnYJuISDRKX9Clqve3OUaiVId1cJTy+Yz55xoIdKs0LBCwtqO/IdQjlBxOc217AjGDW0tw==
+"@react-query-firebase/firestore@^0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@react-query-firebase/firestore/-/firestore-0.2.5.tgz#1a342cfda4b33d36f8a7e6b35041a8732c8df86d"
+  integrity sha512-0yvnP+i7+1gB1sKZsDpdZ+EyhnYHL1lojHC3l8ZwqRDtEgsJp64dXuNRVhBh6qbKNqqncO5w/gdSm2Ce8KsUFg==
 
 "@rollup/pluginutils@^4.1.1":
   version "4.1.1"
@@ -896,6 +896,16 @@
   dependencies:
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
+
+"@tailwindcss/typography@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@tailwindcss/typography/-/typography-0.4.1.tgz#51ddbceea6a0ee9902c649dbe58871c81a831212"
+  integrity sha512-ovPPLUhs7zAIJfr0y1dbGlyCuPhpuv/jpBoFgqAc658DWGGrOBWBMpAWLw2KlzbNeVk4YBJMzue1ekvIbdw6XA==
+  dependencies:
+    lodash.castarray "^4.4.0"
+    lodash.isplainobject "^4.0.6"
+    lodash.merge "^4.6.2"
+    lodash.uniq "^4.5.0"
 
 "@types/classnames@^2.3.1":
   version "2.3.1"
@@ -2185,10 +2195,20 @@ lodash.camelcase@^4.3.0:
   resolved "https://registry.yarnpkg.com/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz#b28aa6288a2b9fc651035c7711f65ab6190331a6"
   integrity sha1-soqmKIorn8ZRA1x3EfZathkDMaY=
 
+lodash.castarray@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/lodash.castarray/-/lodash.castarray-4.4.0.tgz#c02513515e309daddd4c24c60cfddcf5976d9115"
+  integrity sha1-wCUTUV4wna3dTCTGDP3c9ZdtkRU=
+
 lodash.clonedeep@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
   integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
+
+lodash.isplainobject@^4.0.6:
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz#7c526a52d89b45c45cc690b88163be0497f550cb"
+  integrity sha1-fFJqUtibRcRcxpC4gWO+BJf1UMs=
 
 lodash.merge@^4.6.2:
   version "4.6.2"
@@ -2204,6 +2224,11 @@ lodash.truncate@^4.4.2:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/lodash.truncate/-/lodash.truncate-4.4.2.tgz#5a350da0b1113b837ecfffd5812cbe58d6eae193"
   integrity sha1-WjUNoLERO4N+z//VgSy+WNbq4ZM=
+
+lodash.uniq@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
+  integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
 lodash@^4.17.21:
   version "4.17.21"
@@ -2603,17 +2628,17 @@ react-refresh@^0.10.0:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.10.0.tgz#2f536c9660c0b9b1d500684d9e52a65e7404f7e3"
   integrity sha512-PgidR3wST3dDYKr6b4pJoqQFpPGNKDSCDx4cZoshjXipw3LzO7mG1My2pwEzz2JVkF+inx3xRpDeQLFQGH/hsQ==
 
-react-router-dom@6.0.0-beta.2:
-  version "6.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.0.0-beta.2.tgz#f001f862e94787853363dd845d70340ab55c8744"
-  integrity sha512-ZOauHu+clEYCRsW77F21/q6Ou5zmJvL6FvKsbmvO+J+4e7OXglh0VJy8yph8xoz20Ak5UYDExubE6n5+2QP1pw==
+react-router-dom@6.0.0-beta.4:
+  version "6.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.0.0-beta.4.tgz#9cc9fb57bca3d5548b297ae8101efcdcc68dd903"
+  integrity sha512-yppoRR8S7FxNMG6OGFn9DPJBPLsjeIuQa7GYnkRlgOSTBSPhAQpD6z7rvRzZnesQ9r6W+ibD9RvnqTcna4w/Pg==
   dependencies:
-    react-router "6.0.0-beta.2"
+    react-router "6.0.0-beta.4"
 
-react-router@6.0.0-beta.2:
-  version "6.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.0.0-beta.2.tgz#7c804e4d1f86ebfd397ed8b1e05a63d24bf3313f"
-  integrity sha512-oyVEfpVT9VbClWaZNNShfprq8HA5rSLfo/ZsXFT08/6mldM6onHzqr6Lc1ybBYEB7/c+rr1VOA99as7hEoAoXw==
+react-router@6.0.0-beta.4:
+  version "6.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.0.0-beta.4.tgz#e35a440b36fd07a2ac854e1f1f176b56a777793a"
+  integrity sha512-48JRRZJOwmfOKM12Tv3WjmNkVb2NpSEgDTWC4+MEJaud0+eyLJxqy62CKzOydMlk7hrfRFpC/elUYSZAuyx3qA==
 
 react@^17.0.0:
   version "17.0.2"

@@ -1,7 +1,8 @@
 import React from 'react';
+import cx from 'classnames';
 import { NavLink, Outlet } from 'react-router-dom';
 
-export function Account() {
+export function AccountOutlet() {
   return (
     <section>
       <nav className="mb-8">
@@ -35,8 +36,11 @@ function Menu({ items }: MenuProps) {
           <NavLink
             end
             to={item.to}
-            className="px-2 py-2 border-b-2 border-transparent font-medium text-gray-600 hover:text-gray-900"
-            activeClassName="border-indigo-500 text-gray-900"
+            className={({ isActive }) =>
+              cx('px-2 py-2 border-b-2 border-transparent font-medium text-gray-600 hover:text-gray-900', {
+                'border-indigo-500 text-gray-900': isActive,
+              })
+            }
           >
             {item.label}
           </NavLink>

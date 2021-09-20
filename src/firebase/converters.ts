@@ -1,5 +1,5 @@
 import { FirestoreDataConverter, Timestamp } from 'firebase/firestore';
-import { Product, Customer, Session, Review, Subscription } from '../types';
+import { Product, Customer, Session, Review, Subscription, Content } from '../types';
 
 export const productConverter: FirestoreDataConverter<Product> = {
   fromFirestore(snapshot): Product {
@@ -123,5 +123,23 @@ export const subscriptionConverter: FirestoreDataConverter<Subscription> = {
       status: subscription.status,
       items: subscription.items || [],
     };
+  },
+};
+
+export const contentConverter: FirestoreDataConverter<Content> = {
+  fromFirestore(snapshot): Content {
+    const data = snapshot.data();
+
+    return {
+      id: data.id,
+      title: data.title,
+      hero: data.hero,
+      excerpt: data.excerpt,
+      created_at: data.created_at,
+      content: data.content,
+    };
+  },
+  toFirestore() {
+    throw new Error('Client does not support updating content.');
   },
 };

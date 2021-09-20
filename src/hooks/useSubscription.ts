@@ -15,13 +15,11 @@ export function useSubscription() {
 
   const constraints: QueryConstraint[] = [];
 
-  // constraints.push(where('product', '==', '/products/coffee-club'));
-  constraints.push(where('status', '==', 'active'));
   constraints.push(where('status', '==', 'active'));
   constraints.push(limit(1));
 
   return useFirestoreQueryData<Subscription, Subscription | null>(
-    'orders',
+    'subscription',
     query(collection, ...constraints),
     undefined,
     {
