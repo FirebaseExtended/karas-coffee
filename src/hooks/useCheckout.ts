@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { doc, getDoc, onSnapshot, setDoc, Unsubscribe } from 'firebase/firestore';
 
 import { collections } from '../firebase';
@@ -16,55 +16,60 @@ export function useCheckout() {
 
   const uid = user.data.uid;
 
-  const checkout = useCallback(async (session: Omit<Session, 'url' | 'customer'>) => {
-    setLoading(true);
-    const collection = collections.sessions(uid);
-    const ref = doc(collection);
+  const checkout = useCallback(
+    async (session: Omit<Session, 'url' | 'customer'>) => {
+      setLoading(true);
+      const collection = collections.sessions(uid);
+      const ref = doc(collection);
 
-    try {
-      const customer = await getDoc(doc(collections.customers, uid));
-      const { stripe_id } = customer.data() ?? {};
+      try {
+        const customer = await getDoc(doc(collections.customers, uid));
+        const { stripe_id } = customer.data() ?? {};
 
-      if (!stripe_id) {
-        throw new Error('Customer does not exist in the database.');
-      }
+        if (!stripe_id) {
+          throw new Error('Customer does not exist in the database.');
+        }
 
-      // Declare the unsubscribe function.
-      let unsubscribe: Unsubscribe;
+        // Declare the unsubscribe function.
+        let unsubscribe: Unsubscribe;
 
-      // Listen to changes to the new ref.
-      unsubscribe = onSnapshot(
-        ref,
-        (snapshot) => {
-          const data = snapshot.data();
+        // Listen to changes to the new ref.
+        unsubscribe = onSnapshot(
+          ref,
+          (snapshot) => {
+            const data = snapshot.data();
 
-          if (data?.url) {
+            console.log('data >>>', data);
+
+            if (data?.url) {
+              unsubscribe?.();
+              window.location.assign(data.url);
+            }
+
+            if (data?.error) {
+              unsubscribe?.();
+              setError(new Error(data.error.message));
+              setLoading(false);
+            }
+          },
+          (e) => {
             unsubscribe?.();
-            window.location.assign(data.url);
-          }
-
-          if (data?.error) {
-            unsubscribe?.();
-            setError(new Error(data.error.message));
+            setError(e);
             setLoading(false);
-          }
-        },
-        (e) => {
-          unsubscribe?.();
-          setError(e);
-          setLoading(false);
-        },
-      );
+          },
+        );
 
-      await setDoc(ref, {
-        ...session,
-        customer: stripe_id,
-      });
-    } catch (e: any) {
-      setError(e);
-      setLoading(false);
-    }
-  }, [uid]);
+        await setDoc(ref, {
+          ...session,
+          customer: stripe_id,
+        });
+      } catch (e: any) {
+        setError(e);
+        setLoading(false);
+      }
+    },
+    [uid],
+  );
 
   return { checkout, loading, error };
 }

@@ -6,6 +6,8 @@ import { useProducts } from '../hooks/useProducts';
 import { ProductType } from '../types';
 import { emptyArray } from '../utils';
 
+import { useCheckout } from '../hooks/useCheckout';
+
 export function Homepage() {
   return (
     <>
@@ -17,6 +19,22 @@ export function Homepage() {
 }
 
 function Subscribe() {
+  const { checkout, error, loading } = useCheckout();
+
+  const addSubscription = async () =>
+    await checkout({
+      mode: 'subscription',
+      success_url: `${window.location.origin}/account/orders`,
+      cancel_url: window.location.href,
+      line_items: [
+        {
+          price: 'price_1JZYqLDPaZ24HcpvFAXEs4WJ',
+          quantity: 1,
+        },
+      ],
+      collect_shipping_address: false,
+    });
+
   return (
     <section>
       <div className="mt-6 bg-gray-900 h-[400px] rounded overflow-hidden">
@@ -28,7 +46,7 @@ function Subscribe() {
               professional barista.
             </p>
             <div className="w-64 mt-8">
-              <Button>Subscribe Now</Button>
+              <Button onClick={() => addSubscription()}>{!loading ? 'Subscribe Now' : 'Subscribing....'}</Button>
             </div>
           </div>
           <div className="relative">
@@ -56,7 +74,11 @@ type ShopProps = {
 
 function Shop({ title, type }: ShopProps) {
   const limit = 4;
-  const products = useProducts(['homepage', type], { limitTo: limit, orders: [], filters: [['metadata.type', '==', type]] });
+  const products = useProducts(['homepage', type], {
+    limitTo: limit,
+    orders: [],
+    filters: [['metadata.type', '==', type]],
+  });
 
   return (
     <>
@@ -68,8 +90,7 @@ function Shop({ title, type }: ShopProps) {
       </div>
       <section className="flex-row md:grid md:flex-col md:grid-cols-4 md:gap-x-6 md:gap-y-12">
         {!products.isSuccess && emptyArray(limit).map((_, i) => <ProductCardSkeleton key={i} />)}
-        {products.isSuccess &&
-          products.data.map((product) => <ProductCard key={product.id} product={product} />)}
+        {products.isSuccess && products.data.map((product) => <ProductCard key={product.id} product={product} />)}
       </section>
     </>
   );

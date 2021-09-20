@@ -5,7 +5,13 @@ import { getFirestore, collection } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 
-import { productConverter, customerConverter, sessionConverter, reviewConverter } from './converters';
+import {
+  productConverter,
+  customerConverter,
+  sessionConverter,
+  reviewConverter,
+  subscriptionConverter,
+} from './converters';
 
 export const firebaseConfig = {
   apiKey: 'AIzaSyCrbVzj7TfFBPjxardH4JTuYFr38CZealM',
@@ -35,6 +41,8 @@ export const collections = {
   sessions: (customerId: string) =>
     collection(firestore, 'customers', customerId, 'checkout_sessions').withConverter(sessionConverter),
   payments: (customerId: string) => collection(firestore, 'customers', customerId, 'payments'),
+  subscriptions: (customerId: string) =>
+    collection(firestore, 'customers', customerId, 'subscriptions').withConverter(subscriptionConverter),
   productReviews: (productId: string) =>
     collection(firestore, 'products', productId, 'reviews').withConverter(reviewConverter),
 };

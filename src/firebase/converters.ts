@@ -1,5 +1,5 @@
 import { FirestoreDataConverter, Timestamp } from 'firebase/firestore';
-import { Product, Customer, Session, Review } from '../types';
+import { Product, Customer, Session, Review, Subscription } from '../types';
 
 export const productConverter: FirestoreDataConverter<Product> = {
   fromFirestore(snapshot): Product {
@@ -84,9 +84,11 @@ export const sessionConverter: FirestoreDataConverter<Session> = {
       success_url: data.success_url,
       cancel_url: data.cancel_url,
       customer: data.customer,
-      line_items: data.line_items,
-      shipping: data.shipping,
+      price: data.price,
+      line_items: data.line_items || [],
+      shipping: data.shipping || {},
       url: data.url,
+      collect_shipping_address: data.collect_shipping_address,
       error: data.error,
     };
   },
@@ -96,12 +98,30 @@ export const sessionConverter: FirestoreDataConverter<Session> = {
       success_url: session.success_url,
       cancel_url: session.cancel_url,
       customer: session.customer,
-      line_items: session.line_items,
-      shipping: session.shipping,
-      collect_shipping_address: true,
+      // price: session.price,
+      line_items: session.line_items || [],
+      shipping: session.shipping || {},
+      collect_shipping_address: session.collect_shipping_address,
       metadata: {
         mode: session.mode,
       },
+    };
+  },
+};
+
+export const subscriptionConverter: FirestoreDataConverter<Subscription> = {
+  fromFirestore(snapshot): Subscription {
+    const data = snapshot.data();
+
+    return {
+      status: data.status,
+      items: data.items,
+    };
+  },
+  toFirestore(subscription: Subscription) {
+    return {
+      status: subscription.status,
+      items: subscription.items || [],
     };
   },
 };
