@@ -110,12 +110,9 @@ export interface Session {
 }
 
 export interface Subscription {
-  status: boolean;
-  items?: {
-    plan: {
-      product: string;
-    };
-  }[];
+  id: string;
+  status: string;
+  [key: string]: any;
 }
 
 export interface Content {

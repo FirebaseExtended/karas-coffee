@@ -114,15 +114,13 @@ export const subscriptionConverter: FirestoreDataConverter<Subscription> = {
     const data = snapshot.data();
 
     return {
+      id: snapshot.id,
+      ...data,
       status: data.status,
-      items: data.items,
     };
   },
   toFirestore(subscription: Subscription) {
-    return {
-      status: subscription.status,
-      items: subscription.items || [],
-    };
+    throw new Error('Client does not support updating subscriptions.');
   },
 };
 

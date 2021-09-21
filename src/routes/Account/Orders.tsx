@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 import cx from 'classnames';
 import { ChevronRightIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
+
+import { Accordion, AccordionItem } from '../../components/Accordion';
 import { useOrders } from '../../hooks/useOrders';
 import { emptyArray } from '../../utils';
 import { Skeleton } from '../../components/Skeleton';
 
-type OrderMap = { [key: string]: boolean };
+type OpenMap = { [key: string]: boolean };
 
 export function Orders() {
   const orders = useOrders();
 
-  const [open, setOpen] = useState<OrderMap>({});
+  const [open, setOpen] = useState<OpenMap>({});
 
   function toggleOrder(orderId: string) {
     setOpen((prev) => ({
@@ -22,8 +24,8 @@ export function Orders() {
 
   return (
     <section>
-      <h1 className="font-bold text-2xl">Your Orders</h1>
-      <div className="border rounded mt-6 divide-y">
+      <h1 className="font-bold text-2xl mb-6">Your Orders</h1>
+      <Accordion>
         {orders.isLoading &&
           emptyArray(5).map((_, i) => (
             <div key={i} className="p-6 flex items-center">
@@ -39,41 +41,12 @@ export function Orders() {
           ))}
         {orders.isSuccess &&
           orders.data.map((order, index) => (
-            <div key={order.id}>
-              <div className="flex items-center space-x-4 p-6">
-                <button onClick={() => toggleOrder(order.id)} className="p-2">
-                  <ChevronRightIcon
-                    className={cx('w-5 h-5 transform transition-transform', {
-                      'rotate-90': !!open[order.id],
-                    })}
-                  />
-                </button>
-                <div className="flex-grow">
-                  <div className="font-bold">
-                    {format(new Date(order.created * 1000), 'eeee, do LLLL, y')}
-                  </div>
-                  {!!order.shipping && (
-                    <div className="text-sm text-gray-600">
-                      {[
-                        order.shipping.name,
-                        order.shipping.address.line1,
-                        order.shipping.address.line2,
-                        order.shipping.address.city,
-                        order.shipping.address.state,
-                        order.shipping.address.city,
-                        order.shipping.address.postal_code,
-                      ]
-                        .filter(Boolean)
-                        .join(', ')}
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <div className="font-bold text-lg">${(order.amount / 100).toFixed(2)}</div>
-                </div>
-              </div>
-              {!!open[order.id] && (
-                <div className="bg-gray-50 p-6">
+            <AccordionItem
+              key={order.id}
+              isOpen={open[order.id]}
+              onToggle={() => toggleOrder(order.id)}
+              collapsible={
+                <>
                   <div className="flex pb-3">
                     <div className="flex-grow">
                       {!!order.charges?.data?.[0].receipt_url && (
@@ -105,11 +78,35 @@ export function Orders() {
                       <div>${(order.amount / 100).toFixed(2)}</div>
                     </div>
                   </div>
+                </>
+              }
+            >
+              <div className="flex-grow flex items-center">
+                <div className="flex-grow">
+                  <div className="font-bold">{format(new Date(order.created * 1000), 'eeee, do LLLL, y')}</div>
+                  {!!order.shipping && (
+                    <div className="text-sm text-gray-600">
+                      {[
+                        order.shipping.name,
+                        order.shipping.address.line1,
+                        order.shipping.address.line2,
+                        order.shipping.address.city,
+                        order.shipping.address.state,
+                        order.shipping.address.city,
+                        order.shipping.address.postal_code,
+                      ]
+                        .filter(Boolean)
+                        .join(', ')}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+                <div>
+                  <div className="font-bold text-lg">${(order.amount / 100).toFixed(2)}</div>
+                </div>
+              </div>
+            </AccordionItem>
           ))}
-      </div>
+      </Accordion>
     </section>
   );
 }

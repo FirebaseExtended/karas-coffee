@@ -10,7 +10,7 @@ export function Cart() {
   const { cart } = useCart();
 
   // Require the user to sign-in to go to the checkout.
-  const href = user ? '/checkout' : '/signin?redirect=/checkout';
+  const href = !!user.data ? '/checkout' : '/signin?redirect=/checkout';
 
   return (
     <Link to={href} className="group relative w-10 h-10 flex items-center justify-center">

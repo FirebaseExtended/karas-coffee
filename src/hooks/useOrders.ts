@@ -13,8 +13,7 @@ export function useOrders() {
   const collection = collections.payments(user.data.uid);
   const constraints: QueryConstraint[] = [];
 
-  constraints.push(where('metadata.mode', '==', 'payment'));
-  constraints.push(orderBy('created'));
+  constraints.push(orderBy('created', 'desc'));
 
   return useFirestoreQueryData('orders', query(collection, ...constraints));
 }

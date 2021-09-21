@@ -44,6 +44,9 @@ export const collections = {
   payments: (customerId: string) => collection(firestore, 'customers', customerId, 'payments'),
   subscriptions: (customerId: string) =>
     collection(firestore, 'customers', customerId, 'subscriptions').withConverter(subscriptionConverter),
+  invoices: (customerId: string, subscriptionId: string) => {
+    return collection(collections.subscriptions(customerId), subscriptionId, 'invoices');
+  },
   productReviews: (productId: string) =>
     collection(firestore, 'products', productId, 'reviews').withConverter(reviewConverter),
   content: collection(firestore, 'content').withConverter(contentConverter),

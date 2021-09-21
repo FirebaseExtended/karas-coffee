@@ -1,11 +1,13 @@
 import { useCallback, useState } from 'react';
 import { doc, getDoc, onSnapshot, setDoc, Unsubscribe } from 'firebase/firestore';
+import { useNavigate } from 'react-router';
 
 import { collections } from '../firebase';
 import { useUser } from './useUser';
 import { Session } from '../types';
 
 export function useCheckout() {
+  const navigate = useNavigate();
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const user = useUser();
@@ -15,7 +17,7 @@ export function useCheckout() {
   const checkout = useCallback(
     async (session: Omit<Session, 'url' | 'customer'>) => {
       if (!uid) {
-        return;
+        return navigate(`/signin?redirect=${window.location.pathname}`);
       }
 
       setLoading(true);

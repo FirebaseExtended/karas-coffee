@@ -5,14 +5,15 @@ export type SpinnerProps = {
   size?: SpinnerSize;
 };
 
-export type SpinnerSize = 'base' | 'sm';
+export type SpinnerSize = 'base' | 'sm' | 'lg';
 
 const sizeClassName: { [key in SpinnerSize]: string } = {
-  base: 'h-5 w-5 ',
+  lg: 'h-8 w-8',
+  base: 'h-5 w-5',
   sm: 'h-4 w-4',
 };
 
-const baseClassName = 'animate-spin text-white';
+const baseClassName = 'animate-spin';
 
 export function Spinner({ size }: SpinnerProps): JSX.Element {
   const joinedClassName = cx(baseClassName, sizeClassName[size || 'base']);
