@@ -16,6 +16,7 @@ type ProductRecordMetadata = {
   type: ProductType;
   price: string;
   price_usd: string;
+  weight: string;
 };
 
 export type ProductCoffee = {
@@ -85,6 +86,7 @@ export interface Session {
   success_url: string;
   cancel_url: string;
   customer: string; // Stripe customer id
+  isPaid: boolean;
   line_items?: {
     price: string;
     quantity: number;
@@ -92,6 +94,17 @@ export interface Session {
   price?: string;
   shipping?: {
     name: string;
+    shipDate: string;
+    fromAddress: {
+      name: string;
+      phone: string;
+      country: string;
+      line1: string;
+      line2?: string;
+      city: string;
+      postal_code: string;
+      state: string;
+    }
     address: {
       country: string;
       line1: string;
@@ -100,6 +113,10 @@ export interface Session {
       postal_code: string;
       state: string;
     };
+    weight: {
+      value: number;
+      unit: string;
+    }
   };
   collect_shipping_address: boolean;
   // Updated via extension

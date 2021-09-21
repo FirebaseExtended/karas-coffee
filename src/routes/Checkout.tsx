@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
+import moment from 'moment';
 
 import { XIcon } from '@heroicons/react/solid';
 import { Button } from '../components/Button';
@@ -118,6 +119,17 @@ function Order() {
         })),
         shipping: {
           name: values.name,
+          shipDate: moment().format("YYYY-MM-DD"),
+          fromAddress: {
+            // TODO: set this in env variables or somewhere centralized
+            country: 'US',
+            line1: '500 W 2nd St',
+            city: 'Austin',
+            postal_code: '78701',
+            state: 'TX',
+            name: "Kara's Coffee",
+            phone: '512-343-5283'
+          },
           address: {
             country: 'US', // TODO(ehesp): allow users to select country
             line1: values.line1,
@@ -126,7 +138,12 @@ function Order() {
             postal_code: values.postal_code,
             state: values.state,
           },
+          weight: {
+            value: cart.reduce((total, { metadata, quantity }) => total + (parseInt(metadata.weight) * quantity), 0),
+            unit: 'gram'
+          }
         },
+        isPaid: false,
         collect_shipping_address: true,
       });
     },

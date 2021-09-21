@@ -20,6 +20,7 @@ export const productConverter: FirestoreDataConverter<Product> = {
         variety: data.metadata?.variety ?? '',
         price: data.metadata?.price ?? '',
         price_usd: data.metadata?.price_usd ?? '',
+        weight: data.metadata?.weight ?? '0g'
       },
     };
   },
