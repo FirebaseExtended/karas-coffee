@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
-import moment from 'moment';
 
 import { XIcon } from '@heroicons/react/solid';
 import { Button } from '../components/Button';
@@ -13,6 +12,7 @@ import { ProductCoffeeMetadata } from '../components/ProductCard';
 import { Alert } from '../components/Alert';
 import { Address, AddressFormValues } from '../components/Address';
 import { useUser } from '../hooks/useUser';
+import moment from 'moment';
 
 export function Checkout() {
   const { cart } = useCart();
@@ -119,17 +119,6 @@ function Order() {
         })),
         shipping: {
           name: values.name,
-          shipDate: moment().format("YYYY-MM-DD"),
-          fromAddress: {
-            // TODO: set this in env variables or somewhere centralized
-            country: 'US',
-            line1: '500 W 2nd St',
-            city: 'Austin',
-            postal_code: '78701',
-            state: 'TX',
-            name: "Kara's Coffee",
-            phone: '512-343-5283'
-          },
           address: {
             country: 'US', // TODO(ehesp): allow users to select country
             line1: values.line1,
@@ -138,13 +127,37 @@ function Order() {
             postal_code: values.postal_code,
             state: values.state,
           },
-          weight: {
-            value: cart.reduce((total, { metadata, quantity }) => total + (parseInt(metadata.weight) * quantity), 0),
-            unit: 'gram'
-          }
         },
-        isPaid: false,
         collect_shipping_address: true,
+        shipment: {
+          carrierId: 'se-423887',
+          serviceCode: 'usps_media_mail',
+          shipDate: moment().format("YYYY-MM-DD"),
+          shipFrom: {
+            name: "Kara's Coffee",
+            phone: '512-343-5283',
+            addressLine1: '500 W 2nd St',
+            cityLocality: 'Austin',
+            stateProvince: 'TX',
+            postalCode: '78701'
+          },
+          shipTo: {
+            name: values.name,
+            addressLine1: values.line1,
+            addressLine2: values.line2,
+            cityLocality: values.city,
+            stateProvince: values.state,
+            postalCode: values.postal_code,
+          },
+          packages: [
+            {
+              weight: {
+                value: cart.reduce((total, { metadata, quantity }) => total + (parseInt(metadata.weight) * quantity), 0),
+                unit: 'gram'
+              }
+            }
+          ]
+        }
       });
     },
   });
