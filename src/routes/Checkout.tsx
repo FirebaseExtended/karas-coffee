@@ -139,7 +139,8 @@ function Order() {
             addressLine1: '500 W 2nd St',
             cityLocality: 'Austin',
             stateProvince: 'TX',
-            postalCode: '78701'
+            postalCode: '78701',
+            countryCode: 'US'
           },
           shipTo: {
             name: values.name,
@@ -148,6 +149,7 @@ function Order() {
             cityLocality: values.city,
             stateProvince: values.state,
             postalCode: values.postal_code,
+            countryCode: 'US'
           },
           packages: [
             {

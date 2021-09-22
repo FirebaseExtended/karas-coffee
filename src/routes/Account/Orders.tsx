@@ -90,13 +90,18 @@ export function Orders() {
                         order.shipping.name,
                         order.shipping.address.line1,
                         order.shipping.address.line2,
-                        order.shipping.address.city,
                         order.shipping.address.state,
                         order.shipping.address.city,
                         order.shipping.address.postal_code,
                       ]
                         .filter(Boolean)
                         .join(', ')}
+                    </div>
+                  )}
+
+                  {!!order.shippingLabel?.trackingNumber && (
+                    <div className="text-xs text-gray-600">
+                      <span className="font-bold">Tracking Number:</span> {order.shippingLabel.trackingNumber}
                     </div>
                   )}
                 </div>

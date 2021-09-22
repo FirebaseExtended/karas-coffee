@@ -113,6 +113,7 @@ export interface Session {
       cityLocality: string;
       stateProvince: string;
       postalCode: string;
+      countryCode: string;
     };
     shipTo: {
       name: string;
@@ -121,6 +122,7 @@ export interface Session {
       cityLocality: string;
       stateProvince: string;
       postalCode: string;
+      countryCode: string;
     };
     packages: {
       weight: {
