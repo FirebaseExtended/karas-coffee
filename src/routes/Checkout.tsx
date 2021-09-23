@@ -12,7 +12,7 @@ import { ProductCoffeeMetadata } from '../components/ProductCard';
 import { Alert } from '../components/Alert';
 import { Address, AddressFormValues } from '../components/Address';
 import { useUser } from '../hooks/useUser';
-import moment from 'moment';
+import { format } from 'date-fns';
 
 export function Checkout() {
   const { cart } = useCart();
@@ -132,7 +132,7 @@ function Order() {
         shipment: {
           carrierId: 'se-423887',
           serviceCode: 'usps_media_mail',
-          shipDate: moment().format("YYYY-MM-DD"),
+          shipDate: format(new Date(), 'yyyy-MM-DD'),
           shipFrom: {
             name: "Kara's Coffee",
             phone: '512-343-5283',
@@ -140,7 +140,7 @@ function Order() {
             cityLocality: 'Austin',
             stateProvince: 'TX',
             postalCode: '78701',
-            countryCode: 'US'
+            countryCode: 'US',
           },
           shipTo: {
             name: values.name,
@@ -149,17 +149,17 @@ function Order() {
             cityLocality: values.city,
             stateProvince: values.state,
             postalCode: values.postal_code,
-            countryCode: 'US'
+            countryCode: 'US',
           },
           packages: [
             {
               weight: {
-                value: cart.reduce((total, { metadata, quantity }) => total + (parseInt(metadata.weight) * quantity), 0),
-                unit: 'gram'
-              }
-            }
-          ]
-        }
+                value: cart.reduce((total, { metadata, quantity }) => total + parseInt(metadata.weight) * quantity, 0),
+                unit: 'gram',
+              },
+            },
+          ],
+        },
       });
     },
   });
