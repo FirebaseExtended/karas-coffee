@@ -20,6 +20,7 @@ export const productConverter: FirestoreDataConverter<Product> = {
         variety: data.metadata?.variety ?? '',
         price: data.metadata?.price ?? '',
         price_usd: data.metadata?.price_usd ?? '',
+        weight: data.metadata?.weight ?? '0g'
       },
     };
   },
@@ -104,6 +105,25 @@ export const sessionConverter: FirestoreDataConverter<Session> = {
       collect_shipping_address: session.collect_shipping_address,
       metadata: {
         mode: session.mode,
+        carrierId: session.shipment?.carrierId,
+        serviceCode: session.shipment?.serviceCode,
+        shipDate: session.shipment?.shipDate,
+        shipFromName: session.shipment?.shipFrom.name,
+        shipFromPhone: session.shipment?.shipFrom.phone,
+        shipFromAddressLine1: session.shipment?.shipFrom.addressLine1,
+        shipFromCityLocality: session.shipment?.shipFrom.cityLocality,
+        shipFromStateProvince: session.shipment?.shipFrom.stateProvince,
+        shipFromPostalCode: session.shipment?.shipFrom.postalCode,
+        shipFromCountryCode: session.shipment?.shipFrom.countryCode,
+        shipToName: session.shipment?.shipTo.name,
+        shipToAddressLine1: session.shipment?.shipTo.addressLine1,
+        shipToAddressLine2: session.shipment?.shipTo.addressLine2,
+        shipToCityLocality: session.shipment?.shipTo.cityLocality,
+        shipToStateProvince: session.shipment?.shipTo.stateProvince,
+        shipToPostalCode: session.shipment?.shipTo.postalCode,
+        shipToCountryCode: session.shipment?.shipTo.countryCode,
+        packageWeightValue: session.shipment?.packages[0].weight.value,
+        packageWeightUnit: session.shipment?.packages[0].weight.unit,
       },
     };
   },

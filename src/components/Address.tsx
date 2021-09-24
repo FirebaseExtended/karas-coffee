@@ -25,7 +25,8 @@ export function Address({ values, errors, onChange }: AddressProps) {
         <Input id="line1" value={values.line1} onChange={onChange} placeholder="Address Line 1" error={errors?.line1} />
         <Input id="line2" value={values.line2} onChange={onChange} placeholder="Address Line 2" error={errors?.line2} />
       </div>
-      <div className="grid grid-cols-2 gap-x-2">
+      <div className="grid grid-cols-3 gap-x-2">
+        <Input id="city" value={values.city} onChange={onChange} placeholder="City" error={errors?.city} />
         <Input id="state" value={values.state} onChange={onChange} placeholder="State / Region" error={errors?.state} />
         <Input
           id="postal_code"

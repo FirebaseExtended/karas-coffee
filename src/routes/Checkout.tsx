@@ -12,6 +12,7 @@ import { ProductCoffeeMetadata } from '../components/ProductCard';
 import { Alert } from '../components/Alert';
 import { Address, AddressFormValues } from '../components/Address';
 import { useUser } from '../hooks/useUser';
+import { format } from 'date-fns';
 
 export function Checkout() {
   const { cart } = useCart();
@@ -128,6 +129,37 @@ function Order() {
           },
         },
         collect_shipping_address: true,
+        shipment: {
+          carrierId: 'se-423887',
+          serviceCode: 'usps_media_mail',
+          shipDate: format(new Date(), 'yyyy-MM-DD'),
+          shipFrom: {
+            name: "Kara's Coffee",
+            phone: '512-343-5283',
+            addressLine1: '500 W 2nd St',
+            cityLocality: 'Austin',
+            stateProvince: 'TX',
+            postalCode: '78701',
+            countryCode: 'US',
+          },
+          shipTo: {
+            name: values.name,
+            addressLine1: values.line1,
+            addressLine2: values.line2,
+            cityLocality: values.city,
+            stateProvince: values.state,
+            postalCode: values.postal_code,
+            countryCode: 'US',
+          },
+          packages: [
+            {
+              weight: {
+                value: cart.reduce((total, { metadata, quantity }) => total + parseInt(metadata.weight) * quantity, 0),
+                unit: 'gram',
+              },
+            },
+          ],
+        },
       });
     },
   });

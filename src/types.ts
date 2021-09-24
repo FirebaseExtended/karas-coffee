@@ -16,6 +16,7 @@ type ProductRecordMetadata = {
   type: ProductType;
   price: string;
   price_usd: string;
+  weight: string;
 };
 
 export type ProductCoffee = {
@@ -101,6 +102,35 @@ export interface Session {
       state: string;
     };
   };
+  shipment?: {
+    carrierId: string;
+    serviceCode: string;
+    shipDate: string;
+    shipFrom: {
+      name: string;
+      phone: string;
+      addressLine1: string;
+      cityLocality: string;
+      stateProvince: string;
+      postalCode: string;
+      countryCode: string;
+    };
+    shipTo: {
+      name: string;
+      addressLine1: string;
+      addressLine2?: string;
+      cityLocality: string;
+      stateProvince: string;
+      postalCode: string;
+      countryCode: string;
+    };
+    packages: {
+      weight: {
+        value: number;
+        unit: string;
+      };
+    }[]
+  }
   collect_shipping_address: boolean;
   // Updated via extension
   url?: string;
