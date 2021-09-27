@@ -889,10 +889,10 @@
   resolved "https://registry.yarnpkg.com/@react-query-firebase/auth/-/auth-0.1.0.tgz#ea32470e3946ee82c372d1021971821e97f75449"
   integrity sha512-wjcDSGwwpNdTa4Et2fzm0HLlfATtLFwWwQR3QcC/dLmtC5qz9P795XA7ej3HJNVYTtrJDMyc6CzLWHCEzJt4hg==
 
-"@react-query-firebase/firestore@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@react-query-firebase/firestore/-/firestore-0.3.0.tgz#3be6c0cd31c8f0990af295ac15522b0d79c32181"
-  integrity sha512-khQVmDrsARSnLyADMSrTnuNqjR+y6LN3hRWvtQNK2o6PshMfpyhgGs5ueHbG48d7cTABWdR5ExLPaJNL+8J2Qw==
+"@react-query-firebase/firestore@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@react-query-firebase/firestore/-/firestore-0.3.1.tgz#62735a75a98cfe43a1a507d5993c02858110e8f0"
+  integrity sha512-CshUmc7AkPN80BdrPX9qf2422qERMUekuR/Y8zIItnf1B/8bosRD5smzBlcF4lHsWb6Bt+XYzAXnCochEXAorg==
 
 "@rollup/pluginutils@^4.1.1":
   version "4.1.1"

@@ -12,6 +12,7 @@ import { useContent } from '../hooks/useContent';
 import { ContentCard, ContentCardSkeleton } from '../components/ContentCard';
 import { Heading } from '../components/Heading';
 import { useUser } from '../hooks/useUser';
+import { limit, where } from '@firebase/firestore';
 
 export function Homepage() {
   const user = useUser();
@@ -126,12 +127,7 @@ type ShopProps = {
 };
 
 function Shop({ title, type }: ShopProps) {
-  const limit = 4;
-  const products = useProducts(['homepage', type], {
-    limitTo: limit,
-    orders: [],
-    filters: [['metadata.type', '==', type]],
-  });
+  const products = useProducts(['homepage', type], [limit(4), where('metadata.type', '==', type)]);
 
   return (
     <>
@@ -145,7 +141,7 @@ function Shop({ title, type }: ShopProps) {
         {title}
       </Heading>
       <section className="flex-row md:grid md:flex-col md:grid-cols-4 md:gap-x-6 md:gap-y-12">
-        {!products.isSuccess && emptyArray(limit).map((_, i) => <ProductCardSkeleton key={i} />)}
+        {!products.isSuccess && emptyArray(4).map((_, i) => <ProductCardSkeleton key={i} />)}
         {products.isSuccess && products.data.map((product) => <ProductCard key={product.id} product={product} />)}
       </section>
     </>

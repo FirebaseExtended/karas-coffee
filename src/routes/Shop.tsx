@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { FieldPath } from 'firebase/firestore';
+import { FieldPath, orderBy, QueryConstraint, where } from 'firebase/firestore';
 
 import { ProductCard, ProductCardSkeleton } from '../components/ProductCard';
-import { useProducts, UseProductsConstraints } from '../hooks/useProducts';
+import { useProducts } from '../hooks/useProducts';
 import { emptyArray } from '../utils';
 import { Select } from '../components/Form';
 import { ButtonGroup } from '../components/ButtonGroup';
@@ -32,33 +32,34 @@ const fieldPaths: { [key in OrderBy]: FieldPath } = {
 export function Shop() {
   const [params, setParams] = useSearchParams();
 
-  const constraints: UseProductsConstraints = {
-    orders: [],
-    filters: [],
-  };
+  let constraints: undefined | QueryConstraint[] | string = [];
 
   // Extract the filter and validate it.
   let filter: Filter = (params.get('filter') as Filter) ?? 'all';
   if (!filters.includes(filter)) filter = filters[0];
 
   // Extract the order and validate it.
-  let order: Order = (params.get('order') as Order) ?? `${orders[0]}-asc`;
+  let [order, direction] = ((params.get('order') as Order) ?? `${orders[0]}-asc`).split('-');
 
-  if (filter !== 'all') {
-    constraints.filters.push([new FieldPath('metadata', 'type'), '==', filter]);
-  } else {
-    constraints.filters.push([new FieldPath('metadata', 'type'), '!=', 'subscription']);
-    constraints.orders.push(['metadata.type', undefined]);
-  }
-
-  const [orderBy, direction] = order.split('-');
-  const fieldPath = fieldPaths[orderBy as OrderBy];
+  const fieldPath = fieldPaths[order as OrderBy];
   const directionValue: OrderByDirection = directions.includes(direction as OrderByDirection)
     ? (direction as OrderByDirection)
     : directions[0];
 
-  if (fieldPath) {
-    constraints.orders.push([fieldPath, directionValue]);
+  if (filter == 'all' && order === 'name-asc') {
+    // If the default filters are in place, use the named query created called "shop".
+    constraints = 'shop';
+  } else {
+    if (filter !== 'all') {
+      constraints.push(where('metadata.type', '==', filter));
+    } else {
+      constraints.push(where('metadata.type', '!=', 'subscription'));
+      constraints.push(orderBy('metadata.type'));
+    }
+
+    if (fieldPath) {
+      constraints.push(orderBy(fieldPath, directionValue));
+    }
   }
 
   const updateParamValue = useCallback(
@@ -76,8 +77,8 @@ export function Shop() {
     [
       'shop',
       {
-        type: filter,
-        order: [orderBy, direction],
+        filter,
+        order: `${order}-${direction}`,
       },
     ],
     constraints,
@@ -88,7 +89,7 @@ export function Shop() {
       <div>
         <div className="mb-6 flex justify-end space-x-4">
           <Select
-            value={order}
+            value={`${order}-${direction}`}
             onChange={(e) => updateParamValue('order', e.target.value)}
             id="order"
             options={[

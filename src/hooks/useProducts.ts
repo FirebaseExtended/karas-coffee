@@ -1,4 +1,4 @@
-import { useFirestoreQueryData } from '@react-query-firebase/firestore';
+import { namedQuery, useFirestoreQueryData, NamedQuery } from '@react-query-firebase/firestore';
 import {
   FieldPath,
   orderBy,
@@ -8,39 +8,31 @@ import {
   limit,
   where,
   WhereFilterOp,
+  Query,
 } from 'firebase/firestore';
-import { QueryKey } from 'react-query';
-import { collections } from '../firebase';
+import { QueryKey, UseQueryResult } from 'react-query';
+import { collections, firestore } from '../firebase';
+import { Product } from '../types';
 
-export type UseProductsConstraints = {
-  limitTo?: number;
-  // Order: [field, direction]
-  orders: [FieldPath | string, OrderByDirection | void][];
-  // Where: [field, op, value]
-  filters: [FieldPath | string, WhereFilterOp, any][];
-};
+function isQueryConstraints(value: unknown): value is QueryConstraint[] {
+  return Array.isArray(value);
+}
 
-export function useProducts(key: QueryKey, { limitTo, orders, filters }: UseProductsConstraints) {
+export function useProducts(key: QueryKey, constraintsOrNamedQuery?: QueryConstraint[] | string) {
   const collection = collections.products;
-  const constraints: QueryConstraint[] = [];
+  let ref: Query<Product> | NamedQuery<Product>;
 
-  if (limitTo) {
-    constraints.push(limit(limitTo));
-  }
-
-  if (orders) {
-    for (const [field, direction] of orders) {
-      constraints.push(orderBy(field, direction || undefined));
+  if (constraintsOrNamedQuery) {
+    if (isQueryConstraints(constraintsOrNamedQuery)) {
+      ref = query(collection, ...constraintsOrNamedQuery);
+    } else {
+      ref = namedQuery(firestore, constraintsOrNamedQuery);
     }
+  } else {
+    ref = query(collection);
   }
 
-  if (filters) {
-    for (const [field, op, value] of filters) {
-      constraints.push(where(field, op, value));
-    }
-  }
-
-  return useFirestoreQueryData(key, query(collection, ...constraints), {
+  return useFirestoreQueryData(key, ref, {
     subscribe: true,
   });
 }
