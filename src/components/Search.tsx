@@ -1,6 +1,6 @@
 import React, { FocusEventHandler, useEffect, useRef, useState } from 'react';
 import algoliasearch from 'algoliasearch/lite';
-import { InstantSearch, Hits, connectStateResults, connectSearchBox } from 'react-instantsearch-dom';
+import { InstantSearch, Hits, Configure, connectStateResults, connectSearchBox } from 'react-instantsearch-dom';
 import { SearchBoxProvided, Hit } from 'react-instantsearch-core';
 import { Link } from 'react-router-dom';
 import { Product } from '../types';
@@ -13,6 +13,7 @@ export function Search() {
   return (
     <div className="relative w-[500px]">
       <InstantSearch searchClient={CLIENT} indexName="products">
+        <Configure facetFilters={[["metadata.type:swag", "metadata.type:coffee"]]} />
         <SearchBox
           onFocus={() => setFocussed(true)}
           onBlur={() => {
@@ -71,12 +72,6 @@ const Results = connectStateResults((state) => {
 });
 
 const Row = ({ hit }: { hit: Hit<Product> }) => {
-  // TODO(ehesp): remove once https://github.com/stripe/stripe-firebase-extensions/pull/248/files lands
-  if (hit.objectID === 'shipping_countries') return null;
-
-  // Don't show subscription items
-  if (hit.metadata.type === 'subscription') return null;
-
   return (
     <Link
       to={`/product/${hit.objectID}`}
