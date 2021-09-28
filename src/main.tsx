@@ -17,7 +17,7 @@ async function bootstrap(): Promise<void> {
   client.setQueryData('user', await getUserOnce());
 
   // Define any bundles to pre-load.
-  const bundles = await Promise.all([fetch('/bundles/shop')]);
+  const bundles = await Promise.all([fetch('/bundle/shop')]);
 
   // Load the bundles into Firestore.
   await Promise.all(bundles.map((bundle) => loadBundle(firestore, bundle.body!)));
