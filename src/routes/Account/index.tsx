@@ -4,7 +4,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 
 export function AccountOutlet() {
   return (
-    <section>
+    <section className="px-4 lg:px-0">
       <nav className="mb-8">
         <Menu
           items={[

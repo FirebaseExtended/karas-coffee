@@ -37,8 +37,8 @@ export function Product() {
 
   return (
     <>
-      <section className="mt-8">
-        <div className="grid grid-cols-2 gap-12">
+      <section className="mt-8 px-4 lg:px-0">
+        <div className="flex flex-col-reverse lg:grid grid-cols-2 gap-12">
           <div>
             <Gallery images={product.data.images} />
           </div>
@@ -82,7 +82,7 @@ export function Product() {
           </div>
         </div>
       </section>
-      <section className="max-w-xl mx-auto mt-25">
+      <section className="max-w-xl mx-auto mt-25 px-4 lg:px-0">
         {!!user && <Review productId={product.data.id} />}
         <ListReviews productId={product.data.id} />
       </section>

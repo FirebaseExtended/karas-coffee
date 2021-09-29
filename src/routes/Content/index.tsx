@@ -24,7 +24,7 @@ export function ContentList() {
   const content = useContent('content');
 
   const wrapper = (children: React.ReactNode[]) => (
-    <section className="mt-12 max-w-3xl mx-auto">
+    <section className="mt-12 max-w-3xl mx-auto px-4 lg:px-0">
       <Heading>Your daily coffee content</Heading>
       <div className="space-y-12">{children}</div>
     </section>

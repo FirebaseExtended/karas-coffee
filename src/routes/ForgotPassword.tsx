@@ -54,7 +54,7 @@ export function ForgotPassword() {
   const status = formik.status as FormikStatus;
 
   return (
-    <section className="max-w-xl mx-auto my-20">
+    <section className="max-w-xl mx-auto my-20 px-4">
       <h1 className="text-3xl font-extrabold text-center mb-4 text-gray-900">Forgot Password</h1>
       <p className="text-center mb-4 italic text-gray-600">
         Enter your email address, we'll send a recovery link to your inbox. .

@@ -44,7 +44,7 @@ export function SignIn() {
   });
 
   return (
-    <section className="max-w-xl mx-auto my-20">
+    <section className="max-w-xl mx-auto my-20 px-4">
       <h1 className="text-3xl font-extrabold text-center mb-4 text-gray-900">Sign in to your account</h1>
       <p className="text-center mb-4 italic text-gray-600">
         New to Kara's Coffee?{' '}

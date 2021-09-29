@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useFormik } from 'formik';
 
 import { XIcon } from '@heroicons/react/solid';
@@ -18,7 +18,7 @@ export function Checkout() {
   const { cart } = useCart();
 
   return (
-    <section className="mt-8">
+    <section className="mt-8 px-4 lg:px-0">
       <div className="max-w-3xl mx-auto">
         <Alert type="danger">
           <b>This is a demo application!</b> This is purely for example purposes - do not use real payment information.
@@ -31,7 +31,7 @@ export function Checkout() {
         </>
       )}
       {cart.length > 0 && (
-        <div className="grid grid-cols-12 gap-16">
+        <div className="lg:grid grid-cols-12 gap-16">
           <div className="col-start-1 col-end-8">
             <Items />
           </div>
@@ -52,7 +52,7 @@ function Items() {
       <div className="divide-y">
         {cart.map((item) => (
           <div key={item.id} className="flex py-8 space-x-4">
-            <div className="flex-shrink-0 w-64">
+            <div className="flex-shrink-0 w-32 lg:w-64">
               <img src={item.images[0]} alt={item.name} className="rounded shadow" />
             </div>
             <div className="flex-grow py-1">
@@ -165,7 +165,7 @@ function Order() {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} className="sticky p-8 space-y-4 border rounded bg-gray-50 top-20">
+    <form onSubmit={formik.handleSubmit} className="lg:sticky p-8 space-y-4 border rounded bg-gray-50 top-20">
       <div>
         <h2 className="mb-2 text-lg font-bold text-gray-700">Shipping Address</h2>
         <Address values={formik.values} onChange={formik.handleChange} errors={formik.errors} />

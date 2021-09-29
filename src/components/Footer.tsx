@@ -3,14 +3,14 @@ import React from 'react';
 export function Footer() {
   return (
     <footer className="mt-16 py-16 border-t">
-      <div className="px-6 max-w-7xl mx-auto grid grid-cols-4 gap-24">
+      <div className="px-6 max-w-7xl mx-auto text-center lg:text-left lg:grid grid-cols-4 gap-24">
         <div className="col-start-1 col-end-3">
           <p className="text-gray-500">
             Kara's Coffee is an demo E-Commerce and Stripe application, showcasing various Firebase Extensions,
             integrations with Firebase services and more. Learn more by visiting the GitHub repository.
           </p>
         </div>
-        <div className="flex flex-col space-y-2">
+        <div className="mt-16 lg:mt-0 flex flex-col space-y-2">
           <Heading>Extensions</Heading>
           <ul role="list" className="mt-4 space-y-4">
             <Link to="https://firebase.google.com/products/extensions/delete-user-data">Delete User Data</Link>
@@ -26,7 +26,7 @@ export function Footer() {
             </Link>
           </ul>
         </div>
-        <div className="flex flex-col space-y-2">
+        <div className="mt-16 lg:mt-0 flex flex-col space-y-2">
           <Heading>Firebase</Heading>
           <ul role="list" className="mt-4 space-y-4">
             <Link to="https://console.firebase.google.com/">Firebase Console</Link>

@@ -129,7 +129,7 @@ export function Shop() {
             ]}
           />
         </div>
-        <section className="flex-row md:grid md:flex-col md:grid-cols-4 md:gap-x-6 md:gap-y-12">
+        <section className="px-4 lg:px-0 flex-row lg:grid lg:flex-col lg:grid-cols-4 lg:gap-x-6 lg:gap-y-12">
           {products.isLoading && emptyArray(8).map((_, i) => <ProductCardSkeleton key={i} />)}
           {products.isSuccess && products.data.map((product) => <ProductCard key={product.id} product={product} />)}
         </section>

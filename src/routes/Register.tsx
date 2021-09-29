@@ -45,7 +45,7 @@ export function Register() {
   });
 
   return (
-    <section className="max-w-xl mx-auto my-20">
+    <section className="max-w-xl mx-auto my-20 px-4">
       <h1 className="text-3xl font-extrabold text-center mb-4 text-gray-900">Create a new account</h1>
       <p className="text-center mb-4 italic text-gray-600">
         Already have account?{' '}

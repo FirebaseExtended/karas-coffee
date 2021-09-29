@@ -17,7 +17,7 @@ export function Content() {
   const data = content.data!;
 
   return (
-    <section className="mt-24 max-w-3xl mx-auto">
+    <section className="mt-24 max-w-3xl mx-auto px-4 lg:px-0">
       <Link to="/content" className="hover:underline text-gray-600">&larr; Back to content</Link>
       <Heading>{data.title}</Heading>
       <div className="my-4 text-lg text-gray-600">{format(data.created_at.toDate(), 'MMMM d, yyyy')}</div>

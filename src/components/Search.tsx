@@ -11,7 +11,7 @@ export function Search() {
   const [focussed, setFocussed] = useState<boolean>(false);
 
   return (
-    <div className="relative w-[500px]">
+    <div className="relative w-full max-w-[500px]">
       <InstantSearch searchClient={CLIENT} indexName="products">
         <Configure facetFilters={[["metadata.type:swag", "metadata.type:coffee"]]} />
         <SearchBox
@@ -46,7 +46,7 @@ const SearchBox = connectSearchBox((state: SearchBoxProvided & SearchBoxProps) =
     <input
       onFocus={state.onFocus}
       onBlur={state.onBlur}
-      className="w-[500px] p-2 border rounded focus:border-gray-500 focus:outline-none"
+      className="w-full max-w-[500px] p-2 border rounded focus:border-gray-500 focus:outline-none"
       placeholder="Search coffee & swag..."
       type="search"
       value={state.currentRefinement}

@@ -9,19 +9,19 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-10 bg-white/95 backdrop-filter backdrop-blur-sm">
-      <div className="flex items-center h-20 mx-auto max-w-7xl md:px-6">
-        <div>
-          <h3 className="text-xl font-bold tracking-wide">
+      <div className="flex items-center h-20 mx-auto max-w-7xl px-6 space-x-4">
+        <div className="flex-grow lg:flex-shrink-0 lg:flex-grow-0">
+          <h3 className="lg:text-xl font-bold tracking-wide">
             <Link to="/" className="hover:underline">
               Kara's Coffee
             </Link>
           </h3>
-          <p className="-mt-1 text-xs italic text-gray-500">Not so real coffee and swag</p>
+          <p className="hidden lg:block -mt-1 text-xs italic text-gray-500">Not so real coffee and swag</p>
         </div>
-        <div className="flex items-center justify-center flex-grow">
+        <div className="hidden lg:flex items-center justify-center flex-grow">
           <Search />
         </div>
-        <div className="flex space-x-4">
+        <div className="flex flex-shrink-0 space-x-4">
           <Cart />
           <HeaderLink to="/shop">Shop</HeaderLink>
           <HeaderLink to={user.isSuccess && !!user.data ? '/account' : '/signin'}>

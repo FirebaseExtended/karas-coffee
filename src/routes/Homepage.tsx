@@ -51,7 +51,7 @@ function Content() {
   const content = useContent('homepage', 4);
 
   return (
-    <div>
+    <div className="px-4 lg:px-0">
       <Heading
         actions={[
           <Link key="content" to="/content" className="text-indigo-700 hover:underline">
@@ -61,7 +61,7 @@ function Content() {
       >
         Your daily coffee content
       </Heading>
-      <section className="grid grid-cols-2 gap-6 mt-4">
+      <section className="space-y-6 lg:space-y-0 lg:grid grid-cols-2 gap-6 mt-4">
         {content.isLoading && emptyArray(4).map((_, i) => <ContentCardSkeleton key={i} />)}
         {content.isSuccess && content.data.map((content) => <ContentCard key={content.title} content={content} />)}
       </section>
@@ -88,23 +88,23 @@ function Subscribe() {
     });
 
   return (
-    <section>
+    <section className="px-4 lg:px-0">
       <div className="mt-6 bg-gray-900 h-[400px] rounded overflow-hidden">
-        <div className="grid grid-cols-2">
-          <div className="p-12">
-            <h1 className="font-extrabold text-white text-7xl">Become your own Barista.</h1>
+        <div className="lg:grid grid-cols-2">
+          <div className="p-12 text-center lg:text-left">
+            <h1 className="font-extrabold text-white text-5xl lg:text-6xl">Become your own Barista.</h1>
             <p className="mt-8 text-lg text-white">
               Subscribe today to gain exclusive access to blogs, videos & recipes so you can become your own
               professional barista.
             </p>
-            <div className="w-64 mt-8">
+            <div className="mx-auto lg:mx-0 w-64 mt-8">
               <Button onClick={() => createSubscription()} loading={loading}>
                 Subscribe Now
               </Button>
               {!!error && <div className="text-red-500 text-sm mt-2">{error}</div>}
             </div>
           </div>
-          <div className="relative">
+          <div className="relative hidden lg:block">
             <img
               src="https://images.unsplash.com/photo-1515442261605-65987783cb6a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
               alt=""
@@ -131,7 +131,7 @@ function Shop({ title, type }: ShopProps) {
   const products = useProducts(['homepage', type], [limit(4), where('metadata.type', '==', type)]);
 
   return (
-    <>
+    <div className="px-4">
       <Heading
         actions={[
           <Link key="shop" to="/shop" className="text-indigo-700 hover:underline">
@@ -141,10 +141,10 @@ function Shop({ title, type }: ShopProps) {
       >
         {title}
       </Heading>
-      <section className="flex-row md:grid md:flex-col md:grid-cols-4 md:gap-x-6 md:gap-y-12">
+      <section className="flex-row lg:grid lg:flex-col lg:grid-cols-4 lg:gap-x-6 lg:gap-y-12">
         {!products.isSuccess && emptyArray(4).map((_, i) => <ProductCardSkeleton key={i} />)}
         {products.isSuccess && products.data.map((product) => <ProductCard key={product.id} product={product} />)}
       </section>
-    </>
+    </div>
   );
 }
