@@ -72,7 +72,7 @@ function Content() {
 function Subscribe() {
   const { checkout, error, loading } = useCheckout();
 
-  const addSubscription = async () =>
+  const createSubscription = async () =>
     await checkout({
       mode: 'subscription',
       success_url: `${window.location.origin}/account/subscription`,
@@ -98,9 +98,10 @@ function Subscribe() {
               professional barista.
             </p>
             <div className="w-64 mt-8">
-              <Button onClick={() => addSubscription()} loading={loading}>
+              <Button onClick={() => createSubscription()} loading={loading}>
                 Subscribe Now
               </Button>
+              {!!error && <div className="text-red-500 text-sm mt-2">{error}</div>}
             </div>
           </div>
           <div className="relative">
