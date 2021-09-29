@@ -132,7 +132,7 @@ function Order() {
         shipment: {
           carrierId: 'se-423887',
           serviceCode: 'usps_media_mail',
-          shipDate: format(new Date(), 'yyyy-MM-DD'),
+          shipDate: format(new Date(), 'yyyy-mm-dd'),
           shipFrom: {
             name: "Kara's Coffee",
             phone: '512-343-5283',
