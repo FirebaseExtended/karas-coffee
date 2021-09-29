@@ -5,10 +5,12 @@ import { ref } from 'firebase/storage';
 import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 import { app, collections, firestore, storage } from '../firebase';
+import { useUser } from './useUser';
 
 export const TOXICITY_THRESHOLD = 0.6;
 
 export function useProductReviews(productId: string) {
+  const user = useUser();
   const collection = collections.productReviews(productId);
 
   const constraints: QueryConstraint[] = [];
@@ -19,9 +21,22 @@ export function useProductReviews(productId: string) {
   // Ensure the record has all the toxicity fields.
   constraints.push(where(new FieldPath('attribute_scores', 'TOXICITY'), '<', TOXICITY_THRESHOLD));
 
-  return useFirestoreQueryData(['reviews', productId], query(collection, ...constraints), {
-    subscribe: true,
-  });
+  // In production, only show the users own reviews.
+  // @ts-expect-error
+  if (import.meta.PROD && !!user.data) {
+    constraints.push(where('user.id', '==', user.data.uid));
+  }
+
+  return useFirestoreQueryData(
+    ['reviews', productId],
+    query(collection, ...constraints),
+    {
+      subscribe: true,
+    },
+    {
+      enabled: !user.isLoading,
+    },
+  );
 }
 
 export function useProductReview(productId: string, reviewId: string) {

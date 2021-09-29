@@ -1,4 +1,5 @@
 import React from 'react';
+import { Alert } from './Alert';
 
 export function Footer() {
   return (
@@ -9,6 +10,9 @@ export function Footer() {
             Kara's Coffee is an demo E-Commerce and Stripe application, showcasing various Firebase Extensions,
             integrations with Firebase services and more. Learn more by visiting the GitHub repository.
           </p>
+          <div className="mt-8">
+            <Alert type="warning">The data for this application is reset every 24 hours!</Alert>
+          </div>
         </div>
         <div className="mt-16 lg:mt-0 flex flex-col space-y-2">
           <Heading>Extensions</Heading>
