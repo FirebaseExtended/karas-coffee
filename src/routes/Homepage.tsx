@@ -70,10 +70,10 @@ function Content() {
 }
 
 function Subscribe() {
-  const { checkout, error, loading } = useCheckout();
+  const { trigger, error, loading } = useCheckout();
 
   const createSubscription = async () =>
-    await checkout({
+    await trigger({
       mode: 'subscription',
       success_url: `${window.location.origin}/account/subscription`,
       cancel_url: window.location.href,
