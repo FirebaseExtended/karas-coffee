@@ -10,7 +10,6 @@ exports.onAuthCreate = functions.auth.user().onCreate(async (user: any) => {
   await collection.add({ to: user.email, template: { name: 'welcome_email' } });
 });
 
-
 // Returns a list of all product ids in the database
 function getProductIds(): Promise<string[]> {
   return admin
@@ -32,13 +31,17 @@ function deleteCollection(path: string): Promise<any> {
 }
 
 exports.deleteUserData = functions.pubsub.schedule('every 24 hours').onRun(async () => {
-  const productIds = await getProductIds();
+  const [users, productIds] = await Promise.all([admin.auth().listUsers(), getProductIds()]);
+
+  // TODO: Delete all storage data
+  // const bucket = admin.storage().bucket();
 
   await Promise.all([
     deleteCollection('cart'),
     deleteCollection('customers'),
     deleteCollection('gcs-mirror'),
     deleteCollection('mail'),
+    admin.auth().deleteUsers(users.users.map((user) => user.uid)),
     ...productIds.map((productId) => deleteCollection(`products/${productId}/reviews`)),
   ]);
 });
