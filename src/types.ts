@@ -129,8 +129,8 @@ export interface Session {
         value: number;
         unit: string;
       };
-    }[]
-  }
+    }[];
+  };
   collect_shipping_address: boolean;
   // Updated via extension
   url?: string;
@@ -152,4 +152,19 @@ export interface Content {
   excerpt: string;
   created_at: Timestamp;
   content: string;
+}
+
+export interface Address {
+  address: {
+    addressLine1: string;
+    addressLine2?: string;
+    cityLocality: string;
+    name: string;
+    postalCode: string;
+    countryCode: string;
+  };
+  validation?: {
+    // https://www.shipengine.com/docs/addresses/validation/#address-status-meanings
+    status: 'verified' | 'unverified' | 'warning' | 'error';
+  };
 }

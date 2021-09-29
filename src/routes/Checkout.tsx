@@ -12,7 +12,8 @@ import { ProductCoffeeMetadata } from '../components/ProductCard';
 import { Alert } from '../components/Alert';
 import { Address, AddressFormValues } from '../components/Address';
 import { useUser } from '../hooks/useUser';
-import { format } from 'date-fns';
+import { add, format } from 'date-fns';
+import { useAddressValidation } from '../hooks/useAddressValidation';
 
 export function Checkout() {
   const { cart } = useCart();
@@ -96,20 +97,22 @@ function Order() {
   const user = useUser();
   const { cart, total } = useCart();
 
-  const { checkout, error, loading } = useCheckout();
+  const checkout = useCheckout();
+  const address = useAddressValidation();
 
   // TODO(ehesp): Add address validation
   const formik = useFormik<AddressFormValues>({
     initialValues: {
       name: user.data?.displayName || '',
-      line1: '',
+      line1: '1600 Amphitheatre Parkway',
       line2: '',
-      city: '',
-      state: '',
-      postal_code: '',
+      city: 'Mountain View',
+      state: 'CA',
+      postal_code: '94043',
     },
     async onSubmit(values) {
-      await checkout({
+      await address.validate(values);
+      await checkout.trigger({
         mode: 'payment',
         success_url: `${window.location.origin}/account/orders`,
         cancel_url: window.location.href,
@@ -183,12 +186,19 @@ function Order() {
         </div>
       </div>
 
-      <Button type="submit" className="block" loading={loading} disabled={!formik.isValid}>
+      <Button type="submit" className="block" loading={checkout.loading || address.loading} disabled={!formik.isValid}>
         Checkout
       </Button>
-      {!!error && (
+      {!!checkout.loading && <div className="mt-4 text-xs">Creating a checkout session...</div>}
+      {!!address.loading && <div className="mt-4 text-xs">Validating your address...</div>}
+      {!!checkout.error && (
         <div className="mt-4">
-          <Error>{error.message}</Error>
+          <Error>{checkout.error.message}</Error>
+        </div>
+      )}
+      {!!address.error && (
+        <div className="mt-4">
+          <Error>{address.error.message}</Error>
         </div>
       )}
     </form>

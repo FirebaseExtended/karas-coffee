@@ -1,5 +1,5 @@
 import { DocumentData, FirestoreDataConverter, Timestamp } from 'firebase/firestore';
-import { Product, Customer, Session, Review, Subscription, Content } from '../types';
+import { Product, Customer, Session, Review, Subscription, Content, Address } from '../types';
 
 export const productConverter: FirestoreDataConverter<Product> = {
   fromFirestore(snapshot): Product {
@@ -172,5 +172,19 @@ export const contentConverter: FirestoreDataConverter<Content> = {
   },
   toFirestore() {
     throw new Error('Client does not support updating content.');
+  },
+};
+
+export const addressConverter: FirestoreDataConverter<Address> = {
+  fromFirestore(snapshot) {
+    const data = snapshot.data();
+
+    return {
+      address: data.address,
+      validation: data.validation,
+    };
+  },
+  toFirestore(data): DocumentData {
+    return data;
   },
 };

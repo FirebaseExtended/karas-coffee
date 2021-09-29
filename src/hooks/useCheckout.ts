@@ -14,7 +14,7 @@ export function useCheckout() {
 
   const uid = user.data?.uid;
 
-  const checkout = useCallback(
+  const trigger = useCallback(
     async (session: Omit<Session, 'url' | 'customer'>) => {
       if (!uid) {
         return navigate(`/signin?redirect=${window.location.pathname}`);
@@ -40,8 +40,6 @@ export function useCheckout() {
           ref,
           (snapshot) => {
             const data = snapshot.data();
-
-            console.log('data >>>', data);
 
             if (data?.url) {
               unsubscribe?.();
@@ -73,5 +71,5 @@ export function useCheckout() {
     [uid],
   );
 
-  return { checkout, loading, error };
+  return { trigger, loading, error };
 }
