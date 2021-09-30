@@ -100,7 +100,6 @@ function Order() {
   const checkout = useCheckout();
   const address = useAddressValidation();
 
-  // TODO(ehesp): Add address validation
   const formik = useFormik<AddressFormValues>({
     initialValues: {
       name: user.data?.displayName || '',
@@ -114,7 +113,7 @@ function Order() {
       await address.validate(values);
       await checkout.trigger({
         mode: 'payment',
-        success_url: `${window.location.origin}/account/orders`,
+        success_url: `${window.location.origin}/account/orders?completed=true`,
         cancel_url: window.location.href,
         line_items: cart.map((item) => ({
           price: item.metadata.price,

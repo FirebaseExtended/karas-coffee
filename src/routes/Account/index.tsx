@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import cx from 'classnames';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useSearchParams } from 'react-router-dom';
+import { useCart } from '../../hooks/useCart';
 
 export function AccountOutlet() {
+  const [params] = useSearchParams();
+  const { clearCart } = useCart();
+
+  const completed = params.get('complete') === 'true';
+
+  useEffect(() => {
+    if (completed) {
+      clearCart();
+    }
+  }, [completed]);
+
   return (
     <section className="px-4 lg:px-0">
       <nav className="mb-8">
