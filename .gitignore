@@ -11,3 +11,4 @@ functions/lib/**/*.js
 functions/lib/**/*.js.map
 functions/typings/
 functions/node_modules/
+*.log
