@@ -21,11 +21,8 @@ export function useProductReviews(productId: string) {
   // Ensure the record has all the toxicity fields.
   constraints.push(where(new FieldPath('attribute_scores', 'TOXICITY'), '<', TOXICITY_THRESHOLD));
 
-  // In production, only show the users own reviews.
-  // @ts-expect-error
-  if (import.meta.PROD && !!user.data) {
-    constraints.push(where('user.id', '==', user.data.uid));
-  }
+  // For this example, only show the users own reviews.
+  constraints.push(where('user.id', '==', user.data?.uid ?? '-'));
 
   return useFirestoreQueryData(
     ['reviews', productId],
