@@ -2,18 +2,20 @@ import React from 'react';
 import { useFormik } from 'formik';
 
 import { XIcon } from '@heroicons/react/solid';
-import { Button } from '../components/Button';
-import { Input, Error } from '../components/Form';
-import { useCart } from '../hooks/useCart';
-import { useCheckout } from '../hooks/useCheckout';
+import { Button } from '../../components/Button';
+import { Input, Error } from '../../components/Form';
+import { useCart } from '../../hooks/useCart';
+import { useCheckout } from '../../hooks/useCheckout';
 
-import { isProductCoffee } from '../types';
-import { ProductCoffeeMetadata } from '../components/ProductCard';
-import { Alert } from '../components/Alert';
-import { Address, AddressFormValues } from '../components/Address';
-import { useUser } from '../hooks/useUser';
+import { isProductCoffee } from '../../types';
+import { ProductCoffeeMetadata } from '../../components/ProductCard';
+import { Alert } from '../../components/Alert';
+import { Address, AddressFormValues } from '../../components/Address';
+import { useUser } from '../../hooks/useUser';
 import { add, format } from 'date-fns';
-import { useAddressValidation } from '../hooks/useAddressValidation';
+import { useAddressValidation } from '../../hooks/useAddressValidation';
+import { useNavigate } from 'react-router';
+import { OrderSummary } from '../../components/OrderSummary';
 
 export function Checkout() {
   const { cart } = useCart();
@@ -94,6 +96,7 @@ function Items() {
 }
 
 function Order() {
+  const navigate = useNavigate();
   const user = useUser();
   const { cart, total } = useCart();
 
@@ -168,29 +171,15 @@ function Order() {
 
   return (
     <form onSubmit={formik.handleSubmit} className="lg:sticky p-8 space-y-4 border rounded bg-gray-50 top-20">
-      <div>
+      {/* <div>
         <h2 className="mb-2 text-lg font-bold text-gray-700">Shipping Address</h2>
         <Address values={formik.values} onChange={formik.handleChange} errors={formik.errors} />
-      </div>
-      <div>
-        <h2 className="text-lg font-bold text-gray-700">Order Summary</h2>
-        <div className="my-4 divide-y">
-          <OrderRow label="Subtotal" value={`$${total}`} />
-          <OrderRow label="Shipping" value="$0" />
-          <OrderRow label="Tax" value="$0" />
-          <OrderRow
-            label={<span className="text-lg font-bold text-gray-900">Order Total</span>}
-            value={<span className="text-lg">${total}</span>}
-          />
-        </div>
-      </div>
-
-      <Button type="submit" className="block" loading={checkout.loading || address.loading} disabled={!formik.isValid}>
-        Checkout
-      </Button>
-      {!!checkout.loading && <div className="mt-4 text-xs">Creating a checkout session...</div>}
-      {!!address.loading && <div className="mt-4 text-xs">Validating your address...</div>}
-      {!!checkout.error && (
+      </div> */}
+      <OrderSummary shipping={<span>TBC</span>} />
+      <Button onClick={() => navigate('/checkout/shipping')}>Shipping &rarr;</Button>
+      {/* {!!checkout.loading && <div className="mt-4 text-xs">Creating a checkout session...</div>}
+      {!!address.loading && <div className="mt-4 text-xs">Validating your address...</div>} */}
+      {/* {!!checkout.error && (
         <div className="mt-4">
           <Error>{checkout.error.message}</Error>
         </div>
@@ -199,21 +188,7 @@ function Order() {
         <div className="mt-4">
           <Error>{address.error.message}</Error>
         </div>
-      )}
+      )}*/}
     </form>
-  );
-}
-
-type OrderRowProps = {
-  label: React.ReactNode;
-  value: React.ReactNode;
-};
-
-function OrderRow({ label, value }: OrderRowProps) {
-  return (
-    <div className="flex items-center py-2">
-      <div className="flex-grow text-sm text-gray-600">{label}</div>
-      <div className="font-bold">{value}</div>
-    </div>
   );
 }

@@ -86,10 +86,7 @@ export interface Session {
   success_url: string;
   cancel_url: string;
   customer: string; // Stripe customer id
-  line_items?: {
-    price: string;
-    quantity: number;
-  }[];
+  line_items?: any[];
   price?: string;
   shipping?: {
     name: string;
@@ -160,6 +157,7 @@ export interface Address {
     addressLine2?: string;
     cityLocality: string;
     name: string;
+    stateProvince: string;
     postalCode: string;
     countryCode: string;
   };

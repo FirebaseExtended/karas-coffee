@@ -24,10 +24,20 @@ export function useAddressValidation() {
       const collection = collections.addresses;
       const ref = doc(collection, uid);
 
-      await deleteDoc(ref);
-
       return new Promise<void>(async (resolve, reject) => {
         try {
+          await setDoc(ref, {
+            address: {
+              name: address.name,
+              addressLine1: address.line1,
+              addressLine2: address.line2,
+              cityLocality: address.city,
+              postalCode: address.postal_code,
+              stateProvince: address.state,
+              countryCode: 'US',
+            },
+          });
+
           // Declare the unsubscribe function.
           let unsubscribe: Unsubscribe;
 
@@ -60,17 +70,6 @@ export function useAddressValidation() {
               return reject(e);
             },
           );
-
-          await setDoc(ref, {
-            address: {
-              name: address.name,
-              addressLine1: address.line1,
-              addressLine2: address.line2,
-              cityLocality: address.city,
-              postalCode: address.postal_code,
-              countryCode: 'US',
-            },
-          });
         } catch (e: any) {
           setError(e);
           setLoading(false);

@@ -180,6 +180,7 @@ export const addressConverter: FirestoreDataConverter<Address> = {
     const data = snapshot.data();
 
     return {
+      uid: data.uid,
       address: data.address,
       validation: data.validation,
     };
