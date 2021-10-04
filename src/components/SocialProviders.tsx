@@ -1,33 +1,29 @@
-import React, { useCallback, useState } from 'react';
-import { UserCredential } from 'firebase/auth';
+import React from 'react';
+import { GithubAuthProvider, GoogleAuthProvider, TwitterAuthProvider, UserCredential } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
 import { Error } from './Form';
-import { signInWithGitHub, signInWithGoogle, signInWithTwitter } from '../firebase/auth';
+import { useAuthSignInWithPopup } from '@react-query-firebase/auth';
+import { auth } from '../firebase';
 
 export type SocialProviderProps = {
   redirect?: string | null;
 };
 
+const providers = {
+  github: new GithubAuthProvider(),
+  google: new GoogleAuthProvider(),
+  twitter: new TwitterAuthProvider(),
+};
+
 export function SocialProviders({ redirect }: SocialProviderProps) {
   const navigate = useNavigate();
-  const [error, setError] = useState<string>('');
 
-  const onHandleProvider = useCallback(
-    (fn: () => Promise<UserCredential>) => {
-      fn()
-        .then(() => {
-          navigate(redirect || '/');
-        })
-        .catch((e) => {
-          console.error(e);
-          // TODO(ehesp): handle account exists with credential (link them)
-          // TODO(ehesp): switch on code to provide user friendly error messages.
-          setError(e.message);
-        });
+  const popup = useAuthSignInWithPopup(auth, {
+    onSuccess() {
+      navigate(redirect || '/');
     },
-    [redirect],
-  );
+  });
 
   return (
     <div>
@@ -35,7 +31,7 @@ export function SocialProviders({ redirect }: SocialProviderProps) {
         <div>
           <Provider
             label="Sign in with Google"
-            onClick={() => onHandleProvider(signInWithGoogle)}
+            onClick={() => popup.mutate({ provider: providers.google })}
             icon={
               <svg className="w-5 h-5 text-[#4285F4]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
@@ -46,7 +42,7 @@ export function SocialProviders({ redirect }: SocialProviderProps) {
         <div>
           <Provider
             label="Sign in with GitHub"
-            onClick={() => onHandleProvider(signInWithGitHub)}
+            onClick={() => popup.mutate({ provider: providers.github })}
             icon={
               <svg className="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                 <path
@@ -61,7 +57,7 @@ export function SocialProviders({ redirect }: SocialProviderProps) {
         <div>
           <Provider
             label="Sign in with Twitter"
-            onClick={() => onHandleProvider(signInWithTwitter)}
+            onClick={() => popup.mutate({ provider: providers.twitter })}
             icon={
               <svg className="w-5 h-5 text-[#1D9BF0]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                 <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
@@ -70,7 +66,7 @@ export function SocialProviders({ redirect }: SocialProviderProps) {
           />
         </div>
       </div>
-      {!!error && <Error>{error}</Error>}
+      {popup.isError && <Error>{popup.error.message}</Error>}
     </div>
   );
 }

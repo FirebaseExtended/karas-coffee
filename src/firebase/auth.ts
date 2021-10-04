@@ -22,23 +22,3 @@ export function getUserOnce(): Promise<User | null> {
     });
   });
 }
-
-export function signInWithGitHub(): Promise<UserCredential> {
-  const provider = new GithubAuthProvider();
-  // Add additional provider scope/data as required.
-  return signInWithPopup(auth, provider);
-}
-
-export function signInWithGoogle() {
-  const provider = new GoogleAuthProvider();
-  // Add additional provider scope/data as required.
-  return signInWithPopup(auth, provider);
-}
-
-
-export function signInWithTwitter() {
-  const provider = new TwitterAuthProvider();
-  // Add additional provider scope/data as required.
-  return signInWithPopup(auth, provider);
-}
-

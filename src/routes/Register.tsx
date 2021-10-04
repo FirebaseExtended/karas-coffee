@@ -1,7 +1,8 @@
 import React from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { FormikErrors, useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuthCreateUserWithEmailAndPassword } from '@react-query-firebase/auth';
+
 import { Card } from '../components/Card';
 import { Input, Error, Divider } from '../components/Form';
 import { SocialProviders } from '../components/SocialProviders';
@@ -16,8 +17,12 @@ type FormValues = {
 
 export function Register() {
   const navigate = useNavigate();
+  const register = useAuthCreateUserWithEmailAndPassword(auth, {
+    onSuccess() {
+      navigate('/');
+    },
+  });
 
-  // Set up formik for login.
   const formik = useFormik<FormValues>({
     initialValues: {
       email: '',
@@ -31,16 +36,11 @@ export function Register() {
       if (values.password && values.password !== values.confirm) errors.confirm = 'Passwords do not match.';
       return errors;
     },
-    async onSubmit(values, helpers) {
-      try {
-        console.log('Submitting form with values: ', values);
-        await createUserWithEmailAndPassword(auth, values.email, values.password);
-        navigate('/');
-      } catch (e: any) {
-        // TODO(ehesp): switch on code to provide user friendly error messages.
-        console.error(e);
-        helpers.setStatus(e?.message || 'Something went wrong.');
-      }
+    async onSubmit(values) {
+      register.mutate({
+        email: values.email,
+        password: values.password,
+      });
     },
   });
 
@@ -79,8 +79,8 @@ export function Register() {
             onChange={formik.handleChange}
             error={formik.dirty ? formik.errors.confirm : undefined}
           />
-          {!!formik.status && <Error>{formik.status}</Error>}
-          <Button disabled={!formik.isValid} loading={formik.isSubmitting} type="submit">
+          {!!register.isError && <Error>{register.error?.message}</Error>}
+          <Button disabled={!formik.isValid} loading={register.isLoading} type="submit">
             Register
           </Button>
         </form>
