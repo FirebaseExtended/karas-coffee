@@ -173,7 +173,7 @@ function RatesSelection({
         },
         shipment: addressToShipment(values),
       });
-      console.log(results);
+
       setProviders(results.rates);
     },
   });

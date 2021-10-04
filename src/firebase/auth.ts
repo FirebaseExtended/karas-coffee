@@ -1,15 +1,5 @@
-import { createContext } from 'react';
 import { auth } from './index';
-import {
-  GithubAuthProvider,
-  onAuthStateChanged,
-  Unsubscribe,
-  User,
-  signInWithPopup,
-  UserCredential,
-  GoogleAuthProvider,
-  TwitterAuthProvider,
-} from 'firebase/auth';
+import { onAuthStateChanged, Unsubscribe, User } from 'firebase/auth';
 /**
  * Gets a user instance once and unsubscribes from future changes.
  */
