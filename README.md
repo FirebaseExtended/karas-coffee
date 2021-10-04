@@ -5,8 +5,8 @@ A demo ecommerce application showcasing Firebase Extensions and other Firebase p
 ----
 ### Project structure
 
-  - [/](/)
-    - Source for the React web application, see [/src](/src).  
+  - [/website](/website)
+    - Source for the React web application.  
   - [/functions](/functions)
     - Source for Firebase Cloud Functions used by this project.  
   - [/tools](/tools)
@@ -15,6 +15,9 @@ A demo ecommerce application showcasing Firebase Extensions and other Firebase p
 ----
 ### Local development
 
+```bash
+yarn
+```
 
 #### Running locally
 

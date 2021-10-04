@@ -1,0 +1,16 @@
+name: firebase_hosting_preview
+on: pull_request
+jobs:
+  deploy:
+    if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn && yarn build
+        working-directory: website
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KARAS_COFFEE }}'
+          projectId: karas-coffee
+          entryPoint: website

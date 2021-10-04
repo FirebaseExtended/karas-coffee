@@ -17,7 +17,7 @@ function getProductIds(): Promise<string[]> {
 }
 
 // Use Firebase Tools to delete a collection
-function deleteCollection(path: string): Promise<any> {
+function deleteCollection(path: string): Promise<void> {
   return firebase_tools.firestore.delete(path, {
     project: 'karas-coffee',
     recursive: true,
@@ -26,7 +26,7 @@ function deleteCollection(path: string): Promise<any> {
 }
 
 // Send a welcome email on user create.
-exports.onAuthCreate = functions.auth.user().onCreate(async (user: any) => {
+exports.onAuthCreate = functions.auth.user().onCreate(async (user: functions.auth.UserRecord) => {
   const collection = admin.firestore().collection('mail');
   await collection.add({ to: user.email, template: { name: 'welcome_email' } });
 });
@@ -56,7 +56,7 @@ exports.deleteUserData = functions.pubsub.schedule('every 24 hours').onRun(async
   const bucket = admin.storage().bucket();
   const bucketFiles = (await bucket.getFiles())[0];
 
-  await Promise.all([
+  await Promise.all<unknown>([
     deleteCollection('cart'),
     // ShipEngine verify addresses
     deleteCollection('addresses'),
