@@ -1,14 +1,5 @@
 node_modules
 .DS_Store
-.firebase
-dist
-dist-ssr
-*.local
-
-
-# functions
-functions/lib/**/*.js
-functions/lib/**/*.js.map
-functions/typings/
-functions/node_modules/
+.idea
+.vscode
 *.log

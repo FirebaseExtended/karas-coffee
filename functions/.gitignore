@@ -1,0 +1,5 @@
+node_modules
+lib/**/*.js
+lib/**/*.js.map
+typings
+node_modules

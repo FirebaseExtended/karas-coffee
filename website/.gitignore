@@ -1,0 +1,4 @@
+.firebase
+dist
+dist-ssr
+*.local

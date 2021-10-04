@@ -8,6 +8,7 @@ async function main() {
 
   for (const product of products) {
     const { price_usd, ...stripeObject } = product;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     stripeObject.metadata = { ...product.metadata, price_usd: '' + product.price_usd } as any;
 
     let productExists = false;
