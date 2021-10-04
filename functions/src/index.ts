@@ -25,11 +25,28 @@ function deleteCollection(path: string): Promise<any> {
   });
 }
 
-// A Firebase function to send a welcome email on user create.
+// Send a welcome email on user create.
 exports.onAuthCreate = functions.auth.user().onCreate(async (user: any) => {
   const collection = admin.firestore().collection('mail');
   await collection.add({ to: user.email, template: { name: 'welcome_email' } });
 });
+
+// Send a order update SMS to the user once they have placed an order.
+exports.onPaymentCreated = functions.firestore
+  .document('customers/{customerId}/payments/{paymentId}')
+  .onCreate(async (snapshot, context) => {
+    const customerId = context.params.customerId;
+    const user = await admin.auth().getUser(customerId);
+    if (!user.phoneNumber) {
+      functions.logger.log('No phone number found for user, skipping sending update.', user.uid);
+      return;
+    }
+    const message = {
+      to: user.phoneNumber,
+      body: `Thank you for ordering from Kara's Coffee, your order is currently being processed. You can track it at https://karas-coffee.web.app/account/orders`,
+    };
+    await admin.firestore().collection('messages').add(message);
+  });
 
 // A Firebase function delete all user data every 24 hours - useful only
 // for the purpose of this demo so we're not storing user data for long period.
@@ -45,8 +62,9 @@ exports.deleteUserData = functions.pubsub.schedule('every 24 hours').onRun(async
     deleteCollection('addresses'),
     // Twilio SendGrid
     deleteCollection('cart_email'),
-    // Twilio
-    deleteCollection('notifications'),
+    // Twilio SMS
+    deleteCollection('messages'),
+    // Stripe & Firebase Auth
     deleteCollection('customers'),
     // Storage mirror
     deleteCollection('gcs-mirror'),
