@@ -9,7 +9,7 @@ import { useUser } from './hooks/useUser';
 import { NotFound } from './routes/NotFound';
 import { SignIn } from './routes/SignIn';
 import { Homepage } from './routes/Homepage';
-import { Checkout } from './routes/Checkout';
+import { Checkout } from './routes/Checkout/Checkout';
 import { AccountOutlet } from './routes/Account';
 import { Product } from './routes/Product';
 import { Overview } from './routes/Account/Overview';
@@ -20,6 +20,7 @@ import { Register } from './routes/Register';
 import { Shop } from './routes/Shop';
 import { ContentList, ContentOutlet } from './routes/Content';
 import { Content } from './routes/Content/Content';
+import { Shipping } from './routes/Checkout/Shipping';
 
 export function App() {
   const user = useUser();
@@ -44,6 +45,7 @@ export function App() {
                 <Route path="orders" element={<Orders />} />
               </Route>
               <Route path="checkout" element={<Checkout />} />
+              <Route path="checkout/shipping" element={<Shipping />} />
             </>
           )}
           {!user.data && (

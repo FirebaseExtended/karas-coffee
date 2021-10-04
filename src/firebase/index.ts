@@ -3,6 +3,7 @@ import { getAnalytics } from 'firebase/analytics';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import { getFunctions } from 'firebase/functions';
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 
 import {
@@ -30,6 +31,7 @@ export const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const firestore = getFirestore(app);
 export const storage = getStorage(app);
+export const functions = getFunctions(app);
 // export const appCheck = initializeAppCheck(app, {
 //   provider: new ReCaptchaV3Provider('6LdTwWccAAAAAM4QOoaqFiVW9j6yy9AOetWVCzeN'),
 //   isTokenAutoRefreshEnabled: true,
@@ -51,5 +53,4 @@ export const collections = {
   productReviews: (productId: string) =>
     collection(firestore, 'products', productId, 'reviews').withConverter(reviewConverter),
   content: collection(firestore, 'content').withConverter(contentConverter),
-  addresses: collection(firestore, 'addresses').withConverter(addressConverter),
 };

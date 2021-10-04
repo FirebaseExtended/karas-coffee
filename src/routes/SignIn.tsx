@@ -1,7 +1,8 @@
 import React from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FormikErrors, useFormik } from 'formik';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useAuthSignInWithEmailAndPassword } from '@react-query-firebase/auth';
+
 import { Card } from '../components/Card';
 import { Input, Error, Divider } from '../components/Form';
 import { SocialProviders } from '../components/SocialProviders';
@@ -15,6 +16,12 @@ type FormValues = {
 
 export function SignIn() {
   const navigate = useNavigate();
+  const signIn = useAuthSignInWithEmailAndPassword(auth, {
+    onSuccess() {
+      navigate(redirect || '/');
+    },
+  });
+
   const [params] = useSearchParams();
   const redirect = params.get('redirect');
 
@@ -30,16 +37,11 @@ export function SignIn() {
       if (!values.password) errors.password = 'Please provide a password.';
       return errors;
     },
-    async onSubmit(values, helpers) {
-      try {
-        console.log('Submitting form with values: ', values);
-        await signInWithEmailAndPassword(auth, values.email, values.password);
-        navigate(redirect || '/');
-      } catch (e: any) {
-        // TODO(ehesp): switch on code to provide user friendly error messages.
-        console.error(e);
-        helpers.setStatus(e?.message || 'Something went wrong.');
-      }
+    async onSubmit(values) {
+      signIn.mutate({
+        email: values.email,
+        password: values.password,
+      });
     },
   });
 
@@ -75,8 +77,8 @@ export function SignIn() {
               Forgot your password?
             </Link>
           </div>
-          {!!formik.status && <Error>{formik.status}</Error>}
-          <Button disabled={!formik.isValid} loading={formik.isSubmitting} type="submit">
+          {signIn.isError && <Error>{signIn.error.message}</Error>}
+          <Button disabled={!formik.isValid} loading={signIn.isLoading} type="submit">
             Sign in
           </Button>
         </form>

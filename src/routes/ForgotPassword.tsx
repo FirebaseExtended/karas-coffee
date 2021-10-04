@@ -1,6 +1,6 @@
 import React from 'react';
-import { sendPasswordResetEmail } from 'firebase/auth';
 import { FormikErrors, useFormik } from 'formik';
+import { useAuthSendPasswordResetEmail } from '@react-query-firebase/auth';
 import { Card } from '../components/Card';
 import { Input, Error } from '../components/Form';
 import { auth } from '../firebase';
@@ -10,14 +10,9 @@ type FormValues = {
   email: string;
 };
 
-type FormikStatus =
-  | {
-      type: 'error' | 'success';
-      message: string;
-    }
-  | undefined;
-
 export function ForgotPassword() {
+  const send = useAuthSendPasswordResetEmail(auth);
+
   // Set up formik for login.
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -28,30 +23,10 @@ export function ForgotPassword() {
       if (!values.email) errors.email = 'Please provide an email address.';
       return errors;
     },
-    async onSubmit(values, helpers) {
-      let status: FormikStatus;
-
-      try {
-        console.log('Submitting form with values: ', values);
-        await sendPasswordResetEmail(auth, values.email);
-        status = {
-          type: 'success',
-          message: `A password reset email has been sent to ${values.email}.`,
-        };
-      } catch (e: any) {
-        // TODO(ehesp): switch on code to provide user friendly error messages.
-        console.error(e);
-        status = {
-          type: 'error',
-          message: e?.message || 'Something went wrong.',
-        };
-      }
-
-      helpers.setStatus(status);
+    async onSubmit(values) {
+      send.mutate({ email: values.email });
     },
   });
-
-  const status = formik.status as FormikStatus;
 
   return (
     <section className="max-w-xl mx-auto my-20 px-4">
@@ -68,9 +43,9 @@ export function ForgotPassword() {
             onChange={formik.handleChange}
             error={formik.dirty ? formik.errors.email : undefined}
           />
-          {status?.type === 'error' && <Error>{status.message}</Error>}
-          {status?.type === 'success' && <p>{status.message}</p>}
-          <Button disabled={!formik.isValid} loading={formik.isSubmitting} type="submit">
+          {send.isError && <Error>{send.error.message}</Error>}
+          {send.isSuccess && <p>A password reset email has been set.</p>}
+          <Button disabled={!formik.isValid} loading={send.isLoading} type="submit">
             Send Email
           </Button>
         </form>

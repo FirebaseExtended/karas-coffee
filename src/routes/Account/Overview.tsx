@@ -3,15 +3,22 @@ import { User, RecaptchaVerifier, ConfirmationResult, linkWithPhoneNumber } from
 
 import { auth } from '../../firebase';
 import { Button } from '../../components/Button';
-import { useSignOut } from '../../hooks/useSignOut';
 import { useUser } from '../../hooks/useUser';
 import { Input } from '../../components/Form';
 import { useQueryClient } from 'react-query';
+import { useAuthLinkWithPhoneNumber, useAuthReload, useAuthSignOut } from '@react-query-firebase/auth';
+import { useNavigate } from 'react-router';
 
 export function Overview() {
-  const signOut = useSignOut();
-  const user = useUser();
+  const navigate = useNavigate();
 
+  const signOut = useAuthSignOut(auth, {
+    onSuccess() {
+      navigate('/');
+    },
+  });
+
+  const user = useUser();
   const data = user.data!;
 
   return (
@@ -26,7 +33,9 @@ export function Overview() {
           <PhoneNumber user={data} />
         </ul>
         <div className="mt-4">
-          <Button onClick={signOut}>Sign Out</Button>
+          <Button onClick={() => signOut.mutate()} loading={signOut.isLoading}>
+            Sign Out
+          </Button>
         </div>
       </div>
     </div>
@@ -43,9 +52,20 @@ function PhoneNumber({ user }: { user: User }) {
   const [verificationCode, setVerificationCode] = useState('');
   const [error, setError] = useState('');
 
+  const reload = useAuthReload();
+
+  const linkPhoneNumber = useAuthLinkWithPhoneNumber({
+    onSuccess(result) {
+      confirmation.current = result;
+      setMethod('code');
+    },
+  });
+
   const verifier = useRef<RecaptchaVerifier>();
   const confirmation = useRef<ConfirmationResult>();
 
+  // Create and render a RecaptchaVerifier instance
+  // when the user wants to link the phone number.
   function onVerify() {
     verifier.current = new RecaptchaVerifier(
       container.current!,
@@ -62,19 +82,6 @@ function PhoneNumber({ user }: { user: User }) {
     verifier.current.render();
   }
 
-  async function onSubmitPhoneNumber() {
-    if (!phoneNumber) {
-      return;
-    }
-
-    try {
-      confirmation.current = await linkWithPhoneNumber(user, phoneNumber, verifier.current!);
-      setMethod('code');
-    } catch (e: any) {
-      setError(e.message);
-    }
-  }
-
   async function onConfirmCode() {
     if (!verificationCode) {
       return;
@@ -82,7 +89,7 @@ function PhoneNumber({ user }: { user: User }) {
 
     try {
       const credential = await confirmation.current!.confirm(verificationCode);
-      await credential.user.reload();
+      await reload.mutateAsync(credential.user);
       client.setQueryData('user', credential.user);
     } catch (e: any) {
       setError(e.message);
@@ -112,7 +119,17 @@ function PhoneNumber({ user }: { user: User }) {
               />
             </div>
             <div className="flex items-end justify-end">
-              <Button onClick={() => onSubmitPhoneNumber()}>Submit</Button>
+              <Button
+                onClick={() =>
+                  linkPhoneNumber.mutate({
+                    user,
+                    phoneNumber,
+                    appVerifier: verifier.current!,
+                  })
+                }
+              >
+                Submit
+              </Button>
             </div>
           </div>
         )}
