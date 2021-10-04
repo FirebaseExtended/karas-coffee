@@ -213,7 +213,7 @@ function RatesSelection({ onShippingCost }: { onShippingCost: (provider: Shippin
                   onClick={() => onShippingCost(provider, addressToShipment(formik.values))}
                 >
                   <div className="flex-grow">
-                    <div className="font-medium">{provider.carrierFriendlyName}</div>
+                    <div className="font-medium">{provider.serviceType}</div>
                     <p className="text-xs text-gray-600">
                       {provider.carrierDeliveryDays.length > 1
                         ? provider.carrierDeliveryDays

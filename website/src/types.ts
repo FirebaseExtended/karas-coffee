@@ -159,6 +159,7 @@ export interface ShippingRate {
   rateId: string;
   carrierId: string;
   serviceCode: string;
+  serviceType: string;
   carrierFriendlyName: string;
   deliveryDays: string;
   shippingAmount: {
