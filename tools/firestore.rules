@@ -6,9 +6,32 @@ service cloud.firestore {
       match /checkout_sessions/{id} {
         allow read, write: if request.auth.uid == uid;
       }
+      match /payments/{id} {
+        allow read, write: if request.auth.uid == uid;
+      }
       match /subscriptions/{id} {
         allow read: if request.auth.uid == uid;
       }
+      match /subscriptions/{id}/invoices/{iid} {
+        allow read: if request.auth.uid == uid;
+      }
+    }
+    
+    match /addresses/{uid} {
+    	allow read, write: if request.auth.uid == uid;
+    }
+    
+    // TODO - allow read if subscription
+    match /content/{id} {
+    	allow read: if true;
+    }
+    
+    match /gcs-mirror/{allImages=**} {
+    	allow read: if true;
+    }
+    
+    match /cart/{uid} {
+      allow read, write: if request.auth.uid == uid;
     }
 
     match /products/{product_id} {
@@ -17,7 +40,7 @@ service cloud.firestore {
       match /prices/{price_id} {
         allow read: if true;
       }
-
+      
       match /reviews/{review_id} {
         allow read: if true;
         allow write: if 
@@ -49,6 +72,10 @@ service cloud.firestore {
 
           // Ensure product id matches this path.
           request.resource.data.product_id == product_id
+      }
+
+      match /tax_rates/{tax_rate_id} {
+        allow read: if true;
       }
     }
   }
