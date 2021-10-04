@@ -1,16 +1,6 @@
 import { namedQuery, useFirestoreQueryData, NamedQuery } from '@react-query-firebase/firestore';
-import {
-  FieldPath,
-  orderBy,
-  OrderByDirection,
-  query,
-  QueryConstraint,
-  limit,
-  where,
-  WhereFilterOp,
-  Query,
-} from 'firebase/firestore';
-import { QueryKey, UseQueryResult } from 'react-query';
+import { query, QueryConstraint, Query } from 'firebase/firestore';
+import { QueryKey } from 'react-query';
 import { collections, firestore } from '../firebase';
 import { Product } from '../types';
 

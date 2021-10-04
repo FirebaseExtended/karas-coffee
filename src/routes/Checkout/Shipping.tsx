@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Address, AddressFormValues } from '../../components/Address';
 import { Button } from '../../components/Button';
 import { OrderSummary } from '../../components/OrderSummary';
-import { useAddress } from '../../hooks/useAddresses';
 import { useAddressValidation } from '../../hooks/useAddressValidation';
 import { useCart } from '../../hooks/useCart';
 import { useCheckout } from '../../hooks/useCheckout';
@@ -12,7 +11,6 @@ import { useRatesCalculation } from '../../hooks/useRatesCalculation';
 
 export function Shipping() {
   const { cart } = useCart();
-  const address = useAddress();
   const checkout = useCheckout();
 
   const [provider, setProvider] = useState<any>();
@@ -61,31 +59,16 @@ export function Shipping() {
       {cart.length > 0 && (
         <div className="lg:grid grid-cols-12 gap-16">
           <div className="col-start-1 col-end-8 mt-4">
-            {address.isLoading && <div>Loading...</div>}
-            {address.isSuccess && (
-              <div>
-                <div className="bg-gray-50 p-6 rounded border">
-                  <RatesSelection
-                    onShippingCost={(provider, shipment) => {
-                      setProvider(provider);
-                      setShipping(shipment);
-                    }}
-                    initialValues={
-                      address.data
-                        ? {
-                            name: '',
-                            line1: address.data.address.addressLine1,
-                            line2: address.data.address.addressLine2 || '',
-                            city: address.data.address.cityLocality,
-                            state: address.data.address.stateProvince,
-                            postal_code: address.data.address.postalCode,
-                          }
-                        : undefined
-                    }
-                  />
-                </div>
+            <div>
+              <div className="bg-gray-50 p-6 rounded border">
+                <RatesSelection
+                  onShippingCost={(provider, shipment) => {
+                    setProvider(provider);
+                    setShipping(shipment);
+                  }}
+                />
               </div>
-            )}
+            </div>
           </div>
           <div className="col-start-8 col-end-13">
             <OrderSummary
@@ -107,13 +90,8 @@ export function Shipping() {
   );
 }
 
-function RatesSelection({
-  initialValues,
-  onShippingCost,
-}: {
-  initialValues?: AddressFormValues;
-  onShippingCost: (provider: any, shipment: any) => void;
-}) {
+function RatesSelection({ onShippingCost }: { onShippingCost: (provider: any, shipment: any) => void }) {
+  const [error, setError] = useState<string | null>(null);
   const validation = useAddressValidation();
   const rates = useRatesCalculation();
   const [providers, setProviders] = useState<any>();
@@ -151,7 +129,7 @@ function RatesSelection({
   }
 
   const formik = useFormik<AddressFormValues>({
-    initialValues: initialValues ?? {
+    initialValues: {
       name: '',
       line1: '1600 Amphitheatre Parkway',
       line2: '',
@@ -165,16 +143,32 @@ function RatesSelection({
       return e;
     },
     async onSubmit(values) {
-      // await validation.validate(values);
-      const results = await rates.mutateAsync({
-        rateOptions: {
-          carrierIds: ['se-765964', 'se-765965', 'se-765963'],
-          serviceCodes: ['usps_media_mail'],
+      const valid = await validation.mutateAsync({
+        address: {
+          name: "Kara's Coffee",
+          phone: '512-343-5283',
+          addressLine1: '500 W 2nd St',
+          cityLocality: 'Austin',
+          stateProvince: 'TX',
+          postalCode: '78701',
+          countryCode: 'US',
         },
-        shipment: addressToShipment(values),
       });
+      const status = valid.validation.status;
 
-      setProviders(results.rates);
+      if (status === 'verified' || status === 'warning') {
+        const results = await rates.mutateAsync({
+          rateOptions: {
+            carrierIds: ['se-765964', 'se-765965', 'se-765963'],
+            serviceCodes: ['usps_media_mail'],
+          },
+          shipment: addressToShipment(values),
+        });
+
+        setProviders(results.rates);
+      } else {
+        setError('The provided address is not valid.');
+      }
     },
   });
 
@@ -183,10 +177,15 @@ function RatesSelection({
       <h3 className="mb-2 text-xl font-bold">Enter a shipping address</h3>
       <Address values={formik.values} onChange={formik.handleChange} errors={formik.errors} />
       <div className="mt-4">
-        <Button loading={validation.loading || rates.isLoading} disabled={!formik.isValid} onClick={formik.submitForm}>
+        <Button
+          loading={validation.isLoading || rates.isLoading}
+          disabled={!formik.isValid}
+          onClick={formik.submitForm}
+        >
           Calculate Shipping &rarr;
         </Button>
       </div>
+      {!!error && <div className="mt-4 text-red-600 text-xs">{error}</div>}
       {!!validation.error && <div className="mt-4 text-red-600 text-xs">{validation.error.message}</div>}
       {!!rates.error && <div className="mt-4 text-red-600 text-xs">{rates.error.message}</div>}
       {providers && (

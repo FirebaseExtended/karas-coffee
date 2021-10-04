@@ -97,98 +97,11 @@ function Items() {
 
 function Order() {
   const navigate = useNavigate();
-  const user = useUser();
-  const { cart, total } = useCart();
-
-  const checkout = useCheckout();
-  const address = useAddressValidation();
-
-  const formik = useFormik<AddressFormValues>({
-    initialValues: {
-      name: user.data?.displayName || '',
-      line1: '1600 Amphitheatre Parkway',
-      line2: '',
-      city: 'Mountain View',
-      state: 'CA',
-      postal_code: '94043',
-    },
-    async onSubmit(values) {
-      await address.validate(values);
-      await checkout.trigger({
-        mode: 'payment',
-        success_url: `${window.location.origin}/account/orders?completed=true`,
-        cancel_url: window.location.href,
-        line_items: cart.map((item) => ({
-          price: item.metadata.price,
-          quantity: item.quantity,
-        })),
-        shipping: {
-          name: values.name,
-          address: {
-            country: 'US', // TODO(ehesp): allow users to select country
-            line1: values.line1,
-            line2: values.line2,
-            city: values.city,
-            postal_code: values.postal_code,
-            state: values.state,
-          },
-        },
-        collect_shipping_address: true,
-        shipment: {
-          carrierId: 'se-423887',
-          serviceCode: 'usps_media_mail',
-          shipDate: format(new Date(), 'yyyy-mm-dd'),
-          shipFrom: {
-            name: "Kara's Coffee",
-            phone: '512-343-5283',
-            addressLine1: '500 W 2nd St',
-            cityLocality: 'Austin',
-            stateProvince: 'TX',
-            postalCode: '78701',
-            countryCode: 'US',
-          },
-          shipTo: {
-            name: values.name,
-            addressLine1: values.line1,
-            addressLine2: values.line2,
-            cityLocality: values.city,
-            stateProvince: values.state,
-            postalCode: values.postal_code,
-            countryCode: 'US',
-          },
-          packages: [
-            {
-              weight: {
-                value: cart.reduce((total, { metadata, quantity }) => total + parseInt(metadata.weight) * quantity, 0),
-                unit: 'gram',
-              },
-            },
-          ],
-        },
-      });
-    },
-  });
 
   return (
-    <form onSubmit={formik.handleSubmit} className="lg:sticky p-8 space-y-4 border rounded bg-gray-50 top-20">
-      {/* <div>
-        <h2 className="mb-2 text-lg font-bold text-gray-700">Shipping Address</h2>
-        <Address values={formik.values} onChange={formik.handleChange} errors={formik.errors} />
-      </div> */}
+    <div className="lg:sticky p-8 space-y-4 border rounded bg-gray-50 top-20">
       <OrderSummary shipping={<span>TBC</span>} />
       <Button onClick={() => navigate('/checkout/shipping')}>Shipping &rarr;</Button>
-      {/* {!!checkout.loading && <div className="mt-4 text-xs">Creating a checkout session...</div>}
-      {!!address.loading && <div className="mt-4 text-xs">Validating your address...</div>} */}
-      {/* {!!checkout.error && (
-        <div className="mt-4">
-          <Error>{checkout.error.message}</Error>
-        </div>
-      )}
-      {!!address.error && (
-        <div className="mt-4">
-          <Error>{address.error.message}</Error>
-        </div>
-      )}*/}
-    </form>
+    </div>
   );
 }

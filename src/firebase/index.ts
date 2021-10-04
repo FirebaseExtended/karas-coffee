@@ -53,5 +53,4 @@ export const collections = {
   productReviews: (productId: string) =>
     collection(firestore, 'products', productId, 'reviews').withConverter(reviewConverter),
   content: collection(firestore, 'content').withConverter(contentConverter),
-  addresses: collection(firestore, 'addresses').withConverter(addressConverter),
 };
