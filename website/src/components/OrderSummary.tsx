@@ -3,10 +3,11 @@ import { useCart } from '../hooks/useCart';
 
 type OrderSummaryProps = {
   shipping: React.ReactNode;
+  shippingLabel?: string;
   shippingCost?: number | null;
 };
 
-export function OrderSummary({ shipping, shippingCost }: OrderSummaryProps) {
+export function OrderSummary({ shipping, shippingLabel, shippingCost }: OrderSummaryProps) {
   const { cart, total } = useCart();
 
   return (
@@ -21,7 +22,7 @@ export function OrderSummary({ shipping, shippingCost }: OrderSummaryProps) {
           />
         ))}
         <OrderRow label="Tax" value="$0" />
-        <OrderRow label="Shipping" value={shipping} />
+        <OrderRow label={shippingLabel || 'Shipping'} value={shipping} />
         <OrderRow
           label={<span className="text-lg font-bold text-gray-900">Order Total</span>}
           value={<span className="text-lg">${(total + (shippingCost || 0)).toFixed(2)}</span>}
