@@ -97,6 +97,7 @@ export interface Session {
           unit_amount_decimal: number;
           product_data: {
             name: string;
+            description?: string;
           };
         };
         quantity: number;
@@ -139,6 +140,7 @@ export interface Content {
 }
 
 export interface Address {
+  id: string;
   address: {
     addressLine1: string;
     addressLine2?: string;

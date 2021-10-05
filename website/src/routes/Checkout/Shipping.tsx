@@ -1,26 +1,28 @@
 import { format } from 'date-fns';
-import { FormikErrors, useFormik } from 'formik';
-import React, { useState } from 'react';
-import { Address, AddressFormValues } from '../../components/Address';
+import cx from 'classnames';
+import React, { useEffect, useRef, useState } from 'react';
+import { AddressBook } from '../../components/AddressBook';
 import { Button } from '../../components/Button';
 import { OrderSummary } from '../../components/OrderSummary';
-import { useAddressValidation } from '../../hooks/useAddressValidation';
 import { useCart } from '../../hooks/useCart';
 import { useCheckout } from '../../hooks/useCheckout';
 import { useRatesCalculation } from '../../hooks/useRatesCalculation';
-import { ShippingRate, Shipment } from '../../types';
+import { ShippingRate, Address, Shipment } from '../../types';
+import { emptyArray } from '../../utils';
+import { Skeleton } from '../../components/Skeleton';
 
 export function Shipping() {
   const { cart } = useCart();
   const checkout = useCheckout();
 
-  const [provider, setProvider] = useState<ShippingRate>();
-  const [shipping, setShipping] = useState<Shipment>();
+  const [address, setAddress] = useState<Address | null>(null);
+  const [rate, setRate] = useState<ShippingRate | null>(null);
+  const shipment = useRef<Shipment>();
 
   async function onPlaceOrder() {
-    if (!provider) return;
-    if (!shipping) return;
-    await checkout.trigger({
+    if (!address) return;
+    if (!rate) return;
+    checkout.trigger({
       mode: 'payment',
       success_url: `${window.location.origin}/account/orders?completed=true`,
       cancel_url: window.location.href,
@@ -32,9 +34,10 @@ export function Shipping() {
         {
           price_data: {
             currency: 'USD',
-            unit_amount_decimal: (provider.shippingAmount.amount * 100) | 0,
+            unit_amount_decimal: (rate.shippingAmount.amount * 100) | 0,
             product_data: {
               name: 'Shipping',
+              description: `Shipping via ${rate.carrierFriendlyName}`,
             },
           },
           quantity: 1,
@@ -42,9 +45,9 @@ export function Shipping() {
       ],
       collect_shipping_address: true,
       shipment: {
-        ...shipping,
-        carrierId: provider.carrierId,
-        serviceCode: provider.serviceCode,
+        ...shipment.current!,
+        carrierId: rate.carrierId,
+        serviceCode: rate.serviceCode,
       },
     });
   }
@@ -62,28 +65,31 @@ export function Shipping() {
       {cart.length > 0 && (
         <div className="lg:grid grid-cols-12 gap-16">
           <div className="col-start-1 col-end-8 mt-4">
-            <div>
-              <div className="bg-gray-50 p-6 rounded border">
-                <RatesSelection
-                  onShippingCost={(provider, shipment) => {
-                    setProvider(provider);
-                    setShipping(shipment);
-                  }}
-                />
-              </div>
-            </div>
+            <AddressBook
+              onSelect={(address) => {
+                setAddress(address);
+              }}
+            />
           </div>
-          <div className="col-start-8 col-end-13">
+          <div className="col-start-8 col-end-13 space-y-4">
+            <ShippingRates
+              address={address}
+              onSelect={(rate, shipping) => {
+                setRate(rate);
+                shipment.current = shipping;
+              }}
+            />
             <OrderSummary
-              shippingCost={provider?.shippingAmount.amount}
+              shippingCost={rate?.shippingAmount.amount}
+              shippingLabel={rate?.carrierFriendlyName ? `Shipping via ${rate.carrierFriendlyName}` : undefined}
               shipping={
                 <>
-                  {!provider && <span>Pending</span>}
-                  {!!provider && <span>${provider.shippingAmount.amount}</span>}
+                  {!rate && <span>TBC</span>}
+                  {!!rate && <span>${rate.shippingAmount.amount}</span>}
                 </>
               }
             />
-            <Button disabled={!provider} loading={checkout.loading} onClick={onPlaceOrder}>
+            <Button disabled={!rate} loading={checkout.loading} onClick={onPlaceOrder}>
               Place Order &rarr;
             </Button>
           </div>
@@ -93,15 +99,23 @@ export function Shipping() {
   );
 }
 
-function RatesSelection({ onShippingCost }: { onShippingCost: (provider: ShippingRate, shipment: Shipment) => void }) {
-  const [error, setError] = useState<string | null>(null);
-  const validation = useAddressValidation();
-  const rates = useRatesCalculation();
-  const [providers, setProviders] = useState<ShippingRate[]>();
+function ShippingRates({
+  address,
+  onSelect,
+}: {
+  address: Address | null;
+  onSelect: (rate: ShippingRate, shipment: Shipment) => void;
+}) {
+  const [selected, setSelected] = useState<string | null>(null);
+  const shipment = useRef<Shipment>();
 
-  function addressToShipment(address: AddressFormValues): Shipment {
-    return {
-      shipDate: format(new Date(), 'yyyy-mm-dd'),
+  const rates = useRatesCalculation();
+  const id = address?.id;
+
+  useEffect(() => {
+    if (!id) return;
+    shipment.current = {
+      shipDate: format(new Date(), 'yyyy-MM-dd'),
       shipFrom: {
         name: "Kara's Coffee",
         phone: '512-343-5283',
@@ -112,12 +126,12 @@ function RatesSelection({ onShippingCost }: { onShippingCost: (provider: Shippin
         countryCode: 'US',
       },
       shipTo: {
-        name: address.name,
-        addressLine1: address.line1,
-        addressLine2: address.line2,
-        cityLocality: address.city,
-        stateProvince: address.state,
-        postalCode: address.postal_code,
+        name: address.address.name,
+        addressLine1: address.address.addressLine1,
+        addressLine2: address.address.addressLine2,
+        cityLocality: address.address.cityLocality,
+        stateProvince: address.address.stateProvince,
+        postalCode: address.address.postalCode,
         countryCode: 'US',
       },
       packages: [
@@ -129,103 +143,78 @@ function RatesSelection({ onShippingCost }: { onShippingCost: (provider: Shippin
         },
       ],
     };
-  }
 
-  const formik = useFormik<AddressFormValues>({
-    initialValues: {
-      name: 'Coffee Drinker',
-      line1: '1600 Amphitheatre Parkway',
-      line2: '',
-      city: 'Mountain View',
-      state: 'CA',
-      postal_code: '94043',
-    },
-    validate(values) {
-      const e: FormikErrors<AddressFormValues> = {};
-      if (!values.name) e.name = 'A name is required';
-      return e;
-    },
-    async onSubmit(values) {
-      const valid = await validation.mutateAsync({
-        address: {
-          name: "Kara's Coffee",
-          phone: '512-343-5283',
-          addressLine1: '500 W 2nd St',
-          cityLocality: 'Austin',
-          stateProvince: 'TX',
-          postalCode: '78701',
-          countryCode: 'US',
-        },
-      });
-      const status = valid.validation.status;
-
-      if (status === 'verified' || status === 'warning') {
-        const results = await rates.mutateAsync({
-          rateOptions: {
-            carrierIds: ['se-765964', 'se-765965', 'se-765963'],
-            serviceCodes: ['usps_media_mail'],
-          },
-          shipment: addressToShipment(values),
-        });
-        setProviders(
-          results.rates.sort((a, b) => {
-            if (a.shippingAmount.amount > b.shippingAmount.amount) {
-              return -1;
-            }
-            return 1;
-          }),
-        );
-      } else {
-        setError('The provided address is not valid.');
-      }
-    },
-  });
+    rates.mutate({
+      rateOptions: {
+        carrierIds: ['se-765964', 'se-765965', 'se-765963'],
+        serviceCodes: ['usps_media_mail'],
+      },
+      shipment: shipment.current,
+    });
+  }, [id]);
 
   return (
     <div>
-      <h3 className="mb-2 text-xl font-bold">Enter a shipping address</h3>
-      <Address values={formik.values} onChange={formik.handleChange} errors={formik.errors} />
-      <div className="mt-4">
-        <Button
-          loading={validation.isLoading || rates.isLoading}
-          disabled={!formik.isValid}
-          onClick={formik.submitForm}
-        >
-          Calculate Shipping &rarr;
-        </Button>
-      </div>
-      {!!error && <div className="mt-4 text-red-600 text-xs">{error}</div>}
-      {!!validation.error && <div className="mt-4 text-red-600 text-xs">{validation.error.message}</div>}
-      {!!rates.error && <div className="mt-4 text-red-600 text-xs">{rates.error.message}</div>}
-      {providers && (
-        <div className="mt-4">
-          <h3 className="mb-2 text-xl font-bold">Choose your shipping:</h3>
-          <div className="divide-y max-h-64 overflow-y-auto">
-            {providers.length === 0 && (
-              <div>Sorry, no carriers are available for your address. Please try a different address.</div>
-            )}
-            {!!providers.length &&
-              providers.map((provider: ShippingRate) => (
-                <div
-                  className="flex items-center py-1 px-4 hover:bg-gray-100"
-                  role="button"
-                  key={provider.rateId}
-                  onClick={() => onShippingCost(provider, addressToShipment(formik.values))}
-                >
-                  <div className="flex-grow">
-                    <div className="font-medium">{provider.serviceType}</div>
-                    <p className="text-xs text-gray-600">
-                      {provider.carrierDeliveryDays.length > 1
-                        ? provider.carrierDeliveryDays
-                        : `Within ${provider.carrierDeliveryDays} day(s).`}
-                    </p>
-                  </div>
-                  <div>${provider.shippingAmount.amount}</div>
+      <h2 className="text-lg font-bold text-gray-700">Shipping Rates</h2>
+      {!address && <p className="mt-4 text-sm text-gray-500">Select an address to calculate shipping rates.</p>}
+      {rates.isLoading && (
+        <div className="mt-2 space-y-3">
+          {emptyArray(5).map((_, i) => (
+            <div key={i} className="flex h-8">
+              <div className="flex-grow">
+                <Skeleton className="w-36 h-8" />
+              </div>
+              <Skeleton className="w-12 h-8" />
+            </div>
+          ))}
+        </div>
+      )}
+      {!!address && rates.isSuccess && (
+        <div>
+          <div className="mt-2">
+            <p>Select a shipping carrier and rate:</p>
+            <div className="mt-2 text-sm text-gray-500">
+              {[
+                address.address.name,
+                address.address.addressLine1,
+                address.address.addressLine2,
+                address.address.cityLocality,
+                address.address.stateProvince,
+                address.address.postalCode,
+              ]
+                .filter(Boolean)
+                .join(', ')}
+            </div>
+          </div>
+          <div className="mt-2 max-h-[200px] overflow-y-auto">
+            {rates.data.rates.map((rate) => (
+              <div
+                className={cx('flex items-center py-1 px-1', {
+                  'hover:bg-gray-100': rate.rateId !== selected,
+                  'bg-green-100': rate.rateId === selected,
+                })}
+                role="button"
+                key={rate.rateId}
+                onClick={() => {
+                  onSelect(rate, shipment.current!);
+                  setSelected(rate.rateId);
+                }}
+              >
+                <div className="flex-grow">
+                  <div className="font-medium">{rate.serviceType}</div>
+                  <p className="text-xs text-gray-600">
+                    {rate.carrierDeliveryDays.length > 1
+                      ? rate.carrierDeliveryDays
+                      : `Within ${rate.carrierDeliveryDays} day(s).`}
+                  </p>
                 </div>
-              ))}
+                <div>${rate.shippingAmount.amount}</div>
+              </div>
+            ))}
           </div>
         </div>
       )}
+      {rates.isError && <p className="mt-4 text-red-500 text-sm">{rates.error.message}</p>}
     </div>
   );
 }

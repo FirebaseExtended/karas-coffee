@@ -16,7 +16,7 @@ type AddressProps = {
   onChange: (e: React.ChangeEvent<unknown>) => void;
 };
 
-export function Address({ values, errors, onChange }: AddressProps) {
+export function AddressForm({ values, errors, onChange }: AddressProps) {
   return (
     <div className="space-y-2">
       <Input id="name" value={values.name} onChange={onChange} placeholder="Name" error={errors?.name} />
