@@ -59,13 +59,13 @@ function AddressEntry() {
     async onSubmit(values) {
       add.mutate({
         address: {
+          name: values.name,
           addressLine1: values.line1,
           addressLine2: values.line2,
           cityLocality: values.city,
-          name: values.name,
           stateProvince: values.state,
           postalCode: values.postal_code,
-          countryCode: values.postal_code,
+          countryCode: 'US',
         },
       });
     },
