@@ -95,12 +95,13 @@ function AddressSelection({ address, onSelect }: { address: Address; onSelect: O
     <div
       role={isSelectable ? 'button' : undefined}
       onClick={() => {
-        // if (isSelectable) {
-        onSelect(address);
-        // }
+        if (isSelectable) {
+          onSelect(address);
+        }
       }}
       className={cx('flex border bg-white rounded p-6', {
         'hover:bg-gray-100': isSelectable,
+        'cursor-not-allowed	': !isSelectable,
       })}
     >
       <div className="flex-grow">
