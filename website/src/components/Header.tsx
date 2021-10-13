@@ -11,12 +11,15 @@ export function Header() {
     <header className="sticky top-0 z-10 bg-white/95 backdrop-filter backdrop-blur-sm">
       <div className="flex items-center h-20 mx-auto max-w-7xl px-6 space-x-4">
         <div className="flex-grow lg:flex-shrink-0 lg:flex-grow-0">
-          <h3 className="lg:text-xl font-bold tracking-wide">
+          <h3
+            className="lg:text-2xl font-bold tracking-wide"
+            style={{ fontFamily: "'Annie Use Your Telescope', cursive" }}
+          >
             <Link to="/" className="hover:underline">
               Kara&apos;s Coffee
             </Link>
           </h3>
-          <p className="hidden lg:block -mt-1 text-xs italic text-gray-500">Not so real coffee and swag</p>
+          <p className="hidden lg:block -mt-1 text-xs text-gray-500">Not so real coffee and swag</p>
         </div>
         <div className="hidden lg:flex items-center justify-center flex-grow">
           <Search />
