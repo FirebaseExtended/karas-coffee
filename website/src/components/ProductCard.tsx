@@ -24,7 +24,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="flex flex-col">
       <div className="relative flex-shrink-0 block group">
-        <div className="overflow-hidden rounded group-hover:shadow-lg">
+        <div className="overflow-hidden rounded shadow group-hover:shadow-lg">
           <Link to={href} className="block">
             <img
               src={product.images[0]}
@@ -59,7 +59,7 @@ export function ProductCard({ product }: ProductCardProps) {
       <div className="flex flex-col flex-grow mt-4">
         <div className="flex items-center">
           <h3 className="flex-grow truncate">
-            <Link to={href} className="font-bold tracking-wide hover:underline">
+            <Link to={href} className="font-bold tracking-wide hover:underline text-gray-900">
               {product.name}
             </Link>
           </h3>
