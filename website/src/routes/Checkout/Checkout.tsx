@@ -49,8 +49,8 @@ function Items() {
       <div className="divide-y">
         {cart.map((item) => (
           <div key={item.id} className="flex py-8 space-x-4">
-            <div className="flex-shrink-0 w-32 lg:w-64">
-              <img src={item.images[0]} alt={item.name} className="rounded shadow" />
+            <div className="rounded shadow overflow-hidden">
+              <img src={item.images[0]} alt={item.name} className="object-cover w-48 h-48" />
             </div>
             <div className="flex-grow py-1">
               <div className="text-lg font-bold tracking-wide text-gray-600">{item.name}</div>
@@ -78,7 +78,11 @@ function Items() {
                   />
                 </div>
                 <div className="flex items-center justify-center flex-shrink-0 w-10">
-                  <XIcon role="button" className="w-5 h-5 mt-7 hover:opacity-50" onClick={() => removeFromCart(item)} />
+                  <XIcon
+                    role="button"
+                    className="w-5 h-5 mt-7 hover:opacity-50 text-red-400"
+                    onClick={() => removeFromCart(item)}
+                  />
                 </div>
               </div>
             </div>
