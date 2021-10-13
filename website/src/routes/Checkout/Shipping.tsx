@@ -187,30 +187,32 @@ function ShippingRates({
             </div>
           </div>
           <div className="mt-2 max-h-[200px] overflow-y-auto">
-            {rates.data.rates.map((rate) => (
-              <div
-                className={cx('flex items-center py-1 px-1', {
-                  'hover:bg-gray-100': rate.rateId !== selected,
-                  'bg-green-100': rate.rateId === selected,
-                })}
-                role="button"
-                key={rate.rateId}
-                onClick={() => {
-                  onSelect(rate, shipment.current!);
-                  setSelected(rate.rateId);
-                }}
-              >
-                <div className="flex-grow">
-                  <div className="font-medium">{rate.serviceType}</div>
-                  <p className="text-xs text-gray-600">
-                    {rate.carrierDeliveryDays.length > 1
-                      ? rate.carrierDeliveryDays
-                      : `Within ${rate.carrierDeliveryDays} day(s).`}
-                  </p>
+            {rates.data.rates
+              .sort((a, b) => (a.shippingAmount.amount < b.shippingAmount.amount ? -1 : 0))
+              .map((rate) => (
+                <div
+                  className={cx('flex items-center py-1 px-1', {
+                    'hover:bg-gray-100': rate.rateId !== selected,
+                    'bg-green-100': rate.rateId === selected,
+                  })}
+                  role="button"
+                  key={rate.rateId}
+                  onClick={() => {
+                    onSelect(rate, shipment.current!);
+                    setSelected(rate.rateId);
+                  }}
+                >
+                  <div className="flex-grow">
+                    <div className="font-medium">{rate.serviceType}</div>
+                    <p className="text-xs text-gray-600">
+                      {rate.carrierDeliveryDays.length > 1
+                        ? rate.carrierDeliveryDays
+                        : `Within ${rate.carrierDeliveryDays} day(s).`}
+                    </p>
+                  </div>
+                  <div>${rate.shippingAmount.amount}</div>
                 </div>
-                <div>${rate.shippingAmount.amount}</div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       )}
