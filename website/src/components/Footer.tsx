@@ -17,28 +17,53 @@ export function Footer() {
         <div className="mt-16 lg:mt-0 flex flex-col space-y-2">
           <Heading>Extensions</Heading>
           <ul role="list" className="mt-4 space-y-4">
-            <Link to="https://firebase.google.com/products/extensions/delete-user-data">Delete User Data</Link>
-            <Link to="https://firebase.google.com/products/extensions/firestore-algolia-search">
-              Firestore Algolia Search
-            </Link>
-            <Link to="https://firebase.google.com/products/extensions/firestore-send-email">Firestore Send Email</Link>
-            <Link to="https://firebase.google.com/products/extensions/firestore-stripe-subscriptions">
-              Firestore Stripe Subscriptions
-            </Link>
-            <Link to="https://github.com/conversationai/firestore-perspective-toxicity">
-              Firestore Perspective Toxicity
-            </Link>
+            <li>
+              <Link to="https://firebase.google.com/products/extensions/delete-user-data">Delete User Data</Link>
+            </li>
+            <li>
+              <Link to="https://firebase.google.com/products/extensions/firestore-algolia-search">
+                Firestore Algolia Search
+              </Link>
+            </li>
+            <li>
+              <Link to="https://firebase.google.com/products/extensions/firestore-send-email">
+                Firestore Send Email
+              </Link>
+            </li>
+            <li>
+              <Link to="https://firebase.google.com/products/extensions/firestore-stripe-subscriptions">
+                Firestore Stripe Subscriptions
+              </Link>
+            </li>
+            <li>
+              <Link to="https://github.com/conversationai/firestore-perspective-toxicity">
+                Firestore Perspective Toxicity
+              </Link>
+            </li>
           </ul>
         </div>
         <div className="mt-16 lg:mt-0 flex flex-col space-y-2">
           <Heading>Firebase</Heading>
           <ul role="list" className="mt-4 space-y-4">
-            <Link to="https://console.firebase.google.com/">Firebase Console</Link>
-            <Link to="https://firebase.google.com/products-build">Build</Link>
-            <Link to="https://firebase.google.com/products-release">Release</Link>
-            <Link to="https://firebase.google.com/products-engage">Engage</Link>
+            <li>
+              <Link to="https://console.firebase.google.com/">Firebase Console</Link>
+            </li>
+            <li>
+              <Link to="https://firebase.google.com/products-build">Build</Link>
+            </li>
+            <li>
+              <Link to="https://firebase.google.com/products-release">Release</Link>
+            </li>
+            <li>
+              <Link to="https://firebase.google.com/products-engage">Engage</Link>
+            </li>
           </ul>
         </div>
+      </div>
+      <div className="flex items-center justify-center mt-10 space-x-6 text-gray-600">
+        <Link to="https://policies.google.com/privacy?hl=en-GB&fg=1">Privacy</Link>
+        <span>&bull;</span>
+        <Link to="https://policies.google.com/terms?hl=en-GB&fg=1">Terms</Link>
       </div>
     </footer>
   );
@@ -50,10 +75,8 @@ function Heading({ children }: { children: string }) {
 
 function Link({ to, children }: { to: string; children: string }) {
   return (
-    <li>
-      <a href={to} target="_blank" rel="noreferrer" className="text-gray-500 hover:text-gray-900">
-        {children}
-      </a>
-    </li>
+    <a href={to} target="_blank" rel="noreferrer" className="text-gray-500 hover:text-gray-900">
+      {children}
+    </a>
   );
 }

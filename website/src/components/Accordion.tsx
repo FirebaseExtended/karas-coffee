@@ -11,9 +11,13 @@ export function Accordion({ children }: AccordionProps) {
 }
 
 export type AccordionItemProps = {
+  // If true, the contents of the accordion item will be displayed.
   isOpen: boolean;
+  // A function called to trigger the open state of the accordion.
   onToggle: () => void;
+  // The visible content of the accordion item.
   children: React.ReactNode;
+  // The hidden content of the accordion item, which will be shown when opened.
   collapsible: React.ReactNode;
 };
 

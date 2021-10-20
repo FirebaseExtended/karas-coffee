@@ -1,15 +1,19 @@
-## Firebase Extensions Demo - Website
+# Firebase Extensions Demo - Website
 
-Source for the React web application, see [/website/src](/src).  
+Source code for the Kara's Coffee web application.
 
-#### Running locally
+## Running locally
 
 ```bash
 yarn dev
 ```
 
-#### Deploying to Firebase Hosting
+Go to `http://localhost:3000`.
+
+## Deploying to Firebase Hosting
 
 ```bash
 yarn deploy
 ```
+
+

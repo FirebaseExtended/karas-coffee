@@ -1,9 +1,9 @@
-import { useFunctionsMutation } from '@react-query-firebase/functions';
+import { useFunctionsCall } from '@react-query-firebase/functions';
 import { functions } from '../firebase';
 import { Shipment, ShippingRate } from '../types';
 
 export function useRatesCalculation() {
-  return useFunctionsMutation<
+  return useFunctionsCall<
     {
       rateOptions: {
         carrierIds: string[];

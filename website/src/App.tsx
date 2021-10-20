@@ -25,6 +25,10 @@ import { Shipping } from './routes/Checkout/Shipping';
 export function App() {
   const user = useUser();
 
+  if (user.isLoading) {
+    return <div />;
+  }
+
   return (
     <>
       <Header />

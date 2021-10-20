@@ -7,15 +7,12 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import 'tailwindcss/tailwind.css';
 
 import { App } from './App';
-import { getUserOnce } from './firebase/auth';
 import { loadBundle } from 'firebase/firestore';
 import { firestore } from './firebase';
 
 const client = new QueryClient();
 
 async function bootstrap(): Promise<void> {
-  client.setQueryData('user', await getUserOnce());
-
   // Define any bundles to pre-load.
   const bundles = await Promise.all([fetch('/bundles/shop')]);
 

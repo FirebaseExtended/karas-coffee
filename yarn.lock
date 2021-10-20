@@ -1895,20 +1895,20 @@
     prop-types "^15.7.2"
     tslib "^2.3.0"
 
-"@react-query-firebase/auth@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@react-query-firebase/auth/-/auth-0.2.0.tgz#c9dc6a645c9897a0e29ad2c0e545869c51a65519"
-  integrity sha512-S6Ih816OX/iL5nQLVAYg7ZBDEtL+LsUesNCvVR8qwF1eEHGXiUBb5KaDIF2LuppDecJM61e2i8Aepx1zH1XtxA==
+"@react-query-firebase/auth@^0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@react-query-firebase/auth/-/auth-0.3.3.tgz#f3142b2584988929271f1130ef3a01e56893662a"
+  integrity sha512-MG/MSTVqarmmzjugNG/goXDuwskJbdKiqAOsJJ4Opaage3yW/nmmY6qNrQ3sq04lvO8dfh6Rzobe7y+p+afqwA==
 
-"@react-query-firebase/firestore@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@react-query-firebase/firestore/-/firestore-0.3.1.tgz#62735a75a98cfe43a1a507d5993c02858110e8f0"
-  integrity sha512-CshUmc7AkPN80BdrPX9qf2422qERMUekuR/Y8zIItnf1B/8bosRD5smzBlcF4lHsWb6Bt+XYzAXnCochEXAorg==
+"@react-query-firebase/firestore@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@react-query-firebase/firestore/-/firestore-0.4.1.tgz#a6c1a5b754902973cb8726e3f85061b99623b6b6"
+  integrity sha512-yD02VNtzs5TTOH4i+t+4KTaD6JwX9IMywNLt3HyiyxMh+UU3PTskYrMBSTYp7/BD6sGKQuQ/WExrKN8X0xYm/w==
 
-"@react-query-firebase/functions@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@react-query-firebase/functions/-/functions-0.1.0.tgz#5f22faaf320f0f3fdccf916786458e793014b338"
-  integrity sha512-0ZW37VIYOTcHfxS+Khu82KWTWPmdnpuw66IbLvKqnRbQBuRvEVITO4sf88TindkAsm4gf2/DtBH8fZot6jpdKg==
+"@react-query-firebase/functions@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@react-query-firebase/functions/-/functions-0.2.1.tgz#068ca1bcf519fd535737a49609541342cf5d0bbb"
+  integrity sha512-Sn0tC+e031hjvcFGXki2wRJ4VcAQosNZlkJvxzOjdy1qWW5eNUa8GMJ4SR2a27hwkKcx9B/hw0mq8Lm7kczptA==
 
 "@rollup/pluginutils@^4.1.1":
   version "4.1.1"
