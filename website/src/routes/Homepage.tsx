@@ -51,7 +51,7 @@ function Content() {
   const content = useContent('homepage', 4);
 
   return (
-    <div className="px-4 lg:px-0">
+    <div className="px-4 lg:px-0 text-gray-800">
       <Heading
         actions={[
           <Link key="content" to="/content" className="text-indigo-700 hover:underline">

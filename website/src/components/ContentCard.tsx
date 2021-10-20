@@ -8,14 +8,18 @@ import { Skeleton } from './Skeleton';
 export function ContentCard({ content }: { content: Content }) {
   return (
     <div className="flex space-x-4">
-      <div className="w-64 flex-shrink-0">
+      <div className="w-64 flex-shrink-0 overflow-hidden rounded shadow hover:shadow-lg">
         <Link to={`/content/${content.id}`}>
-          <img src={content.hero} alt={content.title} className="rounded object-cover h-48 w-64" />
+          <img
+            src={content.hero}
+            alt={content.title}
+            className="rounded object-cover h-48 w-64 transition-all hover:scale-105"
+          />
         </Link>
       </div>
       <div>
         <Link to={`/content/${content.id}`} className="hover:underline">
-          <h2 className="text-lg font-bold">{content.title}</h2>
+          <h2 className="text-lg font-bold text-gray-800">{content.title}</h2>
         </Link>
 
         <p className="text-sm text-gray-600 mt-4">{content.excerpt}</p>

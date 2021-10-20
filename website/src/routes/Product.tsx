@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { XIcon } from '@heroicons/react/solid';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { Button } from '../components/Button';
 import { Input } from '../components/Form';
@@ -19,6 +19,7 @@ export function Product() {
   const user = useUser();
   const { id } = useParams();
   const product = useProduct(id!);
+  const navigate = useNavigate();
   const { addToCart, removeFromCart, getItem, setQuantity } = useCart();
 
   if (product.isLoading) {
@@ -50,7 +51,7 @@ export function Product() {
             <div className="text-3xl text-gray-600">${product.data.metadata.price_usd}</div>
             <p className="mt-6 text-gray-600">{product.data.description}</p>
             <div className="mt-6">
-              {!!cartItem && (
+              {!!cartItem && user.data && (
                 <div className="flex items-center mt-4">
                   <div className="flex-grow">
                     <Input
@@ -71,13 +72,25 @@ export function Product() {
                   <div className="flex items-center justify-center flex-shrink-0 w-10">
                     <XIcon
                       role="button"
-                      className="w-5 h-5 mt-7 hover:opacity-50"
+                      className="w-5 h-5 mt-7 hover:opacity-50 text-red-400"
                       onClick={() => removeFromCart(product.data!)}
                     />
                   </div>
                 </div>
               )}
-              {!cartItem && !!user.data && <Button onClick={() => addToCart(product.data!)}>Add to cart</Button>}
+              {!cartItem && (
+                <Button
+                  onClick={() => {
+                    if (user.data) {
+                      addToCart(product.data!);
+                    } else {
+                      navigate('/signin');
+                    }
+                  }}
+                >
+                  Add to cart
+                </Button>
+              )}
             </div>
           </div>
         </div>

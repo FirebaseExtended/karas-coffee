@@ -55,8 +55,10 @@ export function Shipping() {
   return (
     <section className="mt-8 px-4 lg:px-0">
       <div className="max-w-3xl mx-auto"></div>
-      <h1 className="mt-8 mb-8 text-4xl font-extrabold tracking-wide">Shipping</h1>
-      <p>Please enter or select an address to calculate shipping rates.</p>
+      <h1 className="mt-8 mb-8 text-4xl font-extrabold text-gray-800 tracking-wide">Shipping</h1>
+      <p className="text-sm text-gray-500">
+        Enter a new address or select an existing address below to calculate shipping rates.
+      </p>
       {cart.length === 0 && (
         <>
           <div className="flex items-center justify-center h-64 text-gray-600">Your cart is currently empty.</div>
@@ -66,6 +68,7 @@ export function Shipping() {
         <div className="lg:grid grid-cols-12 gap-16">
           <div className="col-start-1 col-end-8 mt-4">
             <AddressBook
+              selectedAddressId={address?.id}
               onSelect={(address) => {
                 setAddress(address);
               }}
@@ -81,7 +84,15 @@ export function Shipping() {
             />
             <OrderSummary
               shippingCost={rate?.shippingAmount.amount}
-              shippingLabel={rate?.carrierFriendlyName ? `Shipping via ${rate.carrierFriendlyName}` : undefined}
+              shippingLabel={
+                rate?.carrierFriendlyName
+                  ? `Shipping via ${rate.serviceType} (${
+                      rate.carrierDeliveryDays.length > 1
+                        ? rate.carrierDeliveryDays
+                        : `within ${rate.carrierDeliveryDays} day(s)`
+                    })`
+                  : undefined
+              }
               shipping={
                 <>
                   {!rate && <span>TBC</span>}
@@ -155,7 +166,7 @@ function ShippingRates({
 
   return (
     <div>
-      <h2 className="text-lg font-bold text-gray-700">Shipping Rates</h2>
+      <h2 className="text-lg font-bold text-gray-800">Shipping Rates</h2>
       {!address && <p className="mt-4 text-sm text-gray-500">Select an address to calculate shipping rates.</p>}
       {rates.isLoading && (
         <div className="mt-2 space-y-3">
@@ -172,7 +183,7 @@ function ShippingRates({
       {!!address && rates.isSuccess && (
         <div>
           <div className="mt-2">
-            <p>Select a shipping carrier and rate:</p>
+            <p className="text-gray-800">Select a shipping carrier and rate:</p>
             <div className="mt-2 text-sm text-gray-500">
               {[
                 address.address.name,
@@ -186,31 +197,33 @@ function ShippingRates({
                 .join(', ')}
             </div>
           </div>
-          <div className="mt-2 max-h-[200px] overflow-y-auto">
-            {rates.data.rates.map((rate) => (
-              <div
-                className={cx('flex items-center py-1 px-1', {
-                  'hover:bg-gray-100': rate.rateId !== selected,
-                  'bg-green-100': rate.rateId === selected,
-                })}
-                role="button"
-                key={rate.rateId}
-                onClick={() => {
-                  onSelect(rate, shipment.current!);
-                  setSelected(rate.rateId);
-                }}
-              >
-                <div className="flex-grow">
-                  <div className="font-medium">{rate.serviceType}</div>
-                  <p className="text-xs text-gray-600">
-                    {rate.carrierDeliveryDays.length > 1
-                      ? rate.carrierDeliveryDays
-                      : `Within ${rate.carrierDeliveryDays} day(s).`}
-                  </p>
+          <div className="mt-2 max-h-[200px] overflow-y-auto pr-6">
+            {rates.data.rates
+              .sort((a, b) => (a.shippingAmount.amount < b.shippingAmount.amount ? -1 : 0))
+              .map((rate) => (
+                <div
+                  className={cx('flex items-center border bg-white rounded p-2 mb-2', {
+                    'hover:bg-indigo-50': rate.rateId !== selected,
+                    'border-indigo-500 shadow-inner	': rate.rateId === selected,
+                  })}
+                  role="button"
+                  key={rate.rateId}
+                  onClick={() => {
+                    onSelect(rate, shipment.current!);
+                    setSelected(rate.rateId);
+                  }}
+                >
+                  <div className="flex-grow">
+                    <div className="font-sm font-bold text-gray-800">{rate.serviceType}</div>
+                    <p className="text-sm text-gray-700">
+                      {rate.carrierDeliveryDays.length > 1
+                        ? rate.carrierDeliveryDays
+                        : `Within ${rate.carrierDeliveryDays} day(s).`}
+                    </p>
+                  </div>
+                  <div className="text-sm font-bold text-gray-700">${rate.shippingAmount.amount}</div>
                 </div>
-                <div>${rate.shippingAmount.amount}</div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       )}

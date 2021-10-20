@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingBagIcon, XIcon } from '@heroicons/react/outline';
+import { ShoppingCartIcon, XIcon } from '@heroicons/react/outline';
 import { GlobeIcon, QuestionMarkCircleIcon, SunIcon } from '@heroicons/react/solid';
 
 import { isProductCoffee, Product, ProductCoffee } from '../types';
@@ -24,7 +24,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="flex flex-col">
       <div className="relative flex-shrink-0 block group">
-        <div className="overflow-hidden rounded group-hover:shadow-lg">
+        <div className="overflow-hidden rounded shadow group-hover:shadow-lg">
           <Link to={href} className="block">
             <img
               src={product.images[0]}
@@ -46,16 +46,20 @@ export function ProductCard({ product }: ProductCardProps) {
                 navigate('/signin');
               }
             }}
-            className="absolute top-0 right-0 flex items-center justify-center w-12 h-12 transition-opacity rounded-tr rounded-bl opacity-0 group group-hover:opacity-100 bg-black/90"
+            className="absolute top-0 right-0 flex items-center justify-center w-12 h-12 transition-opacity rounded-tr rounded-bl bg-black/90"
           >
-            {inCart ? <XIcon className="w-6 h-6 text-white" /> : <ShoppingBagIcon className="w-6 h-6 text-white" />}
+            {inCart ? (
+              <XIcon className="w-6 h-6 text-red-400" />
+            ) : (
+              <ShoppingCartIcon className="w-6 h-6 text-green-400" />
+            )}
           </div>
         </div>
       </div>
       <div className="flex flex-col flex-grow mt-4">
         <div className="flex items-center">
           <h3 className="flex-grow truncate">
-            <Link to={href} className="font-bold tracking-wide hover:underline">
+            <Link to={href} className="font-bold tracking-wide hover:underline text-gray-900">
               {product.name}
             </Link>
           </h3>

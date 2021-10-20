@@ -13,9 +13,10 @@ type OnAddressSelect = (address: Address) => void;
 
 type AddressBookProps = {
   onSelect: OnAddressSelect;
+  selectedAddressId?: string;
 };
 
-export function AddressBook({ onSelect }: AddressBookProps) {
+export function AddressBook({ onSelect, selectedAddressId }: AddressBookProps) {
   const addresses = useAddresses();
 
   if (!addresses.isSuccess) {
@@ -23,18 +24,28 @@ export function AddressBook({ onSelect }: AddressBookProps) {
   }
 
   return (
-    <div className="bg-gray-50 p-6 rounded border">
-      <h3 className="mb-4 text-xl font-bold">Enter a shipping address</h3>
+    <div className="bg-gray-50 p-6 rounded border px-6">
+      <h3 className="mb-4 text-xl font-bold text-gray-800">Enter a new shipping address:</h3>
       <div className="mb-4">
         <AddressEntry />
       </div>
-      <h3 className="mb-4 text-xl font-bold">Select an address</h3>
-      {addresses.data.length === 0 && <p>No addresses saved.</p>}
-      <div className="space-y-4">
-        {addresses.data.map((address) => (
-          <AddressSelection key={address.id} address={address} onSelect={onSelect} />
-        ))}
-      </div>
+      <hr />
+      <h3 className="my-4 text-xl font-bold text-gray-800">Select an existing address:</h3>
+      {addresses.data.length === 0 && (
+        <p className="text-sm my-4 text-gray-500 border-none">No existing addresses saved.</p>
+      )}
+      {addresses.data.length > 0 && (
+        <div className="max-h-72 overflow-x-scroll pr-6">
+          {addresses.data.map((address) => (
+            <AddressSelection
+              isSelected={address.id == selectedAddressId}
+              key={address.id}
+              address={address}
+              onSelect={onSelect}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -84,12 +95,20 @@ function AddressEntry() {
   );
 }
 
-function AddressSelection({ address, onSelect }: { address: Address; onSelect: OnAddressSelect }) {
+function AddressSelection({
+  address,
+  onSelect,
+  isSelected,
+}: {
+  address: Address;
+  isSelected: boolean;
+  onSelect: OnAddressSelect;
+}) {
   const remove = useDeleteAddress(address.id);
 
   const isPending = !address.validation;
   const isValid = address.validation?.status === 'verified' || address.validation?.status === 'warning';
-  const isSelectable = !isPending && isValid;
+  const isSelectable = !isPending && isValid && !isSelected;
 
   return (
     <div
@@ -99,12 +118,13 @@ function AddressSelection({ address, onSelect }: { address: Address; onSelect: O
           onSelect(address);
         }
       }}
-      className={cx('flex border bg-white rounded p-6', {
-        'hover:bg-gray-100': isSelectable,
+      className={cx('flex border bg-white rounded p-6 mb-4', {
+        'hover:bg-indigo-50': isSelectable,
         'cursor-not-allowed	': !isSelectable,
+        'border-indigo-500 shadow-inner	': isSelected,
       })}
     >
-      <div className="flex-grow">
+      <div className="flex-grow text-gray-800">
         <div className="font-bold">{address.address.name}</div>
         <div>{address.address.addressLine1}</div>
         <div>{address.address.addressLine2}</div>
