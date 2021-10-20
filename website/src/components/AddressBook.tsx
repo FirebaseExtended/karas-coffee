@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import cx from 'classnames';
 import { TrashIcon, ExclamationIcon } from '@heroicons/react/outline';
 
@@ -8,6 +8,7 @@ import { FormikErrors, useFormik } from 'formik';
 import { Button } from './Button';
 import { Address } from '../types';
 import { Spinner } from './Spinner';
+import { Alert } from './Alert';
 
 type OnAddressSelect = (address: Address) => void;
 
@@ -16,7 +17,35 @@ type AddressBookProps = {
   selectedAddressId?: string;
 };
 
+const fixedAddresses: { [key: string]: AddressFormValues } = {
+  address1: {
+    name: 'Coffee Drinker',
+    line1: '1600 Amphitheatre Parkway',
+    line2: '',
+    city: 'Mountain View',
+    state: 'CA',
+    postal_code: '94043',
+  },
+  address2: {
+    name: 'Coffee Drinker',
+    line1: '111 8th Avenue',
+    line2: '',
+    city: 'New York',
+    state: 'NY',
+    postal_code: '10011',
+  },
+  address3: {
+    name: 'Coffee Drinker',
+    line1: '601 N 34th Street',
+    line2: '',
+    city: 'Seattle',
+    state: 'WA',
+    postal_code: '98103',
+  },
+};
+
 export function AddressBook({ onSelect, selectedAddressId }: AddressBookProps) {
+  const [fixed, setFixed] = useState<string>('address1');
   const addresses = useAddresses();
 
   if (!addresses.isSuccess) {
@@ -25,9 +54,22 @@ export function AddressBook({ onSelect, selectedAddressId }: AddressBookProps) {
 
   return (
     <div className="bg-gray-50 p-6 rounded border px-6">
-      <h3 className="mb-4 text-xl font-bold text-gray-800">Enter a new shipping address:</h3>
+      <Alert type="warning">For this demo application, please use one of the predefined addresses.</Alert>
+      <div className="flex items-center mb-4">
+        <h3 className="flex-grow text-xl font-bold text-gray-800">Enter a new shipping address:</h3>
+        <select
+          name="address"
+          id="address"
+          className="px-3 py-1 border rounded"
+          onChange={(e) => setFixed(e.target.value)}
+        >
+          <option value="address1">Address 1</option>
+          <option value="address2">Address 2</option>
+          <option value="address3">Address 3</option>
+        </select>
+      </div>
       <div className="mb-4">
-        <AddressEntry />
+        <AddressEntry addressKey={fixed} />
       </div>
       <hr />
       <h3 className="my-4 text-xl font-bold text-gray-800">Select an existing address:</h3>
@@ -50,17 +92,17 @@ export function AddressBook({ onSelect, selectedAddressId }: AddressBookProps) {
   );
 }
 
-function AddressEntry() {
+function AddressEntry({ addressKey }: { addressKey: string }) {
   const add = useAddAddress();
 
   const formik = useFormik<AddressFormValues>({
     initialValues: {
-      name: 'Coffee Drinker',
-      line1: '1600 Amphitheatre Parkway',
+      name: '',
+      line1: '',
       line2: '',
-      city: 'Mountain View',
-      state: 'CA',
-      postal_code: '94043',
+      city: '',
+      state: '',
+      postal_code: '',
     },
     validate(values) {
       const e: FormikErrors<AddressFormValues> = {};
@@ -81,6 +123,10 @@ function AddressEntry() {
       });
     },
   });
+
+  useEffect(() => {
+    formik.setValues(fixedAddresses[addressKey]);
+  }, [addressKey]);
 
   return (
     <>

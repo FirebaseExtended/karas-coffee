@@ -96,7 +96,7 @@ export function Shipping() {
               shipping={
                 <>
                   {!rate && <span>TBC</span>}
-                  {!!rate && <span>${rate.shippingAmount.amount}</span>}
+                  {!!rate && <span>${parseFloat(`${rate.shippingAmount.amount}`).toFixed(2)}</span>}
                 </>
               }
             />
@@ -221,7 +221,9 @@ function ShippingRates({
                         : `Within ${rate.carrierDeliveryDays} day(s).`}
                     </p>
                   </div>
-                  <div className="text-sm font-bold text-gray-700">${rate.shippingAmount.amount}</div>
+                  <div className="text-sm font-bold text-gray-700">
+                    ${parseFloat(`${rate.shippingAmount.amount}`).toFixed(2)}
+                  </div>
                 </div>
               ))}
           </div>

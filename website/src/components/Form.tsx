@@ -39,6 +39,7 @@ export function Input({ id, label, value, onChange, error, ...props }: InputProp
         className={cx('bg-white w-full px-2 py-1 border rounded focus:outline-none', {
           'focus:border-gray-500': !error,
           'border-red-500': !!error,
+          'opacity-50': props.disabled,
         })}
         onChange={onChange}
       />
