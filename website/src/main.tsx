@@ -9,6 +9,7 @@ import 'tailwindcss/tailwind.css';
 import { App } from './App';
 import { loadBundle } from 'firebase/firestore';
 import { firestore } from './firebase';
+import { CookiePolicy } from './components/CookiePolicy';
 
 const client = new QueryClient();
 
@@ -27,6 +28,7 @@ bootstrap().then(() => {
         <QueryClientProvider client={client}>
           <>
             <App />
+            <CookiePolicy />
             <ReactQueryDevtools initialIsOpen={false} />
           </>
         </QueryClientProvider>
