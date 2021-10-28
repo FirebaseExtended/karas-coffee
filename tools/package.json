@@ -1,5 +1,6 @@
 {
-  "name": "@karas-coffee/scripts",
+  "name": "@extensions-demo/tools",
+  "private": true,
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -7,8 +8,7 @@
     "firebase:deploy-firestore-rules": "firebase deploy --only firestore:rules",
     "firebase:start-emulators": "firebase emulators:start --only auth,firestore"
   },
-  "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "dependencies": {
     "dotenv": "^10.0.0",
     "firebase-admin": "^9.11.1",
