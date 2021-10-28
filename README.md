@@ -56,12 +56,13 @@ yarn firebase:deploy-firestore-rules
     -  📄&nbsp;&nbsp;[Cloud Firestore](https://firebase.google.com/docs/firestore)
     -  🌍&nbsp;&nbsp;[Firebase Hosting](https://firebase.google.com/docs/hosting)
     -  🧩&nbsp;&nbsp;[Firebase Extensions](https://firebase.google.com/docs/extensions)
-       - [Delete User Data](https://firebase.google.com/products/extensions/delete-user-data)
-       - [Firestore Algolia Search](https://firebase.google.com/products/extensions/firestore-algolia-search)
-       - [Firestore Send Email](https://firebase.google.com/products/extensions/firestore-send-email)
-       - [Firestore Stripe Payments](https://firebase.google.com/products/extensions/firestore-stripe-subscriptions)
-       - [Firestore Perspective Toxicity](https://github.com/conversationai/firestore-perspective-toxicity)
+       - See the [wiki](https://github.com/invertase/karas-coffee/wiki#firebase-extensions) to learn about the Firebase Extensions used in this project.
  -  💳&nbsp;&nbsp;[Stripe Checkout](https://stripe.com/docs/payments/checkout)
+ -  📦&nbsp;&nbsp;[ShipEngine](https://www.shipengine.com/)
+    - ShipEngine’s APIs help brands, ecommerce platforms, 3PLs and others save time and money on shipping.
  -  🔍&nbsp;&nbsp;[Algolia Search](https://www.algolia.com/products/search-and-discovery/hosted-search-api/)
+    - Enables developers to build next generation apps with composable APIs.
  -  ⚛️&nbsp;&nbsp;[React](https://reactjs.org/)
+    - A JavaScript library for building user interfaces.
  -  ⚡️&nbsp;&nbsp;[Vite](https://vitejs.dev/)
+    - Vite is a build tool that aims to provide a faster and leaner development experience for modern web projects.
