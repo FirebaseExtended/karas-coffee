@@ -20,7 +20,7 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, CollectionReference } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getFunctions } from 'firebase/functions';
-import { Session, Review, Subscription, Address } from '../types';
+import { Session, Review, Subscription } from '../types';
 
 import {
   productConverter,
