@@ -2,6 +2,8 @@
 
 A demo ecommerce application showcasing Firebase Extensions and other Firebase products.
 
+> To learn more about this project [visit the wiki](https://github.com/invertase/karas-coffee/wiki).
+
 ----
 ### Project structure
 
@@ -58,6 +60,7 @@ yarn firebase:deploy-firestore-rules
     -  🧩&nbsp;&nbsp;[Firebase Extensions](https://firebase.google.com/docs/extensions)
        - See the [wiki](https://github.com/invertase/karas-coffee/wiki#firebase-extensions) to learn about the Firebase Extensions used in this project.
  -  💳&nbsp;&nbsp;[Stripe Checkout](https://stripe.com/docs/payments/checkout)
+    - Checkout creates a secure, Stripe-hosted payment page that lets you collect payments quickly.
  -  📦&nbsp;&nbsp;[ShipEngine](https://www.shipengine.com/)
     - ShipEngine’s APIs help brands, ecommerce platforms, 3PLs and others save time and money on shipping.
  -  🔍&nbsp;&nbsp;[Algolia Search](https://www.algolia.com/products/search-and-discovery/hosted-search-api/)
