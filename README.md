@@ -2,6 +2,8 @@
 
 A demo ecommerce application showcasing Firebase Extensions and other Firebase products.
 
+> To learn more about this project [visit the wiki](https://github.com/invertase/karas-coffee/wiki).
+
 ----
 ### Project structure
 
