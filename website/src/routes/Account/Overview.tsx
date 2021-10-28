@@ -30,7 +30,7 @@ export function Overview() {
           <li>Display Name: {data.displayName}</li>
           <li>Email Address: {data.email || 'N/A'}</li>
           <li>Email Verified: {data.emailVerified ? 'Yes' : 'No'}</li>
-          <PhoneNumber user={data} />
+          {/* Disabled for demo <PhoneNumber user={data} /> */}
         </ul>
         <div className="mt-4">
           <Button onClick={() => signOut.mutate()} loading={signOut.isLoading}>
