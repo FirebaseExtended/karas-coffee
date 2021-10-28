@@ -1,0 +1,24 @@
+name: validate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: eslint
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Yarn install
+        run: yarn
+      - name: ESLint
+        run: yarn run lint
