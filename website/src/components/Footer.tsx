@@ -37,6 +37,11 @@ export function Footer() {
               <Link to="https://firebase.google.com/products/extensions/delete-user-data">Delete User Data</Link>
             </li>
             <li>
+              <Link to="https://github.com/FirebaseExtended/experimental-extensions/tree/next/firestore-bundle-server">
+                Firestore Bundle Server
+              </Link>
+            </li>
+            <li>
               <Link to="https://firebase.google.com/products/extensions/firestore-algolia-search">
                 Firestore Algolia Search
               </Link>
@@ -54,6 +59,21 @@ export function Footer() {
             <li>
               <Link to="https://github.com/conversationai/firestore-perspective-toxicity">
                 Firestore Perspective Toxicity
+              </Link>
+            </li>
+            <li>
+              <Link to="https://github.com/ShipEngine/firebase-extensions/tree/master/extensions/rates">
+                ShipEngine - Calculate Shipping Rates
+              </Link>
+            </li>
+            <li>
+              <Link to="https://github.com/ShipEngine/firebase-extensions/tree/master/extensions/purchase-label">
+                ShipEngine - Purchase Labels
+              </Link>
+            </li>
+            <li>
+              <Link to="https://github.com/ShipEngine/firebase-extensions/tree/master/extensions/validate-address">
+                ShipEngine - Validate Address
               </Link>
             </li>
           </ul>

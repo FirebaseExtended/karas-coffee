@@ -104,6 +104,20 @@ export function Register() {
         <div className="mt-6">
           <SocialProviders />
         </div>
+        <div className="mt-4 text-sm">
+          <p>
+            By registering an account, you agree to the{' '}
+            <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer" className="underline">
+              Terms of Service
+            </a>
+            . Google&rsquo;s{' '}
+            <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer" className="underline">
+              Privacy Policy
+            </a>{' '}
+            applies to your use of this site. The account you register is temporary as the data for this application is
+            reset every 24 hours.
+          </p>
+        </div>
       </Card>
     </section>
   );

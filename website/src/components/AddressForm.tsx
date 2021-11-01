@@ -35,7 +35,7 @@ type AddressProps = {
 export function AddressForm({ values, errors, onChange }: AddressProps) {
   return (
     <div className="space-y-2">
-      <Input id="name" value={values.name} onChange={onChange} placeholder="Name" error={errors?.name} />
+      <Input disabled id="name" value={values.name} onChange={onChange} placeholder="Name" error={errors?.name} />
       <div className="grid grid-cols-2 gap-x-2">
         <Input
           disabled

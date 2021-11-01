@@ -30,6 +30,7 @@ import { ReviewCard, ReviewCardSkeleton } from '../components/ReviewCard';
 import { emptyArray } from '../utils';
 import { WriteReviewCard } from '../components/WriteReviewCard';
 import { useUser } from '../hooks/useUser';
+import { Alert } from '../components/Alert';
 
 export function Product() {
   const user = useUser();
@@ -186,7 +187,8 @@ function ListReviews({ productId }: { productId: string }) {
 
   return (
     <div className="mt-12">
-      <h2 className="mb-2 text-3xl font-extrabold tracking-wide">Reviews</h2>
+      <h2 className="mb-4 text-3xl font-extrabold tracking-wide">Reviews</h2>
+      <Alert type="warning">For this demo application, only your own reviews are currently visible.</Alert>
       <div className="divide-y">
         {reviews.status === 'loading' && emptyArray(5).map((_, i) => wrapper(<ReviewCardSkeleton />, `${i}`))}
         {reviews.status === 'success' && (
