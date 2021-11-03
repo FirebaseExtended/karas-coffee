@@ -109,7 +109,7 @@ export function SignIn() {
               Terms of Service
             </a>
             . Google&rsquo;s{' '}
-            <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer" className="underline">
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer" className="underline">
               Privacy Policy
             </a>{' '}
             applies to your use of this site. The account you register is temporary as the data for this application is

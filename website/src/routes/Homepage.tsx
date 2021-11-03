@@ -88,20 +88,22 @@ function Content() {
 function Subscribe() {
   const { trigger, error, loading } = useCheckout();
 
-  const createSubscription = async () =>
-    await trigger({
-      mode: 'subscription',
-      success_url: `${window.location.origin}/account/subscription`,
-      cancel_url: window.location.href,
-      line_items: [
-        {
-          // TODO(ehesp): Make const or handle multiple subscription products
-          price: 'price_1JZYqLDPaZ24HcpvFAXEs4WJ',
-          quantity: 1,
-        },
-      ],
-      collect_shipping_address: false,
-    });
+  const createSubscription = async () => {
+    window.location.assign('https://checkout.stripe.dev/');
+    // await trigger({
+    //   mode: 'subscription',
+    //   success_url: `${window.location.origin}/account/subscription`,
+    //   cancel_url: window.location.href,
+    //   line_items: [
+    //     {
+    //       // TODO(ehesp): Make const or handle multiple subscription products
+    //       price: 'price_1JZYqLDPaZ24HcpvFAXEs4WJ',
+    //       quantity: 1,
+    //     },
+    //   ],
+    //   collect_shipping_address: false,
+    // });
+  };
 
   return (
     <section className="px-4 lg:px-0">
