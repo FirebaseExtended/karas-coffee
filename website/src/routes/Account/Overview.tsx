@@ -39,14 +39,14 @@ export function Overview() {
 
   return (
     <div className="max-w-xl mx-auto mt-12">
-      <div className="border rounded p-6">
-        <h1 className="font-bold text-2xl">Your Account</h1>
+      <div className="p-6 border rounded">
+        <h1 className="text-2xl font-bold">Your Account</h1>
         <ul className="mt-4 space-y-2 text-sm">
           <li>User ID: {data.uid}</li>
           <li>Display Name: {data.displayName}</li>
           <li>Email Address: {data.email || 'N/A'}</li>
           <li>Email Verified: {data.emailVerified ? 'Yes' : 'No'}</li>
-          {/* Ignoring for live demo <PhoneNumber user={data} /> */}
+          <PhoneNumber user={data} />
         </ul>
         <div className="mt-4">
           <Button onClick={() => signOut.mutate()} loading={signOut.isLoading}>
@@ -60,7 +60,6 @@ export function Overview() {
 
 type Method = null | 'phone-number' | 'code';
 
-// Ignoring PhoneNumber support for live demo.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function PhoneNumber({ user }: { user: User }) {
   const client = useQueryClient();
