@@ -89,7 +89,6 @@ function Subscribe() {
   const { trigger, error, loading } = useCheckout();
 
   const createSubscription = async () => {
-    window.location.assign('https://checkout.stripe.dev/');
     await trigger({
       mode: 'subscription',
       success_url: `${window.location.origin}/account/subscription`,
