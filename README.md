@@ -58,7 +58,7 @@ yarn firebase:deploy-firestore-rules
     -  📄&nbsp;&nbsp;[Cloud Firestore](https://firebase.google.com/docs/firestore)
     -  🌍&nbsp;&nbsp;[Firebase Hosting](https://firebase.google.com/docs/hosting)
     -  🧩&nbsp;&nbsp;[Firebase Extensions](https://firebase.google.com/docs/extensions)
-       - See the [wiki](https://github.com/invertase/karas-coffee/wiki#firebase-extensions) to learn about the Firebase Extensions used in this project.
+       - See the [docs](https://github.com/FirebaseExtended/karas-coffee/blob/main/docs) to learn about the Firebase Extensions used in this project.
  -  💳&nbsp;&nbsp;[Stripe Checkout](https://stripe.com/docs/payments/checkout)
     - Checkout creates a secure, Stripe-hosted payment page that lets you collect payments quickly.
  -  📦&nbsp;&nbsp;[ShipEngine](https://www.shipengine.com/)
