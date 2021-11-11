@@ -2,7 +2,9 @@
 
 A demo ecommerce application showcasing Firebase Extensions and other Firebase products.
 
-> To learn more about this project [see the documentation](/docs).
+To learn more about this project [see the documentation](/docs) or the video below:
+
+[![Build your retail app with Firebase extensions](https://img.youtube.com/vi/nhCbAezbiQ8/0.jpg)](https://www.youtube.com/watch?v=nhCbAezbiQ8)
 
 ----
 ### Project structure
