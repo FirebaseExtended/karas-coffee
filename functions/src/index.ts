@@ -77,7 +77,7 @@ exports.deleteUserData = functions.pubsub.schedule('every 24 hours').onRun(async
     // ShipEngine verify addresses
     deleteCollection('addresses'),
     // Twilio SendGrid
-    deleteCollection('cart_email'),
+    deleteCollection('cart_emails'),
     // Twilio SMS
     deleteCollection('messages'),
     // Stripe & Firebase Auth
