@@ -1,6 +1,8 @@
 name: firebase_hosting_deploy
 on:
   workflow_dispatch:
+    branches:
+      - live
 jobs:
   deploy:
     runs-on: ubuntu-latest

@@ -1,5 +1,8 @@
 name: firebase_hosting_preview
-on: pull_request
+on:   
+  pull_request:
+    branches:
+      - live
 jobs:
   deploy:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
