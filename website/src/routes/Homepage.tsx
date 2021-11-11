@@ -77,7 +77,7 @@ function Content() {
       >
         Your daily coffee content
       </Heading>
-      <section className="space-y-6 lg:space-y-0 lg:grid grid-cols-2 gap-6 mt-4">
+      <section className="grid-cols-2 gap-6 mt-4 space-y-6 lg:space-y-0 lg:grid">
         {content.isLoading && emptyArray(4).map((_, i) => <ContentCardSkeleton key={i} />)}
         {content.isSuccess && content.data.map((content) => <ContentCard key={content.title} content={content} />)}
       </section>
@@ -90,36 +90,36 @@ function Subscribe() {
 
   const createSubscription = async () => {
     window.location.assign('https://checkout.stripe.dev/');
-    // await trigger({
-    //   mode: 'subscription',
-    //   success_url: `${window.location.origin}/account/subscription`,
-    //   cancel_url: window.location.href,
-    //   line_items: [
-    //     {
-    //       // TODO(ehesp): Make const or handle multiple subscription products
-    //       price: 'price_1JZYqLDPaZ24HcpvFAXEs4WJ',
-    //       quantity: 1,
-    //     },
-    //   ],
-    //   collect_shipping_address: false,
-    // });
+    await trigger({
+      mode: 'subscription',
+      success_url: `${window.location.origin}/account/subscription`,
+      cancel_url: window.location.href,
+      line_items: [
+        {
+          // TODO(ehesp): Make const or handle multiple subscription products
+          price: 'price_1JZYqLDPaZ24HcpvFAXEs4WJ',
+          quantity: 1,
+        },
+      ],
+      collect_shipping_address: false,
+    });
   };
 
   return (
     <section className="px-4 lg:px-0">
       <div className="mt-6 bg-gray-900 h-[400px] rounded overflow-hidden">
-        <div className="lg:grid grid-cols-2">
+        <div className="grid-cols-2 lg:grid">
           <div className="p-12 text-center lg:text-left">
-            <h1 className="font-extrabold text-white text-5xl lg:text-6xl">Become your own Barista.</h1>
+            <h1 className="text-5xl font-extrabold text-white lg:text-6xl">Become your own Barista.</h1>
             <p className="mt-8 text-lg text-white">
               Subscribe today to gain exclusive access to blogs, videos & recipes so you can become your own
               professional barista.
             </p>
-            <div className="mx-auto lg:mx-0 w-64 mt-8">
+            <div className="w-64 mx-auto mt-8 lg:mx-0">
               <Button onClick={() => createSubscription()} loading={loading}>
                 Subscribe Now
               </Button>
-              {!!error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+              {!!error && <div className="mt-2 text-sm text-red-500">{error}</div>}
             </div>
           </div>
           <div className="relative hidden lg:block">
