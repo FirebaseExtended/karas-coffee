@@ -1,7 +1,7 @@
 name: firebase_hosting_deploy
 on:
   workflow_dispatch:
-      branches:
+    branches:
       - live
 jobs:
   deploy:
