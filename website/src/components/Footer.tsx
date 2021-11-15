@@ -97,9 +97,9 @@ export function Footer() {
         </div>
       </div>
       <div className="flex items-center justify-center mt-10 space-x-6 text-gray-600">
-        <Link to="https://policies.google.com/privacy?hl=en-GB&fg=1">Privacy</Link>
+        <Link to="/privacy">Privacy</Link>
         <span>&bull;</span>
-        <Link to="https://policies.google.com/terms?hl=en-GB&fg=1">Terms</Link>
+        <Link to="/terms">Terms</Link>
       </div>
     </footer>
   );

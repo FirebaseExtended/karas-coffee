@@ -54,8 +54,7 @@ export function App() {
       <main className="mx-auto max-w-7xl md:px-6">
         <div className="mt-2">
           <Alert type="warning">
-            Please note that Kara&rsquo;s Coffee is a demo application, and some functionality is restricted to limit
-            processing of personal data.
+            Please note that this is not an official deployment of the Kara{"'"}s Coffee application.
           </Alert>
         </div>
         <Routes>
