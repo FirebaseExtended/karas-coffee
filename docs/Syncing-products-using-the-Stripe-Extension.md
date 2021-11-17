@@ -5,7 +5,7 @@ Products can be automatically imported using Stripe webhooks.
 ## Configuration
 
 Stripe has provided a helpful guide on setting up products that can synchronise with subscriptions and Firebase
-See [Stripe Firebase Subscriptions](https://github.com/stripe/stripe-firebase-extensions/blob/next/firestore-stripe-subscriptions/POSTINSTALL.md)
+See [Run Payments with Stripe extension](https://github.com/stripe/stripe-firebase-extensions/blob/next/firestore-stripe-payments/POSTINSTALL.md)
 for more information.
 
 Once configured the products will then be available to query via the chosen collection on setup, this is by default
@@ -22,4 +22,4 @@ displaying products in the UI.
 
 ## Resources
 
-- [Configure Stripe webhooks](https://github.com/stripe/stripe-firebase-extensions/blob/next/firestore-stripe-subscriptions/POSTINSTALL.md)
+- [Configure Stripe webhooks](https://github.com/stripe/stripe-firebase-extensions/blob/next/firestore-stripe-payments/POSTINSTALL.md)

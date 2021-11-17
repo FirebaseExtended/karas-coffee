@@ -8,7 +8,7 @@ Firestore documents to be synced to the Algolia service.
 
 Once configured to sync the `products` collection and the extension is installed, any documents added to the `products` collection will automatically sync to our Algolia project. You can
 read more about how these products are added by reading
-the [adding stripe products](/Syncing-products-using-the-Stripe-Extension.md) documentation.
+the [adding stripe products](https://github.com/FirebaseExtended/karas-coffee/blob/main/docs/Syncing-products-using-the-Stripe-Extension.md) documentation.
 
 ![image](https://user-images.githubusercontent.com/2060661/139304383-873b0064-44f0-4147-889b-7db5ed95f0ae.png)
 
@@ -20,6 +20,6 @@ a UI for each search result row, we're able to build an instant search experienc
 
 ## Resources
 
-- [Search Component](https://github.com/invertase/karas-coffee/blob/master/website/src/components/Search.tsx).
+- [Search Component](https://github.com/firebaseExtended/karas-coffee/blob/main/website/src/components/Search.tsx).
 - [Algolia](https://www.algolia.com/)
 - [Firestore Search with Algolia](https://www.algolia.com/developers/firebase-search-extension/)
