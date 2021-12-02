@@ -38,8 +38,6 @@ import { ContentList, ContentOutlet } from './routes/Content';
 import { Content } from './routes/Content/Content';
 import { Shipping } from './routes/Checkout/Shipping';
 import { Alert } from './components/Alert';
-import { Privacy } from './routes/Privacy';
-import { Terms } from './routes/Terms';
 
 export function App() {
   const user = useUser();
@@ -60,8 +58,6 @@ export function App() {
         </div>
         <Routes>
           <Route path="/" element={<Homepage />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/terms" element={<Terms />} />
           <Route path="shop" element={<Shop />} />
           <Route path="product/:id" element={<Product />} />
           <Route path="content" element={<ContentOutlet />}>
