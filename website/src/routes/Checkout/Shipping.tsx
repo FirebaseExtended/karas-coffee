@@ -26,6 +26,7 @@ import { useRatesCalculation } from '../../hooks/useRatesCalculation';
 import { ShippingRate, Address, Shipment } from '../../types';
 import { emptyArray } from '../../utils';
 import { Skeleton } from '../../components/Skeleton';
+import { Alert } from '../../components/Alert';
 
 export function Shipping() {
   const { cart } = useCart();
@@ -69,9 +70,9 @@ export function Shipping() {
   }
 
   return (
-    <section className="mt-8 px-4 lg:px-0">
+    <section className="px-4 mt-8 lg:px-0">
       <div className="max-w-3xl mx-auto"></div>
-      <h1 className="mt-8 mb-8 text-4xl font-extrabold text-gray-800 tracking-wide">Shipping</h1>
+      <h1 className="mt-8 mb-8 text-4xl font-extrabold tracking-wide text-gray-800">Shipping</h1>
       <p className="text-sm text-gray-500">
         Enter a new address or select an existing address below to calculate shipping rates.
       </p>
@@ -81,7 +82,7 @@ export function Shipping() {
         </>
       )}
       {cart.length > 0 && (
-        <div className="lg:grid grid-cols-12 gap-16">
+        <div className="grid-cols-12 gap-16 lg:grid">
           <div className="col-start-1 col-end-8 mt-4">
             <AddressBook
               selectedAddressId={address?.id}
@@ -117,7 +118,17 @@ export function Shipping() {
               }
             />
 
-            <Button disabled={!rate} loading={checkout.loading} onClick={onPlaceOrder}>
+            <Alert type="warning">
+              Stripe Checkout is disabled for the live demo. Please clone and run the demo locally - for more
+              information view the GitHub Repository.
+            </Alert>
+            <Button
+              disabled={!rate}
+              loading={checkout.loading}
+              onClick={() => {
+                window.location.assign('https://checkout.stripe.dev/');
+              }}
+            >
               Place Order &rarr;
             </Button>
           </div>
@@ -190,7 +201,7 @@ function ShippingRates({
           {emptyArray(5).map((_, i) => (
             <div key={i} className="flex h-8">
               <div className="flex-grow">
-                <Skeleton className="w-36 h-8" />
+                <Skeleton className="h-8 w-36" />
               </div>
               <Skeleton className="w-12 h-8" />
             </div>
@@ -231,7 +242,7 @@ function ShippingRates({
                   }}
                 >
                   <div className="flex-grow">
-                    <div className="font-sm font-bold text-gray-800">{rate.serviceType}</div>
+                    <div className="font-bold text-gray-800 font-sm">{rate.serviceType}</div>
                     <p className="text-sm text-gray-700">
                       {rate.carrierDeliveryDays.length > 1
                         ? rate.carrierDeliveryDays
@@ -246,7 +257,7 @@ function ShippingRates({
           </div>
         </div>
       )}
-      {rates.isError && <p className="mt-4 text-red-500 text-sm">{rates.error.message}</p>}
+      {rates.isError && <p className="mt-4 text-sm text-red-500">{rates.error.message}</p>}
     </div>
   );
 }
