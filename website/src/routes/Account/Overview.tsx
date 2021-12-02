@@ -46,7 +46,7 @@ export function Overview() {
           <li>Display Name: {data.displayName}</li>
           <li>Email Address: {data.email || 'N/A'}</li>
           <li>Email Verified: {data.emailVerified ? 'Yes' : 'No'}</li>
-          <PhoneNumber user={data} />
+          {/* Ignoring for live demo <PhoneNumber user={data} /> */}
         </ul>
         <div className="mt-4">
           <Button onClick={() => signOut.mutate()} loading={signOut.isLoading}>
@@ -60,6 +60,7 @@ export function Overview() {
 
 type Method = null | 'phone-number' | 'code';
 
+// Ignoring PhoneNumber support for live demo.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function PhoneNumber({ user }: { user: User }) {
   const client = useQueryClient();
@@ -168,7 +169,7 @@ function PhoneNumber({ user }: { user: User }) {
           </div>
         )}
       </div>
-      {!!error && <div className="mt-4 text-red-500 text-xs">{error}</div>}
+      {!!error && <div className="mt-4 text-xs text-red-500">{error}</div>}
     </li>
   );
 }
