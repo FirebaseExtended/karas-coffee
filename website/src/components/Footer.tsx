@@ -19,8 +19,8 @@ import { Alert } from './Alert';
 
 export function Footer() {
   return (
-    <footer className="mt-16 py-16 border-t">
-      <div className="px-6 max-w-7xl mx-auto text-center lg:text-left lg:grid grid-cols-4 gap-24">
+    <footer className="py-16 mt-16 border-t">
+      <div className="grid-cols-4 gap-24 px-6 mx-auto text-center max-w-7xl lg:text-left lg:grid">
         <div className="col-start-1 col-end-3">
           <p className="text-gray-500">
             Kara&apos;s Coffee is an demo E-Commerce and Stripe application, showcasing various Firebase Extensions,
@@ -30,7 +30,7 @@ export function Footer() {
             <Alert type="warning">The data for this application is reset every 24 hours!</Alert>
           </div>
         </div>
-        <div className="mt-16 lg:mt-0 flex flex-col space-y-2">
+        <div className="flex flex-col mt-16 space-y-2 lg:mt-0">
           <Heading>Extensions</Heading>
           <ul role="list" className="mt-4 space-y-4">
             <li>
@@ -78,7 +78,7 @@ export function Footer() {
             </li>
           </ul>
         </div>
-        <div className="mt-16 lg:mt-0 flex flex-col space-y-2">
+        <div className="flex flex-col mt-16 space-y-2 lg:mt-0">
           <Heading>Firebase</Heading>
           <ul role="list" className="mt-4 space-y-4">
             <li>
@@ -97,16 +97,16 @@ export function Footer() {
         </div>
       </div>
       <div className="flex items-center justify-center mt-10 space-x-6 text-gray-600">
-        <Link to="/privacy">Privacy</Link>
+        <Link to="https://policies.google.com/privacy?hl=en-GB&fg=1">Privacy</Link>
         <span>&bull;</span>
-        <Link to="/terms">Terms</Link>
+        <Link to="https://policies.google.com/terms?hl=en-GB&fg=1">Terms</Link>
       </div>
     </footer>
   );
 }
 
 function Heading({ children }: { children: string }) {
-  return <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase mb-4">{children}</h3>;
+  return <h3 className="mb-4 text-sm font-semibold tracking-wider text-gray-400 uppercase">{children}</h3>;
 }
 
 function Link({ to, children }: { to: string; children: string }) {

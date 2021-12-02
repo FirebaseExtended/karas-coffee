@@ -61,9 +61,9 @@ export function Register() {
   });
 
   return (
-    <section className="max-w-xl mx-auto my-20 px-4">
-      <h1 className="text-3xl font-extrabold text-center mb-4 text-gray-900">Create a new account</h1>
-      <p className="text-center mb-4 italic text-gray-600">
+    <section className="max-w-xl px-4 mx-auto my-20">
+      <h1 className="mb-4 text-3xl font-extrabold text-center text-gray-900">Create a new account</h1>
+      <p className="mb-4 italic text-center text-gray-600">
         Already have account?{' '}
         <Link to="/signin" className="text-indigo-700 hover:underline">
           Sign in
@@ -107,13 +107,13 @@ export function Register() {
         <div className="mt-4 text-sm">
           <p>
             By registering an account, you agree to the{' '}
-            <Link to="/terms" className="underline">
+            <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer" className="underline">
               Terms of Service
-            </Link>
+            </a>
             . Google&rsquo;s{' '}
-            <Link to="/privacy" className="underline">
+            <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer" className="underline">
               Privacy Policy
-            </Link>{' '}
+            </a>
             applies to your use of this site. The account you register is temporary as the data for this application is
             reset every 24 hours.
           </p>
