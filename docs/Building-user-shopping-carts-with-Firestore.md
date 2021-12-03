@@ -76,7 +76,7 @@ syntax to iterate through and display data provided by the `dynamicTemplateData`
 
 ## Resources
 
-- [`useCart`](https://github.com/invertase/karas-coffee/blob/master/website/src/hooks/useCart.ts) hook used on the
+- [`useCart`](https://github.com/FirebaseExtended/karas-coffee/blob/main/website/src/hooks/useCart.ts) hook used on the
   application.
 - [SendGrid](https://sendgrid.com/)
 - [Send Abandoned Cart reminders with SendGrid](https://github.com/twilio-labs/twilio-firebase-extensions/tree/main/abandoned-cart-emails)
