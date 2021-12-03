@@ -35,21 +35,21 @@ described in more detail throughout these docs:
 
 ### ☁️&nbsp;&nbsp;[Firebase Cloud Functions](https://firebase.google.com/products/functions)
 
-- [`onAuthCreate`](https://github.com/invertase/karas-coffee/blob/master/functions/src/index.ts#L29)
+- [`onAuthCreate`](https://github.com/invertase/karas-coffee/blob/main/functions/src/index.ts#L45)
 
   - This function adds a new document to the `mail` collection on new user creation - this collection is listened to
     by the [Firestore Send Email](https://firebase.google.com/products/extensions/firestore-send-email) extension and
     sends a welcome email to the new user.
     - These emails are not actually processed on the hosted live demo website.
 
-- [`onPaymentCreated`](https://github.com/invertase/karas-coffee/blob/master/functions/src/index.ts#L35)
+- [`onPaymentCreated`](https://github.com/invertase/karas-coffee/blob/main/functions/src/index.ts#L51)
 
   - This function triggers when a new customer payment has been created and sends an initial order update SMS to the user (if they've set up a
     phone number on their account - entering a user phone number is disabled on the hosted live demo website) via
     the [Twilio Send Message](https://github.com/twilio-labs/twilio-firebase-extensions/tree/main/firestore-send-twilio-message)
     extension by writing to the `messages` collection on Cloud Firestore.
 
-- [`deleteUserData`](https://github.com/invertase/karas-coffee/blob/master/functions/src/index.ts#L53)
+- [`deleteUserData`](https://github.com/invertase/karas-coffee/blob/main/functions/src/index.ts#L69)
   - This scheduled function deletes all user data every 24 hours - it is useful only for the purpose of this demo.
 
 ---
