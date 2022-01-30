@@ -117,7 +117,9 @@ export function Shipping() {
                 </>
               }
             />
-            <Button disabled={!rate} loading={checkout.loading} onClick={onPlaceOrder}></Button>
+            <Button disabled={!rate} loading={checkout.loading} onClick={onPlaceOrder}>
+              Place Order &rarr;
+            </Button>
             {/* <Alert type="warning">
               Stripe Checkout is disabled for the live demo. Please clone and run the demo locally - for more
               information view the GitHub Repository.
