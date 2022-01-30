@@ -30,6 +30,9 @@ import { firestore } from './firebase';
 const client = new QueryClient();
 
 async function bootstrap(): Promise<void> {
+  //check if production
+  if (import.meta.env) return Promise.resolve();
+
   // Define any bundles to pre-load.
   const bundles = await Promise.all([fetch('/bundles/shop')]);
 
