@@ -33,13 +33,13 @@ import {
 } from './converters';
 
 export const firebaseConfig = {
-  apiKey: 'AIzaSyCrbVzj7TfFBPjxardH4JTuYFr38CZealM',
+  apiKey: 'AIzaSyApdn2A_Uvh68xRcj7ExIgJ-TzOVGi_e7Q',
   authDomain: 'karas-coffee-invertase.firebaseapp.com',
   projectId: 'karas-coffee-invertase',
   storageBucket: 'karas-coffee-invertase.appspot.com',
-  messagingSenderId: '94487412900',
-  appId: '1:94487412900:web:b96590557d4383a3fce631',
-  measurementId: 'G-M9HH3JL1S7',
+  // messagingSenderId: '81367302951',
+  appId: '1:81367302951:web:579b2ba2ffa2fe492d9f02',
+  // measurementId: 'G-M9HH3JL1S7',
 };
 
 export const app = initializeApp(firebaseConfig);
