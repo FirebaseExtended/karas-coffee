@@ -34,9 +34,9 @@ import {
 
 export const firebaseConfig = {
   apiKey: 'AIzaSyCrbVzj7TfFBPjxardH4JTuYFr38CZealM',
-  authDomain: 'karas-coffee.firebaseapp.com',
-  projectId: 'karas-coffee',
-  storageBucket: 'karas-coffee.appspot.com',
+  authDomain: 'karas-coffee-invertase.firebaseapp.com',
+  projectId: 'karas-coffee-invertase',
+  storageBucket: 'karas-coffee-invertase.appspot.com',
   messagingSenderId: '94487412900',
   appId: '1:94487412900:web:b96590557d4383a3fce631',
   measurementId: 'G-M9HH3JL1S7',

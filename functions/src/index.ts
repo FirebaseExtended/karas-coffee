@@ -35,7 +35,7 @@ function getProductIds(): Promise<string[]> {
 // Use Firebase Tools to delete a collection
 function deleteCollection(path: string): Promise<void> {
   return firebase_tools.firestore.delete(path, {
-    project: 'karas-coffee',
+    project: 'karas-coffee-invertase',
     recursive: true,
     yes: true, // auto-confirmation
   });
@@ -59,7 +59,7 @@ exports.onPaymentCreated = functions.firestore
     }
     const message = {
       to: user.phoneNumber,
-      body: `Thank you for ordering from Kara's Coffee, your order is currently being processed. You can track it at https://karas-coffee.web.app/account/orders`,
+      body: `Thank you for ordering from Kara's Coffee, your order is currently being processed. You can track it at https://karas-coffee/account/orders`,
     };
     await admin.firestore().collection('messages').add(message);
   });

@@ -1,5 +1,5 @@
 name: firebase_hosting_preview
-on:   
+on:
   pull_request:
     branches:
       - live
@@ -15,5 +15,5 @@ jobs:
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KARAS_COFFEE }}'
-          projectId: karas-coffee
+          projectId: karas-coffee-invertase
           entryPoint: website
