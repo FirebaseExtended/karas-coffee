@@ -1,15 +1,11 @@
 {
   "hosting": {
     "public": "dist",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "/bundles/*",
-        "function": "ext-firestore-bundle-server-serve"
+        "function": "ext-firestore-bundle-server-9rb7-serve"
       },
       {
         "source": "**",
