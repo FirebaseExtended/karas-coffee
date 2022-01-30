@@ -30,7 +30,7 @@ export function Search() {
     <div className="relative w-full max-w-[500px]">
       <InstantSearch searchClient={searchClient} indexName="products">
         <Configure facetFilters={[['metadata.type:swag', 'metadata.type:coffee']]} />
-        {/* <SearchBox
+        <SearchBox
           onFocus={() => setFocussed(true)}
           onBlur={() => {
             // Allow the link event to fire before triggering the blur event
@@ -38,7 +38,7 @@ export function Search() {
               setFocussed(false);
             }, 100);
           }}
-        /> */}
+        />
         {focussed && (
           <Results>
             <div>
