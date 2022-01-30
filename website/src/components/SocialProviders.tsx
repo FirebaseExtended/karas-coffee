@@ -59,7 +59,7 @@ export function SocialProviders({ redirect }: SocialProviderProps) {
           <Provider
             label="Sign in with GitHub"
             onClick={() => {
-              // popup.mutate({ provider: providers.github })
+              popup.mutate({ provider: providers.github });
             }}
             icon={
               <svg className="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
@@ -76,7 +76,7 @@ export function SocialProviders({ redirect }: SocialProviderProps) {
           <Provider
             label="Sign in with Twitter"
             onClick={() => {
-              // popup.mutate({ provider: providers.twitter })
+              popup.mutate({ provider: providers.twitter });
             }}
             icon={
               <svg className="w-5 h-5 text-[#1D9BF0]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
