@@ -26,7 +26,7 @@ import { useRatesCalculation } from '../../hooks/useRatesCalculation';
 import { ShippingRate, Address, Shipment } from '../../types';
 import { emptyArray } from '../../utils';
 import { Skeleton } from '../../components/Skeleton';
-import { Alert } from '../../components/Alert';
+// import { Alert } from '../../components/Alert';
 
 export function Shipping() {
   const { cart } = useCart();
@@ -117,12 +117,12 @@ export function Shipping() {
                 </>
               }
             />
-
-            <Alert type="warning">
+            <Button disabled={!rate} loading={checkout.loading} onClick={onPlaceOrder}></Button>
+            {/* <Alert type="warning">
               Stripe Checkout is disabled for the live demo. Please clone and run the demo locally - for more
               information view the GitHub Repository.
-            </Alert>
-            <Button
+            </Alert> */}
+            {/* <Button
               disabled={!rate}
               loading={checkout.loading}
               onClick={() => {
@@ -130,7 +130,7 @@ export function Shipping() {
               }}
             >
               Place Order &rarr;
-            </Button>
+            </Button> */}
           </div>
         </div>
       )}
