@@ -1,7 +1,11 @@
 {
   "hosting": {
     "public": "dist",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
     "rewrites": [
       {
         "source": "/bundles/*",
@@ -12,5 +16,19 @@
         "destination": "/index.html"
       }
     ]
+  },
+  "extensions": {
+    "storage-resize-images": "firebase/storage-resize-images@0.1.25",
+    "firestore-shorten-urls-bitly": "firebase/firestore-shorten-urls-bitly@0.1.7",
+    "purchase-labels": "shipengine/purchase-labels@0.0.4",
+    "firestore-algolia-search": "algolia/firestore-algolia-search@0.5.9",
+    "firestore-send-email": "firebase/firestore-send-email@0.1.13",
+    "send-message": "twilio/send-message@0.1.1",
+    "firestore-bigquery-export": "firebase/firestore-bigquery-export@0.1.20",
+    "calculate-rates": "shipengine/calculate-rates@0.0.3",
+    "delete-user-data": "firebase/delete-user-data@0.1.12",
+    "firestore-stripe-payments": "stripe/firestore-stripe-payments@0.2.4",
+    "validate-addresses": "shipengine/validate-addresses@0.0.3",
+    "mailchimp-firebase-sync": "mailchimp/mailchimp-firebase-sync@0.2.3"
   }
 }
