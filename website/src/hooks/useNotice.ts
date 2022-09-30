@@ -22,31 +22,48 @@ import { useUser } from './useUser';
 
 export function useNotice(type: string) {
   const user = useUser();
-  return useFunctionsQuery<any, Notice>(['notice', type], functions, 'ext-firestore-notice-extension-getNotice', {
-    type,
-  }, {}, {
-    enabled: !!user.data,
-  });
+  return useFunctionsQuery<any, Notice>(
+    ['notice', type],
+    functions,
+    'ext-firestore-notice-extension-getNotice',
+    {
+      type,
+    },
+    {},
+    {
+      enabled: !!user.data,
+    },
+  );
 }
 
 export function useAcknowledge() {
   const client = useQueryClient();
 
-  return useFunctionsCall<{ noticeId: string }, void>(functions, 'ext-firestore-notice-extension-acknowledgeNotice', {}, {
-    onSuccess() {
-      client.invalidateQueries(['notice']);
-    }
-  });
+  return useFunctionsCall<{ noticeId: string }, void>(
+    functions,
+    'ext-firestore-notice-extension-acknowledgeNotice',
+    {},
+    {
+      onSuccess() {
+        client.invalidateQueries(['notice']);
+      },
+    },
+  );
 }
 
 export function useUnacknowledge() {
   const client = useQueryClient();
 
-  return useFunctionsCall<{ noticeId: string }>(functions, 'ext-firestore-notice-extension-unacknowledgeNotice', {}, {
-    onSuccess() {
-      client.invalidateQueries(['notice']);
-    }
-  });
+  return useFunctionsCall<{ noticeId: string }>(
+    functions,
+    'ext-firestore-notice-extension-unacknowledgeNotice',
+    {},
+    {
+      onSuccess() {
+        client.invalidateQueries(['notice']);
+      },
+    },
+  );
 }
 
 /**
@@ -61,4 +78,3 @@ export function useUnacknowledge() {
 //     enabled: !!user.data,
 //   });
 // }
-

@@ -22,7 +22,7 @@ import { Button } from './Button';
 
 export function Acknowledgement() {
   const user = useUser();
-  
+
   const notice = useNotice('banner');
   const acknowledge = useAcknowledge();
   const unacknowledge = useUnacknowledge();
@@ -30,26 +30,29 @@ export function Acknowledgement() {
   return (
     <div className="mt-2">
       <Alert type="warning">
-        <div className='flex items-center gap-3'>
-          <div className='flex-grow text-left'>
+        <div className="flex items-center gap-3">
+          <div className="flex-grow text-left">
             Please note that Kara&rsquo;s Coffee is a demo application, and some functionality is restricted to limit
             processing of personal data.
           </div>
           <div>
-            {!!user.data && notice.isSuccess && notice.data.acknowledgements.length === 0 && notice.data.unacknowledgedAt === null && (
-              <Button
-                loading={acknowledge.isLoading}
-                onClick={() => {
-                  acknowledge.mutate({
-                    noticeId: notice.data.id,
-                  });
-                }}
+            {!!user.data &&
+              notice.isSuccess &&
+              notice.data.acknowledgements.length === 0 &&
+              notice.data.unacknowledgedAt === null && (
+                <Button
+                  loading={acknowledge.isLoading}
+                  onClick={() => {
+                    acknowledge.mutate({
+                      noticeId: notice.data.id,
+                    });
+                  }}
                 >
-                Acknowledge
-              </Button>
-            )}
+                  Acknowledge
+                </Button>
+              )}
             {!!user.data && notice.isSuccess && notice.data.unacknowledgedAt !== null && (
-              <p className='flex items-center gap-2'>
+              <p className="flex items-center gap-2">
                 <span>Unacknowledged</span>
                 <Button
                   loading={acknowledge.isLoading}
@@ -63,26 +66,25 @@ export function Acknowledgement() {
                 </Button>
               </p>
             )}
-            {!!user.data && notice.isSuccess && notice.data.acknowledgements.length > 0 && notice.data.unacknowledgedAt === null && (
-              <p className='flex items-center gap-2'>
-                <span>
-                  Acknowledged
-                </span>
-                <Button
-                  loading={unacknowledge.isLoading}
-                  onClick={() => {
-                  unacknowledge.mutate({
-                    noticeId: notice.data.id,
-                  });
-                }}
-                >
-                  Unacknowledge
-                </Button>
-              </p>
-            )}
-            {!user.data && (
-              <p>Sign in to acknowledge</p>
-            )}
+            {!!user.data &&
+              notice.isSuccess &&
+              notice.data.acknowledgements.length > 0 &&
+              notice.data.unacknowledgedAt === null && (
+                <p className="flex items-center gap-2">
+                  <span>Acknowledged</span>
+                  <Button
+                    loading={unacknowledge.isLoading}
+                    onClick={() => {
+                      unacknowledge.mutate({
+                        noticeId: notice.data.id,
+                      });
+                    }}
+                  >
+                    Unacknowledge
+                  </Button>
+                </p>
+              )}
+            {!user.data && <p>Sign in to acknowledge</p>}
           </div>
         </div>
       </Alert>

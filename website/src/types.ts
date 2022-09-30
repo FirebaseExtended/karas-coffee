@@ -252,11 +252,11 @@ type BaseAcknowledgement = {
 export type Acknowledgement =
   | (BaseAcknowledgement & {
       // The type of the acknowledgement.
-      ack_event: "acknowledged";
+      ack_event: 'acknowledged';
       // The type of the acknowledgement. Defaults to `seen`.
       type: string;
     })
   | (BaseAcknowledgement & {
       // The type of the acknowledgement.
-      ack_event: "unacknowledged";
+      ack_event: 'unacknowledged';
     });
