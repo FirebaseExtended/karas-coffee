@@ -19,6 +19,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { Acknowledgement } from './components/Acknowledgement';
 
 import { useUser } from './hooks/useUser';
 
@@ -37,7 +38,6 @@ import { Shop } from './routes/Shop';
 import { ContentList, ContentOutlet } from './routes/Content';
 import { Content } from './routes/Content/Content';
 import { Shipping } from './routes/Checkout/Shipping';
-import { Alert } from './components/Alert';
 
 export function App() {
   const user = useUser();
@@ -50,12 +50,7 @@ export function App() {
     <>
       <Header />
       <main className="mx-auto max-w-7xl md:px-6">
-        <div className="mt-2">
-          <Alert type="warning">
-            Please note that Kara&rsquo;s Coffee is a demo application, and some functionality is restricted to limit
-            processing of personal data.
-          </Alert>
-        </div>
+        <Acknowledgement />
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="shop" element={<Shop />} />

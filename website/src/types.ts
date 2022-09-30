@@ -214,3 +214,49 @@ export interface Shipment {
     };
   }[];
 }
+
+export interface Notice {
+  // The document ID.
+  id: string;
+  // The type of notice, e.g. `banner` | `terms-and-condition` | `privacy-policy`.
+  type: string;
+  // An optional notice version. This can be used to filter a specific notice versions via the `getNotice` callable function.
+  version?: number;
+  // The optional title of the notice.
+  title?: string;
+  // The optional description of the notice.
+  description?: string;
+  // The optional link of the notice.
+  link?: string;
+  // The timestamp when the notice was created.
+  createdAt: Timestamp;
+  // The timestamp when the notice was unacknowledged by the user.
+  unacknowledgedAt: Timestamp | null;
+  // A list of user acknowledgements.
+  acknowledgements: Acknowledgement[];
+}
+
+type BaseAcknowledgement = {
+  // The document ID.
+  id: string;
+  // The UID of the user who acknowledged the notice.
+  userId: string;
+  // The ID of the notice that was acknowledged.
+  noticeId: string;
+  // The timestamp when the notice was acknowledged.
+  createdAt: Timestamp;
+  // The optional metadata of the acknowledgement.
+  metadata: any;
+};
+
+export type Acknowledgement =
+  | (BaseAcknowledgement & {
+      // The type of the acknowledgement.
+      ack_event: "acknowledged";
+      // The type of the acknowledgement. Defaults to `seen`.
+      type: string;
+    })
+  | (BaseAcknowledgement & {
+      // The type of the acknowledgement.
+      ack_event: "unacknowledged";
+    });
