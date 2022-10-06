@@ -25,7 +25,7 @@ export function useNotice(type: string) {
   return useFunctionsQuery<any, Notice>(
     ['notice', type],
     functions,
-    'ext-firestore-notice-extension-getNotice',
+    'ext-firestore-record-user-acknowledgements-getNotice',
     {
       type,
     },
@@ -41,7 +41,7 @@ export function useAcknowledge() {
 
   return useFunctionsCall<{ noticeId: string }, void>(
     functions,
-    'ext-firestore-notice-extension-acknowledgeNotice',
+    'ext-firestore-record-user-acknowledgements-acknowledgeNotice',
     {},
     {
       onSuccess() {
@@ -56,7 +56,7 @@ export function useUnacknowledge() {
 
   return useFunctionsCall<{ noticeId: string }>(
     functions,
-    'ext-firestore-notice-extension-unacknowledgeNotice',
+    'ext-firestore-record-user-acknowledgements-unacknowledgeNotice',
     {},
     {
       onSuccess() {
@@ -72,7 +72,7 @@ export function useUnacknowledge() {
 // export function useAcknowledgements() {
 //   const user = useUser();
 
-//   return useFunctionsQuery<any, any>(['acknowledgements'], functions, 'ext-firestore-notice-extension-getAcknowledgements', {
+//   return useFunctionsQuery<any, any>(['acknowledgements'], functions, 'ext-firestore-record-user-acknowledgements-getAcknowledgements', {
 //     // includeUnacknowledgements: true,
 //   }, {}, {
 //     enabled: !!user.data,
