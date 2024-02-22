@@ -20,10 +20,28 @@ import { InstantSearch, Hits, Configure, connectStateResults, connectSearchBox }
 import { SearchBoxProvided, Hit } from 'react-instantsearch-core';
 import { Link } from 'react-router-dom';
 import { Product } from '../types';
+import { VectorSearch } from './VectorSearch';
+import Switch from './switch';
 
 const searchClient = algoliasearch('Z7DKWT901V', 'c529b90d287423b1f926506fb74307ff');
 
 export function Search() {
+  const [conciergeEnabled, setConciergeEnabled] = useState<boolean>(false);
+
+  return (
+    <div className="flex w-full max-w-[500px]">
+      <div className={conciergeEnabled ? '' : 'hidden'}>
+        <VectorSearch />
+      </div>
+      <div className={!conciergeEnabled ? '' : 'hidden'}>
+        <AlgoliaSearch />
+      </div>
+      <Switch />
+    </div>
+  );
+}
+
+function AlgoliaSearch() {
   const [focussed, setFocussed] = useState<boolean>(false);
 
   return (

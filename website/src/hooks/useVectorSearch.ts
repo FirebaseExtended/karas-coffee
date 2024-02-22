@@ -8,8 +8,17 @@ export function useVectorSearch(query: string, limit: number) {
       limit: number;
     },
     { ids: string[] }
-  >(['vectorSearch', query, limit], functions, 'ext-firestore-vector-search-queryCallable', {
-    query,
-    limit,
-  });
+  >(
+    ['concierge', query],
+    functions,
+    'ext-firestore-vector-search-queryCallable',
+    {
+      query,
+      limit,
+    },
+    {},
+    {
+      enabled: !!query,
+    },
+  );
 }
