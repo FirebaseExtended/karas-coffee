@@ -31,10 +31,10 @@ const client = new QueryClient();
 
 async function bootstrap(): Promise<void> {
   // Define any bundles to pre-load.
-  const bundles = await Promise.all([fetch('/bundles/shop')]);
+  // const bundles = await Promise.all([fetch('/bundles/shop')]);
 
-  // Load the bundles into Firestore.
-  await Promise.all(bundles.map((bundle) => loadBundle(firestore, bundle.body!)));
+  // // Load the bundles into Firestore.
+  // await Promise.all(bundles.map((bundle) => loadBundle(firestore, bundle.body!)));
 }
 
 bootstrap().then(() => {

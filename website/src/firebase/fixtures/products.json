@@ -1,0 +1,282 @@
+[
+  {
+    "id": "amazing-mug-black",
+    "stripe_metadata_description": "Drink your coffee in style with our amazing black ceramic mug that's guranteed to turn heads when you drink from it.",
+    "metadata": {
+      "price_usd": "99",
+      "description": "Drink your coffee in style with our amazing black ceramic mug that's guranteed to turn heads when you drink from it.",
+      "type": "swag",
+      "price": "price_1JZYkxDPaZ24HcpvMrjfrvhH"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1608085022020-3e5ee70c4e42?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640",
+      "https://images.unsplash.com/photo-1487099174927-da3cd6408862?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640",
+      "https://images.unsplash.com/photo-1448932284983-0c7b152eba33?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640"
+    ],
+    "role": null,
+    "stripe_metadata_price_usd": "99",
+    "shortUrl": "https://bit.ly/3zYsjES",
+    "active": true,
+    "description": "Drink your coffee in style with our amazing black ceramic mug that's guranteed to turn heads when you drink from it.",
+    "short_url": "https://bit.ly/3zYsjES",
+    "tax_code": null,
+    "name": "The Amazing Mug - Black",
+    "stripe_metadata_price": "price_1JZYkxDPaZ24HcpvMrjfrvhH",
+    "stripe_metadata_type": "swag"
+  },
+  {
+    "id": "amazing-mug-white",
+    "stripe_metadata_description": "Drink your coffee in style with our amazing white ceramic mug that's guranteed to turn heads when you drink from it.",
+    "images": [
+      "https://images.unsplash.com/photo-1605714196241-00bf7a8fe7bb?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640",
+      "https://images.unsplash.com/photo-1530968831187-a937ade474cb?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640",
+      "https://images.unsplash.com/photo-1422207049116-cfaf69531072?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640"
+    ],
+    "metadata": {
+      "price_usd": "99",
+      "description": "Drink your coffee in style with our amazing white ceramic mug that's guranteed to turn heads when you drink from it.",
+      "type": "swag",
+      "price": "price_1JZYkwDPaZ24HcpvXRSHD4k7"
+    },
+    "role": null,
+    "stripe_metadata_price_usd": "99",
+    "shortUrl": "https://bit.ly/38SCQ8B",
+    "active": true,
+    "description": "Drink your coffee in style with our amazing white ceramic mug that's guranteed to turn heads when you drink from it.",
+    "short_url": "https://bit.ly/38SCQ8B",
+    "tax_code": null,
+    "name": "The Amazing Mug - White",
+    "stripe_metadata_price": "price_1JZYkwDPaZ24HcpvXRSHD4k7",
+    "stripe_metadata_type": "swag"
+  },
+  {
+    "id": "chipinga",
+    "stripe_metadata_description": "Chipinga coffee is a medium-bodied with a medium density and lively berry-like or citrusy acidity.",
+    "images": [
+      "https://images.unsplash.com/photo-1562051036-e0eea191d42f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640"
+    ],
+    "metadata": {
+      "price_usd": "2",
+      "strength": "5",
+      "origin": "Zimbabwe",
+      "weight": "500g",
+      "description": "Chipinga coffee is a medium-bodied with a medium density and lively berry-like or citrusy acidity.",
+      "type": "coffee",
+      "variety": "Caltimor",
+      "price": "price_1JZYl4DPaZ24HcpvNPya0k2f"
+    },
+    "role": null,
+    "stripe_metadata_price_usd": "2",
+    "shortUrl": "https://bit.ly/3E4zXzM",
+    "active": true,
+    "description": "Chipinga coffee is a medium-bodied with a medium density and lively berry-like or citrusy acidity.",
+    "stripe_metadata_variety": "Caltimor",
+    "stripe_metadata_strength": "5",
+    "short_url": "https://bit.ly/3E4zXzM",
+    "tax_code": null,
+    "name": "Chipinga",
+    "stripe_metadata_price": "price_1JZYl4DPaZ24HcpvNPya0k2f",
+    "stripe_metadata_origin": "Zimbabwe",
+    "stripe_metadata_type": "coffee",
+    "stripe_metadata_weight": "500g"
+  },
+  {
+    "id": "coffee-club",
+    "stripe_metadata_description": "Subcribe to Kara's Coffee Club for recipies, coffees and more.",
+    "metadata": {
+      "price_usd": "5",
+      "description": "Subcribe to Kara's Coffee Club for recipies, coffees and more.",
+      "type": "subscription",
+      "price": "price_1JZYqLDPaZ24HcpvFAXEs4WJ"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1618381297523-e6c0ab13a5b2?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640"
+    ],
+    "role": null,
+    "stripe_metadata_price_usd": "5",
+    "active": true,
+    "description": "Subcribe to Kara's Coffee Club for recipies, coffees and more.",
+    "tax_code": null,
+    "name": "Kara's Coffee Club",
+    "stripe_metadata_price": "price_1JZYqLDPaZ24HcpvFAXEs4WJ",
+    "stripe_metadata_type": "subscription"
+  },
+  {
+    "id": "french-press",
+    "stripe_metadata_description": "This iconic French press (or cafetière) is a must for your coffee making experience with heat-resistant borosilicate glass that won’t alter or impair your coffee’s natural flavor.",
+    "metadata": {
+      "price_usd": "12",
+      "description": "This iconic French press (or cafetière) is a must for your coffee making experience with heat-resistant borosilicate glass that won’t alter or impair your coffee’s natural flavor.",
+      "type": "swag",
+      "price": "price_1JZYkzDPaZ24HcpvSKqxjX43"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1581471995013-64d59dd04675?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640",
+      "https://images.unsplash.com/photo-1583577012061-d69d2dbc900a?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640",
+      "https://images.unsplash.com/photo-1598639298075-9f62f1fc5463?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640"
+    ],
+    "role": null,
+    "stripe_metadata_price_usd": "12",
+    "shortUrl": "https://bit.ly/3E1A1QR",
+    "active": true,
+    "description": "This iconic French press (or cafetière) is a must for your coffee making experience with heat-resistant borosilicate glass that won’t alter or impair your coffee’s natural flavor.",
+    "short_url": "https://bit.ly/3E1A1QR",
+    "tax_code": null,
+    "name": "French Press",
+    "stripe_metadata_price": "price_1JZYkzDPaZ24HcpvSKqxjX43",
+    "stripe_metadata_type": "swag"
+  },
+  {
+    "id": "kahawa",
+    "stripe_metadata_description": "Kenyan coffee beans have distinctly bright taste with complex tones of fruit and berry.",
+    "metadata": {
+      "price_usd": "4",
+      "strength": "9",
+      "origin": "Kenya",
+      "weight": "500g",
+      "description": "Kenyan coffee beans have distinctly bright taste with complex tones of fruit and berry.",
+      "type": "coffee",
+      "variety": "Arabica",
+      "price": "price_1JZYl6DPaZ24HcpvouvKePTZ"
+    },
+    "images": [
+      "https://files.stripe.com/links/MDB8YWNjdF8xSlVvdGhEUGFaMjRIY3B2fGZsX3Rlc3RfeHpXRTlsYVVUUkV5YWJhbnFNbFQ4emZh00BeJlzUOY"
+    ],
+    "role": null,
+    "shortUrl": "https://bit.ly/3A1ulUA",
+    "stripe_metadata_price_usd": "4",
+    "description": "Kenyan coffee beans have distinctly bright taste with complex tones of fruit and berry.",
+    "active": true,
+    "stripe_metadata_variety": "Arabica",
+    "stripe_metadata_strength": "9",
+    "short_url": "https://bit.ly/3A1ulUA",
+    "tax_code": null,
+    "name": "Kahawa",
+    "stripe_metadata_price": "price_1JZYl6DPaZ24HcpvouvKePTZ",
+    "stripe_metadata_origin": "Kenya",
+    "stripe_metadata_type": "coffee",
+    "stripe_metadata_weight": "500g"
+  },
+  {
+    "id": "lizarb",
+    "stripe_metadata_description": "Lizarb Brazilian coffee has a relatively low acidity, and exhibits a nutty sweet flavor, with a chocolaty roast taste. ",
+    "metadata": {
+      "price_usd": "5",
+      "strength": "7",
+      "origin": "Brazil",
+      "weight": "500g",
+      "description": "Lizarb Brazilian coffee has a relatively low acidity, and exhibits a nutty sweet flavor, with a chocolaty roast taste. ",
+      "type": "coffee",
+      "variety": "Novo",
+      "price": "price_1JZYl3DPaZ24Hcpvx51iRPdi"
+    },
+    "images": [
+      "https://files.stripe.com/links/MDB8YWNjdF8xSlVvdGhEUGFaMjRIY3B2fGZsX3Rlc3RfTWxFMEpWSUlnb0tpVTlMM3NHMnprWmxz00wqomQxY4"
+    ],
+    "role": null,
+    "stripe_metadata_price_usd": "5",
+    "shortUrl": "https://bit.ly/3EbCEzZ",
+    "active": true,
+    "description": "Lizarb Brazilian coffee has a relatively low acidity, and exhibits a nutty sweet flavor, with a chocolaty roast taste. ",
+    "stripe_metadata_variety": "Novo",
+    "stripe_metadata_strength": "7",
+    "short_url": "https://bit.ly/3EbCEzZ",
+    "tax_code": null,
+    "name": "Lizarb",
+    "stripe_metadata_price": "price_1JZYl3DPaZ24Hcpvx51iRPdi",
+    "stripe_metadata_origin": "Brazil",
+    "stripe_metadata_type": "coffee",
+    "stripe_metadata_weight": "500g"
+  },
+  {
+    "id": "loja",
+    "stripe_metadata_description": "A fairly acidic coffee with a medium body and a predictable flavor typical of South American coffees.",
+    "metadata": {
+      "price_usd": "3",
+      "strength": "3",
+      "origin": "Ecuador",
+      "description": "A fairly acidic coffee with a medium body and a predictable flavor typical of South American coffees.",
+      "weight": "500g",
+      "type": "coffee",
+      "variety": "Caturra",
+      "price": "price_1JZYl2DPaZ24HcpvR9ghWg5h"
+    },
+    "images": [
+      "https://files.stripe.com/links/MDB8YWNjdF8xSlVvdGhEUGFaMjRIY3B2fGZsX3Rlc3RfM25sZE85a0JqZ0J5R3F1N1plMUFyNGh100US5qQGyC"
+    ],
+    "role": null,
+    "stripe_metadata_price_usd": "3",
+    "description": "A fairly acidic coffee with a medium body and a predictable flavor typical of South American coffees.",
+    "active": true,
+    "stripe_metadata_variety": "Caturra",
+    "stripe_metadata_strength": "3",
+    "tax_code": null,
+    "name": "Loja",
+    "stripe_metadata_price": "price_1JZYl2DPaZ24HcpvR9ghWg5h",
+    "stripe_metadata_origin": "Ecuador",
+    "stripe_metadata_type": "coffee",
+    "stripe_metadata_weight": "500g"
+  },
+  {
+    "id": "pitcher",
+    "stripe_metadata_description": "Hard wearing and durable pitcher for busy coffee shops and caterers. Measuring lines are etched on the inside so that it is easy to add the correct amount of milk for each serving of latte, cappuccino or hot chocolate",
+    "metadata": {
+      "price_usd": "17",
+      "description": "Hard wearing and durable pitcher for busy coffee shops and caterers. Measuring lines are etched on the inside so that it is easy to add the correct amount of milk for each serving of latte, cappuccino or hot chocolate",
+      "type": "swag",
+      "price": "price_1JZYl0DPaZ24HcpvHhNYzgYY"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1537817236549-8265e0da25d5?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640",
+      "https://images.unsplash.com/photo-1620360289928-dacf4e46f604?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640",
+      "https://images.unsplash.com/photo-1495862433577-132cf20d7902?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640"
+    ],
+    "role": null,
+    "stripe_metadata_price_usd": "17",
+    "shortUrl": "https://bit.ly/3jVKC84",
+    "description": "Hard wearing and durable pitcher for busy coffee shops and caterers. Measuring lines are etched on the inside so that it is easy to add the correct amount of milk for each serving of latte, cappuccino or hot chocolate",
+    "active": true,
+    "short_url": "https://bit.ly/3jVKC84",
+    "tax_code": null,
+    "name": "Pitcher",
+    "stripe_metadata_price": "price_1JZYl0DPaZ24HcpvHhNYzgYY",
+    "stripe_metadata_type": "swag"
+  },
+  {
+    "id": "shipping_countries",
+    "allowed_countries": [
+      "US"
+    ]
+  },
+  {
+    "id": "sulawesi-toraja",
+    "stripe_metadata_description": "A well balanced coffee that exhibits tasting notes of dark chocolate and ripe fruit with a low-toned yet vibrant acidity.",
+    "metadata": {
+      "price_usd": "1",
+      "strength": "10",
+      "origin": "Sulawesi",
+      "description": "A well balanced coffee that exhibits tasting notes of dark chocolate and ripe fruit with a low-toned yet vibrant acidity.",
+      "weight": "500g",
+      "type": "coffee",
+      "variety": "Arabica",
+      "price": "price_1JZYl7DPaZ24HcpvkthINmuJ"
+    },
+    "images": [
+      "https://files.stripe.com/links/MDB8YWNjdF8xSlVvdGhEUGFaMjRIY3B2fGZsX3Rlc3RfREQ3V3VveTdXWGlHclNHdzZRSk9Qamtk00B2Z4GuwV"
+    ],
+    "role": null,
+    "shortUrl": "https://bit.ly/2XdecgF",
+    "stripe_metadata_price_usd": "1",
+    "description": "A well balanced coffee that exhibits tasting notes of dark chocolate and ripe fruit with a low-toned yet vibrant acidity.",
+    "active": true,
+    "stripe_metadata_variety": "Arabica",
+    "stripe_metadata_strength": "10",
+    "short_url": "https://bit.ly/2XdecgF",
+    "tax_code": null,
+    "name": "Sulawesi Toraja",
+    "stripe_metadata_price": "price_1JZYl7DPaZ24HcpvkthINmuJ",
+    "stripe_metadata_origin": "Sulawesi",
+    "stripe_metadata_type": "coffee",
+    "stripe_metadata_weight": "500g"
+  }
+]

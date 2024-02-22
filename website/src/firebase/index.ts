@@ -15,11 +15,11 @@
  */
 
 import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
+// import { getAnalytics } from 'firebase/analytics';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, CollectionReference } from 'firebase/firestore';
+import { getFirestore, collection, CollectionReference, connectFirestoreEmulator } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { getFunctions } from 'firebase/functions';
+import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 import { Session, Review, Subscription } from '../types';
 
 import {
@@ -32,22 +32,26 @@ import {
   addressConverter,
 } from './converters';
 
-export const firebaseConfig = {
-  apiKey: 'AIzaSyCrbVzj7TfFBPjxardH4JTuYFr38CZealM',
-  authDomain: 'karas-coffee.firebaseapp.com',
-  projectId: 'karas-coffee',
-  storageBucket: 'karas-coffee.appspot.com',
-  messagingSenderId: '94487412900',
-  appId: '1:94487412900:web:b96590557d4383a3fce631',
-  measurementId: 'G-M9HH3JL1S7',
+const firebaseConfig = {
+  apiKey: 'AIzaSyCEtg_FqMZAQ8zTMG34-EgUyv-x5rS9Ibg',
+  authDomain: 'fir-vector-invertase-03.firebaseapp.com',
+  projectId: 'fir-vector-invertase-03',
+  storageBucket: 'fir-vector-invertase-03.appspot.com',
+  messagingSenderId: '67051307990',
+  appId: '1:67051307990:web:a62c5d554f7d028a2b9a77',
 };
 
 export const app = initializeApp(firebaseConfig);
-export const analytics = getAnalytics(app);
+// export const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const firestore = getFirestore(app);
+
+connectFirestoreEmulator(firestore, 'localhost', 8080);
+
 export const storage = getStorage(app);
 export const functions = getFunctions(app);
+
+connectFunctionsEmulator(functions, 'localhost', 5001);
 
 export const collections = {
   products: collection(firestore, 'products').withConverter(productConverter),

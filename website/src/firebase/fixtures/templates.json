@@ -1,0 +1,8 @@
+[
+  {
+    "id": "welcome_email",
+    "subject": "Welcome to Kara's Coffee!",
+    "name": "\"welcome_email\"",
+    "text": "< Add welcome message here >"
+  }
+]
