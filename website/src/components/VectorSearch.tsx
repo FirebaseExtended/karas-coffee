@@ -29,32 +29,21 @@ export function VectorSearch() {
 
   const { isLoading, isError, error, data } = useVectorSearch(searchTerm, 3);
 
-  // const data = { ids: undefined };
-  // const isLoading = false;
-  // const isError = false;
-
   const handleSearchChange = (searchTerm: any) => {
     setSearchTerm(searchTerm);
   };
 
-  // const ids = vectorSearchQuery.data?.ids || [];
   const ids = data?.ids || ['amazing-mug-black'];
 
-  // // get products in vectorSearchQuery.data.ids || []
   const results = useFirestoreQueryData(
     ['recommendations', ids],
     firestoreQuery(collections.products, where('id', 'in', ids)),
-    {
-      // Optional: Add other options here
-    },
+    {},
     {
       enabled: !isLoading && !isError && !!ids && ids.length > 1, // Ensure the query is only run when ids are available
     },
   );
 
-  // const results: Product[] = [];
-
-  console.log(results.data);
   return (
     <div className="relative w-full max-w-[500px]">
       <input

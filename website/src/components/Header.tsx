@@ -18,7 +18,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useUser } from '../hooks/useUser';
 import { Cart } from './Cart';
-import { Search } from './Search';
+import { SearchPage as Search } from './Search';
 
 export function Header() {
   const user = useUser();

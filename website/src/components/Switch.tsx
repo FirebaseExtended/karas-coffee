@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 
-const Switch = () => {
+const Switch = ({ onChange }: any) => {
   const [isOn, setIsOn] = useState(false);
 
-  const toggleSwitch = () => setIsOn(!isOn);
+  const toggleSwitch = () => {
+    onChange(!isOn);
+    setIsOn(!isOn);
+  };
 
   return (
     <div className="flex items-center justify-center p-4">

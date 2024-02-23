@@ -232,24 +232,9 @@ type RecommendationsProps = {
 function Recommendations({ title, query, pid }: RecommendationsProps) {
   // todo: use vector search here
 
-  const vectorSearchQuery = useVectorSearch(query, 5);
+  const products = useVectorSearch(query, 5);
 
-  // const ids = vectorSearchQuery.data?.ids || [];
-  const ids = vectorSearchQuery.data?.ids || ['null'];
-
-  // get products in vectorSearchQuery.data.ids || []
-  const products = useFirestoreQueryData(
-    ['recommendations', ids],
-    firestoreQuery(collections.products, where('id', 'in', ids), where('id', '!=', pid)),
-    {
-      // Optional: Add other options here
-    },
-    {
-      enabled: !!ids && ids.length > 0, // Ensure the query is only run when ids are available
-    },
-  );
-
-  if (vectorSearchQuery.isLoading || products.isLoading || vectorSearchQuery.isError || products.isError) {
+  if (products.isLoading || products.isError) {
     return (
       <div className="px-4">
         <Heading>{title}</Heading>

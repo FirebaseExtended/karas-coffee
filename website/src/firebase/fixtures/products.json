@@ -243,12 +243,6 @@
     "stripe_metadata_type": "swag"
   },
   {
-    "id": "shipping_countries",
-    "allowed_countries": [
-      "US"
-    ]
-  },
-  {
     "id": "sulawesi-toraja",
     "stripe_metadata_description": "A well balanced coffee that exhibits tasting notes of dark chocolate and ripe fruit with a low-toned yet vibrant acidity.",
     "metadata": {
