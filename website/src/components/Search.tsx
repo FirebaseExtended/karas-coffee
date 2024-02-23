@@ -25,6 +25,7 @@ import { query as firestoreQuery, where } from 'firebase/firestore';
 import { collections } from '../firebase';
 import { Product } from '../types';
 import { Link } from 'react-router-dom';
+import { useDebounce } from '../hooks/useDebounce';
 const searchClient = algoliasearch('Z7DKWT901V', 'c529b90d287423b1f926506fb74307ff');
 
 export const SearchPage = () => {
@@ -96,11 +97,15 @@ const SearchInput = ({ onSearch, placeholder, handleQueryChange, onFocus, onBlur
 };
 
 const CustomSearchComponent = ({ query }: { query: string }) => {
-  const results = useCustomSearch(query, 3);
+  // change the debounce time according to your needs
+  const debouncedQuery = useDebounce(query, 1000);
+
+  const results = useCustomSearch(debouncedQuery, 3);
 
   if (results.isLoading) return <div>Loading...</div>;
   if (results.isError) return <div>Error: {results.error.message}</div>;
   const hits = results.data;
+
   return (
     <div>
       {/* Adjusted for positioning of search results */}

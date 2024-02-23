@@ -26,6 +26,8 @@ export function useVectorSearch(queryString: string, limit: number) {
 
   const ids = vectorSearchResults.data?.ids || ['amazing-mug-black'];
 
+  console.log(ids);
+
   const results = useFirestoreQueryData(
     ['recommendations', ids],
     query(collections.products, where('id', 'in', ids)),
