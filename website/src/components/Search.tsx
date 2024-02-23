@@ -18,7 +18,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import algoliasearch from 'algoliasearch/lite';
 import { InstantSearch, useHits, useSearchBox, Hits, Configure } from 'react-instantsearch';
 import { useVectorSearch as useCustomSearch } from '../hooks/useVectorSearch';
-import Switch from './switch';
+import { Switch } from './Switch';
 import { Hit } from 'react-instantsearch-core';
 import { useFirestoreQueryData } from '@react-query-firebase/firestore';
 import { query as firestoreQuery, where } from 'firebase/firestore';
@@ -31,6 +31,8 @@ export const SearchPage = () => {
   const [query, setQuery] = useState('');
   const [conciergeEnabled, setConciergeEnabled] = useState(false);
 
+  const [focussed, setFocussed] = useState<boolean>(false);
+
   const handleQueryChange = (query: string) => setQuery(query);
 
   const handleSwitch = (isOn: boolean) => {
@@ -38,18 +40,33 @@ export const SearchPage = () => {
   };
 
   return (
-    <InstantSearch searchClient={searchClient} indexName="products">
-      <SearchInput
-        handleQueryChange={handleQueryChange}
-        placeholder={conciergeEnabled ? 'AI Search...' : 'Alg Search...'}
-      />
-      {!conciergeEnabled ? <AlgoliaSearchComponent query={query} /> : <CustomSearchComponent query={query} />}
-      <Switch onChange={handleSwitch} />
-    </InstantSearch>
+    <div
+      className={`relative w-full max-w-[800px]  border rounded ${focussed ? 'border-gray-500' : ''} grid grid-cols-4`}
+    >
+      <InstantSearch searchClient={searchClient} indexName="products">
+        <SearchInput
+          handleQueryChange={handleQueryChange}
+          placeholder={conciergeEnabled ? 'Search...' : 'Search...'}
+          onFocus={() => setFocussed(true)}
+          onBlur={() => {
+            // Allow the link event to fire before triggering the blur event
+            setTimeout(() => {
+              setFocussed(false);
+            }, 100);
+          }}
+        />
+        {focussed && (
+          <>{!conciergeEnabled ? <AlgoliaSearchComponent query={query} /> : <CustomSearchComponent query={query} />}</>
+        )}
+        <div className="p-2 items-center justify-center flex right-0 pr-4 absolute t-4 h-full">
+          <Switch onChange={handleSwitch} />
+        </div>
+      </InstantSearch>
+    </div>
   );
 };
 
-const SearchInput = ({ onSearch, placeholder, handleQueryChange }: any) => {
+const SearchInput = ({ onSearch, placeholder, handleQueryChange, onFocus, onBlur }: any) => {
   const { query, refine } = useSearchBox();
 
   const handleChange = (e: any) => {
@@ -70,8 +87,10 @@ const SearchInput = ({ onSearch, placeholder, handleQueryChange }: any) => {
       type="text"
       value={inputValue}
       onChange={handleChange}
+      onFocus={onFocus}
+      onBlur={onBlur}
       placeholder={placeholder}
-      className="w-full max-w-[500px] p-2 border rounded focus:border-gray-500 focus:outline-none"
+      className="relative col-span-3 p-2 pl-4 focus:outline-none"
     />
   );
 };
@@ -84,18 +103,18 @@ const CustomSearchComponent = ({ query }: { query: string }) => {
   const hits = results.data;
   return (
     <div>
-      <div className="relative">
-        {/* Adjusted for positioning of search results */}
-        {hits && hits.length > 0 ? (
-          <div className="absolute z-10 mt-4 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]">
-            {hits.map((hit) => (
-              <Row key={hit.id} hit={hit} />
-            ))}
-          </div>
-        ) : (
+      {/* Adjusted for positioning of search results */}
+      {hits && hits.length > 0 ? (
+        <div className="absolute z-10 mt-16 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]">
+          {hits.map((hit) => (
+            <Row key={hit.id} hit={hit} />
+          ))}
+        </div>
+      ) : (
+        <div className="absolute z-10 mt-16 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]">
           <div className="flex items-center justify-center p-20 text-gray-600">Sorry, no results were found.</div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -107,18 +126,18 @@ const AlgoliaSearchComponent = ({ query }: { query: string }) => {
   return (
     <>
       <Configure query={query} hitsPerPage={3} />
-      <div className="relative">
-        {/* Adjusted for positioning of search results */}
-        {hits && hits.length > 0 ? (
-          <div className="absolute z-10 mt-4 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]">
-            {hits.map((hit) => (
-              <Row key={hit.objectID} hit={hit} />
-            ))}
-          </div>
-        ) : (
+      {/* Adjusted for positioning of search results */}
+      {hits && hits.length > 0 ? (
+        <div className="absolute z-10 mt-16 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]">
+          {hits.map((hit) => (
+            <Row key={hit.objectID} hit={hit} />
+          ))}
+        </div>
+      ) : (
+        <div className="absolute z-10 mt-16 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]">
           <div className="flex items-center justify-center p-20 text-gray-600">Sorry, no results were found.</div>
-        )}
-      </div>
+        </div>
+      )}
     </>
   );
 };
