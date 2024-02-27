@@ -1,7 +1,11 @@
 {
   "hosting": {
     "public": "dist",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
     "rewrites": [
       {
         "source": "/bundles/*",
@@ -28,6 +32,7 @@
     }
   },
   "extensions": {
-    "firestore-vector-search": "../firestore-vector-search"
+    "firestore-vector-search": "../firestore-vector-search",
+    "firestore-genai-chatbot": "../firestore-genai-chatbot"
   }
 }
