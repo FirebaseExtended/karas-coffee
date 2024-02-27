@@ -24,13 +24,13 @@ export function useVectorSearch(queryString: string, limit: number) {
     },
   );
 
-  const ids = vectorSearchResults.data?.ids || ['amazing-mug-black'];
+  const ids = vectorSearchResults.data?.ids;
 
-  console.log(ids);
+  const q = ids ? query(collections.products, where('id', 'in', ids)) : query(collections.products);
 
   const results = useFirestoreQueryData(
     ['recommendations', ids],
-    query(collections.products, where('id', 'in', ids)),
+    q,
     {},
     {
       enabled: !vectorSearchResults.isLoading && !vectorSearchResults.isError && !!ids && ids.length > 1, // Ensure the query is only run when ids are available

@@ -71,4 +71,5 @@ export const collections = {
   content: collection(firestore, 'content').withConverter(contentConverter),
   addresses: (customerId: string) =>
     collection(firestore, 'customers', customerId, 'addresses').withConverter(addressConverter),
+  chat: (customerId: string) => collection(firestore, 'customers', customerId, 'chat'),
 };
