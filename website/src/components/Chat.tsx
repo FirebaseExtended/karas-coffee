@@ -6,6 +6,26 @@ import { useChatMutation } from '../hooks/useChatMutation';
 import { useChatContextMutation } from '../hooks/useChatContextMutation';
 import { useVectorSearch } from '../hooks/useVectorSearch';
 import { Product } from '../types';
+import { useSearchTermExtractor } from '../hooks/useSearchTermExtractor';
+
+const formatProducts: (products: Product[]) => string = (products) => {
+  // Format the products into a csv string
+
+  const filterMetadata = (metadata: any) => ({
+    type: metadata.type,
+    origin: metadata.origin || 'N/A',
+    strength: metadata.roast || 'N/A',
+    variety: metadata.variety || 'N/A',
+  });
+
+  return products
+    .map((product) => {
+      const metadata = filterMetadata(product.metadata);
+      return `${product.name}, ${metadata.type}, ${product.description}, ${product.metadata.price_usd}, ${metadata.origin}, ${metadata.strength}, ${metadata.variety}
+      )}`;
+    })
+    .join('\n');
+};
 
 type FirestoreMessage = {
   prompt: string;
@@ -42,43 +62,81 @@ function firestoreMessageToMessage(firestoreMessage: FirestoreMessage): Message[
 export function Chat() {
   //   const user = useUser();
 
+  const [isOpen, setIsOpen] = useState(true);
+
   const [messages, setMessages] = useState<Message[]>([]);
 
   const [vectorSearchQuery, setVectorSearchQuery] = useState<string>('');
   const results = useVectorSearch(vectorSearchQuery, 1);
-
   const chat = useChat('jacob');
   const mutation = useChatMutation('jacob');
-  const contextMutation = useChatContextMutation('jacob');
+  // const contextMutation = useChatContextMutation('jacob');
 
-  useEffect(() => {
-    contextMutation.mutate(results.data);
-  }, [vectorSearchQuery, results.data]);
+  //   useEffect(() => {
+  //     contextMutation.mutate();
+  //   });
 
-  useEffect(() => {
-    if (chat.isSuccess && chat.data) {
-      //@ts-ignore TODO: fix this
-      const transformedMessages = chat.data.map(firestoreMessageToMessage).flat();
-      setMessages(transformedMessages);
+  //   const searchTerm = useSearchTermExtractor(
+  //     messages
+  //       .filter((m) => m.user.id === 'user')
+  //       .map((m) => m.text)
+  //       .join(' '),
+  //   );
+
+  //   if (searchTerm.isSuccess) {
+  //     console.log(searchTerm.data);
+  //   }
+  //   useEffect(() => {
+  //     contextMutation.mutate(results.data);
+  //   }, [vectorSearchQuery, results.data]);
+
+  //   useEffect(() => {
+  //     if (chat.isSuccess && chat.data) {
+  //       //@ts-ignore TODO: fix this
+  //       const transformedMessages = chat.data.map(firestoreMessageToMessage).flat();
+  //       setMessages(transformedMessages);
+  //     }
+  //   }, [chat.isSuccess, chat.data]);
+
+  const handleOpenChat = () => {
+    setIsOpen(!isOpen);
+    if (isOpen) {
+      //
+      //   send some initial context with past purchases
+      mutation.mutate({ prompt: null, contextUpdate: 'intial context' });
     }
-  }, [chat.isSuccess, chat.data]);
+  };
+
+  const handleSendMessage = (text: string) => {
+    // build context from past purchases and current vector search results
+
+    // update context
+
+    mutation.mutate({ prompt: text, contextUpdate: 'new context' });
+  };
 
   return (
-    <div className="w-1/3 fixed bg-gray-300 h-[calc(100vh-5rem)] rounded top-20 -right-3 z-1000 p-2">
-      <MinChatUiProvider theme="#6ea9d7" colorSet={myColorSet}>
-        <MessageContainer>
-          <MessageList currentUserId="user" messages={messages} />
-          <MessageInput
-            placeholder="Type message here"
-            showSendButton
-            showAttachButton={false}
-            onSendMessage={(text) => {
-              setVectorSearchQuery(text);
-              mutation.mutate(text);
-            }}
-          />
-        </MessageContainer>
-      </MinChatUiProvider>
+    <div>
+      <button className="fixed top-1/2 left-1/2 bg-green-100 p-4 rounded" onClick={handleOpenChat}>
+        {isOpen ? 'Open Chat' : 'Close Chat'}
+      </button>
+      <div
+        className={`w-1/3 fixed bg-gray-300 h-[calc(100vh-5rem)] rounded top-20 -right-3 z-1000 p-2 transition duration-700 ${
+          !isOpen ? '' : 'translate-x-[100%]'
+        }`}
+      >
+        <MinChatUiProvider theme="#6ea9d7" colorSet={myColorSet}>
+          <MessageContainer>
+            <MessageList currentUserId="user" messages={messages} />
+            <MessageInput
+              placeholder="Type message here"
+              showSendButton
+              showAttachButton={false}
+              onSendMessage={handleSendMessage}
+            />
+          </MessageContainer>
+        </MinChatUiProvider>
+      </div>
     </div>
   );
 }

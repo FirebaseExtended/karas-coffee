@@ -14,59 +14,19 @@
  * limitations under the License.
  */
 
-import { v4 as uuid } from 'uuid';
 import { useMutation, UseMutationResult, useQueryClient } from 'react-query';
-import { addDoc, doc, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
-import { ref, uploadBytes } from 'firebase/storage';
+import { doc, updateDoc } from 'firebase/firestore';
 
-import { collections, firestore, storage } from '../firebase';
+import { collections, firestore } from '../firebase';
 import { useUser } from './useUser';
-import { Product } from '../types';
 
-const formatProducts: (products: Product[]) => string = (products) => {
-  // Format the products into a csv string
-
-  const filterMetadata = (metadata: any) => ({
-    type: metadata.type,
-    origin: metadata.origin || 'N/A',
-    strength: metadata.roast || 'N/A',
-    variety: metadata.variety || 'N/A',
-  });
-
-  return products
-    .map((product) => {
-      const metadata = filterMetadata(product.metadata);
-      return `${product.name}, ${metadata.type}, ${product.description}, ${product.metadata.price_usd}, ${metadata.origin}, ${metadata.strength}, ${metadata.variety}
-      )}`;
-    })
-    .join('\n');
-};
-
-const getContext = (products: Product[]) => {
-  return `You are an AI customer assistant for a
-    business called "Karas Coffee". Your name is Karabot. This business sells coffee beans and coffee-related products.
-    You will be chatting with a customer who is interested in purchasing a product.
-    Here is a list of products relevant to the customer you are chatting to:
-    \n
-    NAME,TYPE,DESCRIPTION,PRICE,ORIGIN,ROAST,VARIETY
-    ${products && products.length ? formatProducts(products) : ''}
-    \n
-    When recommending products, stick to this list. Be kind and helpful to the customer.
-    
-    Do _NOT_ make up information that isnt present in the above list. The most **important** thing is to be accurate to this data.
-    
-    If the above list is empty, you should just ask more the customer more clarifying questions.
-
-    For example, do not mention anything about the size or weight of the coffee bags, this is not information you are provided with. If the customer asks about this, you should respond with "I'm sorry, I don't have that information."
-    `;
-};
 export function useChatContextMutation(customerId: string): UseMutationResult<string, Error> {
   const client = useQueryClient();
   const user = useUser();
 
   return useMutation(
     //   TODO: fix any
-    async (vectorSearchResults: any) => {
+    async (context: any) => {
       // Soft validation - the Firestore security rules ensure they are
       // authenticated.
       //   if (!user.data) {
@@ -76,11 +36,9 @@ export function useChatContextMutation(customerId: string): UseMutationResult<st
       //   const userData = user.data;
 
       const documentRef = doc(collections.chat(customerId));
-
-      console.log('RESULTS', vectorSearchResults);
-
+      console.log();
       await updateDoc(doc(firestore, 'customers', customerId), {
-        context: getContext(vectorSearchResults),
+        context,
       });
 
       return documentRef.id;

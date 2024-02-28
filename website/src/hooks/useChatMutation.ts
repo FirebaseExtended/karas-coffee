@@ -16,34 +16,43 @@
 
 import { v4 as uuid } from 'uuid';
 import { useMutation, UseMutationResult, useQueryClient } from 'react-query';
-import { addDoc, doc, setDoc, Timestamp } from 'firebase/firestore';
+import { addDoc, doc, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
 
-import { collections, storage } from '../firebase';
+import { collections, firestore, storage } from '../firebase';
 import { useUser } from './useUser';
 import { Review } from '../types';
 
-export function useChatMutation(customerId: string): UseMutationResult<string, Error> {
+export function useChatMutation(customerId: string): UseMutationResult<any, Error, any> {
   const client = useQueryClient();
   const user = useUser();
 
   return useMutation(
-    async (prompt) => {
+    async (args: { prompt?: string; contextUpdate?: string }) => {
       // Soft validation - the Firestore security rules ensure they are
       // authenticated.
       //   if (!user.data) {
       //     throw new Error('This mutation requires authentication.');
       //   }
-
-      const userData = user.data;
-
-      // A user can only have a single review per product, so we use the
-      // id to easily identify whether they have already reviewed this product.
+      // const userData = user.data;
       const documentRef = doc(collections.chat(customerId));
 
-      await addDoc(collections.chat(customerId), {
-        prompt,
-      });
+      if (args.contextUpdate) {
+        // update context before proceeding
+        console.log();
+        await updateDoc(doc(firestore, 'customers', customerId), {
+          context: args.contextUpdate,
+        });
+      }
+
+      if (args.prompt) {
+        // A user can only have a single review per product, so we use the
+        // id to easily identify whether they have already reviewed this product.
+
+        await addDoc(collections.chat(customerId), {
+          prompt: args.prompt,
+        });
+      }
 
       return documentRef.id;
     },

@@ -1,0 +1,410 @@
+name: firestore-multimodal-genai
+version: 0.0.9
+specVersion: v1beta
+
+icon: icon.png
+
+displayName: Multimodal Tasks with the Gemini API
+
+description: >-
+  Performs multimodel generative tasks on text and images, customizable with
+  prompt engineering, using Gemini models and Firestore.
+
+tags: [ai, generative-ai, text-ai, generative-ai, vertex-ai, generative-models, llm, nlp, google-ai]
+
+license: Apache-2.0 # https://spdx.org/licenses/
+
+sourceUrl: https://github.com/GoogleCloudPlatform/firebase-extensions/tree/main/firestore-multimodal-genai
+releaseNotesUrl: https://github.com/GoogleCloudPlatform/firebase-extensions/tree/main/firestore-multimodal-genai/CHANGELOG.md
+
+author:
+  authorName: Google Cloud
+  url: https://cloud.google.com
+
+contributors:
+  - authorName: Invertase
+    email: oss@invertase.io
+    url: https://github.com/invertase
+  - authorName: Jacob Cable
+    email: jacob@invertase.io
+    url: https://github.com/cabljac
+  - authorName: Mais Alheraki
+    email: mais@invertase.io
+    url: https://github.com/pr-Mais
+
+billingRequired: true
+
+apis:
+  - apiName: aiplatform.googleapis.com
+    reason: For access to the Vertex AI Gemini API if this provider is chosen.
+
+roles:
+  - role: datastore.user
+    reason: Allows this extension to access Cloud Firestore to read and process added
+      messages.
+
+  - role: storage.objectAdmin
+    reason: Allows the extension to read from your Cloud Storage.
+
+  - role: aiplatform.user
+    reason: Allows this extension to access the Gemini family of genai models via
+      Vertex AI if this provider is chosen.
+
+resources:
+  - name: generateText
+    type: firebaseextensions.v1beta.function
+    description: >-
+      Listens to Firestore data writes to perform generative tasks.
+    properties:
+      availableMemoryMb: 2048
+      timeout: 540s
+      location: ${LOCATION}
+      eventTrigger:
+        eventType: providers/cloud.firestore/eventTypes/document.write
+        resource: projects/${PROJECT_ID}/databases/(default)/documents/${COLLECTION_NAME}/{summaryId}
+      runtime: 'nodejs18'
+
+  - name: generateOnCall
+    type: firebaseextensions.v1beta.function
+    description: >-
+      A callable function that performs generative tasks
+    properties:
+      location: ${LOCATION}
+      httpsTrigger: {}
+      runtime: nodejs18
+params:
+  - param: GENERATIVE_AI_PROVIDER
+    label: Gemini API Provider
+    description: >-
+      This extension makes use of the Gemini family of large language models.
+      Currently the extension supports the Google AI Gemini API (for developers)
+      and the Vertex AI Gemini API. Learn more about the differences between the
+      Google AI and Vertex AI Gemini APIs here.
+    type: select
+    options:
+      - label: Google AI
+        value: google-ai
+      - label: Vertex AI
+        value: vertex-ai
+    required: true
+    default: google-ai
+    immutable: false
+
+  - param: MODEL
+    label: Gemini model
+    description: >-
+      Input the name of the Gemini model you would like to use. To view
+      available models for each provider, see: [Vertex AI Gemini
+      models](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/models),
+      [Google AI Gemini models](https://ai.google.dev/models/gemini)
+    type: string
+    required: true
+    default: gemini-pro
+    immutable: false
+
+  - param: API_KEY
+    label: Google AI API Key
+    description: >-
+      If you have selected Google AI as your provider, then this parameteris
+      required. If you have instead selected Vertex AI, then this parameter is
+      not required, and application default credentials will be used.
+    type: secret
+    required: false
+    immutable: false
+
+  - param: COLLECTION_NAME
+    label: Firestore Collection Path
+    description: >-
+      Used to store conversation history represented as documents. This
+      extension will listen to the specified collection(s) for new message
+      documents.
+    type: string
+    validationRegex: '^[^/]+(/[^/]+/[^/]+)*$'
+    validationErrorMessage: Must be a valid Cloud Firestore Collection
+    default: generate
+    required: true
+    immutable: false
+
+  - param: PROMPT
+    label: Prompt
+    description: >-
+      This is the text that you want the Gemini API to generate a response for.
+      It can be free-form text or it can use handlebars variables to substitute
+      values from the Firestore document. For example if you set this parameter
+      as "What is the capital of {{ country }}?"
+    type: string
+    required: true
+    immutable: false
+
+  - param: IMAGE_FIELD
+    label: Image field (Gemini Pro Vision)
+    description: >-
+      A document field containing a cloud storage URL of an image, or a base64
+      string of an image. Note that this field is only supported by Gemini, and
+      only with the Gemini Pro Vision model.
+    type: string
+    required: false
+    immutable: false
+    validationRegex: ^[a-zA-Z0-9_]+(,[a-zA-Z0-9_]+)*$
+    validationErrorMessage: >-
+      Field names may only use upper and lowercase letters from A to Z,
+      underscores, or numbers, and may only be separated by commas. Trailing
+      commas and empty variable names are not allowed.
+
+  - param: RESPONSE_FIELD
+    label: Response Field
+    description: >-
+      The field in the message document into which to put the response.
+    type: string
+    default: output
+    required: true
+    immutable: false
+
+  - param: LOCATION
+    label: Cloud Functions location
+    description: >-
+      Where do you want to deploy the functions created for this extension? For
+      help selecting a location, refer to the [location selection
+      guide](https://firebase.google.com/docs/functions/locations). Note that
+      Generative AI on Vertex AI is only available in the regions listed
+      [here](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/locations-genai).
+      A list of languages and regions supported by the Gemini API on Google AI
+      is [here](https://ai.google.dev/available_regions).
+    type: select
+    options:
+      - label: Iowa (us-central1)
+        value: us-central1
+      - label: South Carolina (us-east1)
+        value: us-east1
+      - label: Northern Virginia (us-east4)
+        value: us-east4
+      - label: Los Angeles (us-west2)
+        value: us-west2
+      - label: Salt Lake City (us-west3)
+        value: us-west3
+      - label: Las Vegas (us-west4)
+        value: us-west4
+      - label: Warsaw (europe-central2)
+        value: europe-central2
+      - label: Belgium (europe-west1)
+        value: europe-west1
+      - label: London (europe-west2)
+        value: europe-west2
+      - label: Frankfurt (europe-west3)
+        value: europe-west3
+      - label: Zurich (europe-west6)
+        value: europe-west6
+      - label: Hong Kong (asia-east2)
+        value: asia-east2
+      - label: Tokyo (asia-northeast1)
+        value: asia-northeast1
+      - label: Osaka (asia-northeast2)
+        value: asia-northeast2
+      - label: Seoul (asia-northeast3)
+        value: asia-northeast3
+      - label: Mumbai (asia-south1)
+        value: asia-south1
+      - label: Jakarta (asia-southeast2)
+        value: asia-southeast2
+      - label: Montreal (northamerica-northeast1)
+        value: northamerica-northeast1
+      - label: Sao Paulo (southamerica-east1)
+        value: southamerica-east1
+      - label: Sydney (australia-southeast1)
+        value: australia-southeast1
+    required: true
+    immutable: true
+
+  - param: TEMPERATURE
+    label: Temperature
+    description: >-
+      Controls the randomness of the output. Values can range over [0,1],
+      inclusive. A value closer to 1 will produce responses that are more
+      varied, while a value closer to 0 will typically result in less surprising
+      responses from the model.
+    type: string
+    validationRegex: ^(?:0*(?:\.\d+)?|1(\.0*)?)$
+    validationErrorMessage: Please specify a decimal representation of a number between 0 and 1.
+    required: false
+    immutable: false
+
+  - param: TOP_P
+    label: Nucleus sampling probability
+    description: >-
+      If specified, nucleus sampling will be used as the decoding strategy.
+      Nucleus sampling considers the smallest set of tokens whose probability
+      sum is at least a fixed value. Enter a value between 0 and 1.
+    type: string
+    validationRegex: ^(?:0*(?:\.\d+)?|1(\.0*)?)$
+    validationErrorMessage: Please specify a decimal representation of a number between 0 and 1.
+    required: false
+    immutable: false
+
+  - param: TOP_K
+    label: Sampling strategy parameter
+    description: >-
+      If specified, top-k sampling will be used as the decoding strategy. Top-k
+      sampling considers the set of topK most probable tokens.
+    type: string
+    validationRegex: ^[1-9][0-9]*
+    validationErrorMessage: Please specify a positive integer.
+    required: false
+    immutable: false
+
+  - param: CANDIDATE_COUNT
+    label: Candidate count
+    description: >-
+      When set to an integer higher than one, additional candidate responses, up
+      to the specified number, will be stored in Firestore under the
+      'candidates' field.
+    type: string
+    validationRegex: ^[1-9][0-9]*
+    validationErrorMessage: Please specify a positive integer.
+    default: 1
+    required: false
+    immutable: false
+
+  - param: CANDIDATES_FIELD
+    label: Candidates field
+    description: >-
+      The field in the message document into which to put the other candidate
+      responses if the candidate count parameter is greater than one.
+    type: string
+    default: candidates
+    required: false
+    immutable: false
+
+  # - param: RAG_HOOK_URL
+  #   label: Custom RAG Hook URL
+  #   description: >-
+  #     If provided, this extension will attempt to fetch data from this URL. The
+  #     endpoint provided must return a json body. The extension will extract any
+  #     string properties from this body and attempt to substitute them as
+  #     handlebar variables into the extension prompt. The extension will pass in
+  #     the Custom Hook API Key parameter into the headers object as x-api-key.
+  #   type: string
+  #   validationErrorMessage: Must be a valid Cloud Firestore Collection
+  #   required: false
+  #   immutable: false
+
+  # - param: RAG_HOOK_INPUT_FIELDS
+  #   label: RAG Hook Input Variable Fields
+  #   description: >-
+  #     A comma separated list of fields to pass in the body of the RAG request,
+  #     if the RAG Hook URL is specified.
+  #   type: string
+  #   required: false
+  #   immutable: false
+  #   validationRegex: ^[a-zA-Z0-9_]+(,[a-zA-Z0-9_]+)*$
+  #   validationErrorMessage: >-
+  #     Field names may only use upper and lowercase letters from A to Z,
+  #     underscores, or numbers, and may only be separated by commas. Trailing
+  #     commas and empty variable names are not allowed.
+
+  # - param: RAG_HOOK_OUTPUT_FIELDS
+  #   label: RAG hook output variable fields
+  #   description: >-
+  #     A comma separated list of fields to be extracted from the RAG response
+  #     body, if the RAG Hook URL is specified.
+  #   type: string
+  #   required: false
+  #   immutable: false
+  #   validationRegex: ^[a-zA-Z0-9_]+(,[a-zA-Z0-9_]+)*$
+  #   validationErrorMessage: >-
+  #     Field names may only use upper and lowercase letters from A to Z,
+  #     underscores, or numbers, and may only be separated by commas. Trailing
+  #     commas and empty variable names are not allowed.
+
+  # - param: RAG_HOOK_API_KEY
+  #   label: Custom RAG Hook API Key
+  #   description: >-
+  #     If you have provided a Custom Hook URL which needs authentication, provide
+  #     an API key secret here. It will be passed into custom hook request headers
+  #     under x-api-key.
+  #   type: secret
+  #   required: false
+  #   immutable: false
+
+  - param: HARM_CATEGORY_HATE_SPEECH
+    label: Hate Speech Threshold
+    description: >-
+      Threshold for hate speech content. Specify what probability level of hate
+      speech content is blocked by the Gemini provider.
+    type: select
+    options:
+      - label: Default
+        value: HARM_BLOCK_THRESHOLD_UNSPECIFIED
+      - label: Block low and above
+        value: BLOCK_LOW_AND_ABOVE
+      - label: Block medium and above
+        value: BLOCK_MEDIUM_AND_ABOVE
+      - label: Block only high
+        value: BLOCK_ONLY_HIGH
+      - label: Block none
+        value: BLOCK_NONE
+    required: false
+    default: HARM_BLOCK_THRESHOLD_UNSPECIFIED
+    immutable: false
+
+  - param: HARM_CATEGORY_DANGEROUS_CONTENT
+    label: Dangerous Content Threshold
+    description: >-
+      Threshold for dangerous content. Specify what probability level of
+      dangerous content is blocked by the Gemini provider.
+    type: select
+    options:
+      - label: Default
+        value: HARM_BLOCK_THRESHOLD_UNSPECIFIED
+      - label: Block low and above
+        value: BLOCK_LOW_AND_ABOVE
+      - label: Block medium and above
+        value: BLOCK_MEDIUM_AND_ABOVE
+      - label: Block only high
+        value: BLOCK_ONLY_HIGH
+      - label: Block none
+        value: BLOCK_NONE
+    required: false
+    default: HARM_BLOCK_THRESHOLD_UNSPECIFIED
+    immutable: false
+
+  - param: HARM_CATEGORY_HARASSMENT
+    label: Harassment Content Threshold
+    description: >-
+      Threshold for harassment content. Specify what probability level of
+      harassment content is blocked by the Gemini provider.
+    type: select
+    options:
+      - label: Default
+        value: HARM_BLOCK_THRESHOLD_UNSPECIFIED
+      - label: Block low and above
+        value: BLOCK_LOW_AND_ABOVE
+      - label: Block medium and above
+        value: BLOCK_MEDIUM_AND_ABOVE
+      - label: Block only high
+        value: BLOCK_ONLY_HIGH
+      - label: Block none
+        value: BLOCK_NONE
+    required: false
+    default: HARM_BLOCK_THRESHOLD_UNSPECIFIED
+    immutable: false
+
+  - param: HARM_CATEGORY_SEXUALLY_EXPLICIT
+    label: Sexual Content Threshold
+    description: >-
+      Threshold for sexually explicit content. Specify what probability level of
+      sexual content is blocked by the Gemini provider.
+    type: select
+    options:
+      - label: Default
+        value: HARM_BLOCK_THRESHOLD_UNSPECIFIED
+      - label: Block low and above
+        value: BLOCK_LOW_AND_ABOVE
+      - label: Block medium and above
+        value: BLOCK_MEDIUM_AND_ABOVE
+      - label: Block only high
+        value: BLOCK_ONLY_HIGH
+      - label: Block none
+        value: BLOCK_NONE
+    required: false
+    default: HARM_BLOCK_THRESHOLD_UNSPECIFIED
+    immutable: false

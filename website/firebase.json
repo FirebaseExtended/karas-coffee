@@ -33,6 +33,7 @@
   },
   "extensions": {
     "firestore-vector-search": "../firestore-vector-search",
-    "firestore-genai-chatbot": "../firestore-genai-chatbot"
+    "firestore-genai-chatbot": "../firestore-genai-chatbot",
+    "firestore-multimodal-genai": "../firestore-multimodal-genai"
   }
 }

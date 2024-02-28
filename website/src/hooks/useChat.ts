@@ -24,8 +24,6 @@ import { collections, firestore, storage } from '../firebase';
 import { Review } from '../types';
 import { useUser } from './useUser';
 
-export const TOXICITY_THRESHOLD = 0.6;
-
 export function useChat(customerId: string): UseQueryResult<Review[]> {
   const user = useUser();
 
