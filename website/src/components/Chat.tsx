@@ -7,6 +7,7 @@ import { useChatContextMutation } from '../hooks/useChatContextMutation';
 import { useVectorSearch } from '../hooks/useVectorSearch';
 import { Product } from '../types';
 import { useSearchTermExtractor } from '../hooks/useSearchTermExtractor';
+import { User } from 'firebase/auth';
 
 type FirestoreMessage = {
   prompt: string;
@@ -27,7 +28,7 @@ const firestoreMessageToMessage = ({ prompt, response }: FirestoreMessage): [Mes
 ];
 
 export function Chat() {
-  //   const user = useUser();
+  const user = useUser();
 
   const [isOpen, setIsOpen] = useState(true);
 
@@ -46,7 +47,7 @@ export function Chat() {
 
   const handleOpenChat = () => {
     setIsOpen(!isOpen);
-    if (isOpen) {
+    if (isOpen && user.data && user.data.uid) {
       //
       // set some initial context with past purchases
       chatMutation.mutate({});
@@ -56,7 +57,7 @@ export function Chat() {
   const handleSendMessage = (text: string) => {
     // build context from past purchases and current vector search results
 
-    const newVectorSearchQuery = [...messages.map((message) => message.text), text].join('\n');
+    // const newVectorSearchQuery = [...messages.map((message) => message.text), text].join('\n');
 
     chatMutation.mutate({ prompt: text, searchQuery: text });
   };
@@ -73,18 +74,30 @@ export function Chat() {
       >
         <MinChatUiProvider theme="#6ea9d7" colorSet={myColorSet}>
           <MessageContainer>
-            <MessageList currentUserId="user" messages={messages} />
+            <MessageList
+              currentUserId="user"
+              messages={messages}
+              customEmptyMessagesComponent={() => UnauthenticatedChat(user.data)}
+            />
             <MessageInput
               placeholder="Type message here"
               showSendButton
               showAttachButton={false}
               onSendMessage={handleSendMessage}
+              disabled={!!user.data && !!user.data.uid}
             />
           </MessageContainer>
         </MinChatUiProvider>
       </div>
     </div>
   );
+}
+
+function UnauthenticatedChat(user?: User) {
+  if (user) {
+    <div>No messages yet.</div>;
+  }
+  return <div className="text-white">Chat is disabled for unauthenticated users</div>;
 }
 
 const colors = {

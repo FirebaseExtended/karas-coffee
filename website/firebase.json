@@ -1,11 +1,7 @@
 {
   "hosting": {
     "public": "dist",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "/bundles/*",
@@ -29,6 +25,9 @@
     },
     "hosting": {
       "port": 5002
+    },
+    "auth": {
+      "port": 9099
     }
   },
   "extensions": {

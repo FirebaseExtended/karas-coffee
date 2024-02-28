@@ -7,7 +7,9 @@
     "build": "tsc && rimraf dist && vite build",
     "clean": "rimraf dist",
     "serve": "vite preview",
-    "deploy": "npm run build && firebase deploy --only hosting"
+    "deploy": "npm run build && firebase deploy --only hosting",
+    "fvs-emulators": "node_modules/.bin/firebase emulators:start --project=fir-vector-invertase-03",
+    "populate_emulator": "cd firebase/fixtures && node populate_data.js"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.4",

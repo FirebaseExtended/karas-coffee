@@ -16,7 +16,7 @@
 
 import { v4 as uuid } from 'uuid';
 import { useMutation, UseMutationResult, useQueryClient } from 'react-query';
-import { addDoc, doc, getDocs, query, setDoc, Timestamp, updateDoc, where } from 'firebase/firestore';
+import { addDoc, deleteDoc, doc, getDocs, query, setDoc, Timestamp, updateDoc, where } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
 
 import { collections, firestore, functions, storage } from '../firebase';
@@ -36,7 +36,7 @@ export function useChatMutation(customerId: string): UseMutationResult<any, Erro
       //     throw new Error('This mutation requires authentication.');
       //   }
       // const userData = user.data;
-      const documentRef = doc(collections.chat(customerId));
+      const documentRef = doc(firestore, 'customers', customerId);
 
       let context: string = await getContext({});
 
@@ -72,6 +72,15 @@ export function useChatMutation(customerId: string): UseMutationResult<any, Erro
       if (prompt) {
         await addDoc(collections.chat(customerId), {
           prompt,
+        });
+      }
+
+      if (!prompt && !searchQuery) {
+        // clear chat collection
+        const chatCollection = await getDocs(collections.chat(customerId));
+
+        chatCollection.forEach(async (doc) => {
+          await deleteDoc(doc.ref);
         });
       }
 
@@ -117,7 +126,8 @@ async function getContext({ vectorSearchResults }: { vectorSearchResults?: Produ
   }
 
   const suffix = `
-  Do not provide information about these products that is not available in the above CSV(s).
+  Do not provide information about these products that is not available in the above CSV(s), for example if a customer asks "what color is the product?" and
+  the color is not described anywhere in the product's row, then you **must** answer "I'm sorry, I don't have that information".
 
   If a product is of type "subscription", then the price is per month.
   `;
