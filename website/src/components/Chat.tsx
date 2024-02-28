@@ -8,25 +8,6 @@ import { useVectorSearch } from '../hooks/useVectorSearch';
 import { Product } from '../types';
 import { useSearchTermExtractor } from '../hooks/useSearchTermExtractor';
 
-const formatProducts: (products: Product[]) => string = (products) => {
-  // Format the products into a csv string
-
-  const filterMetadata = (metadata: any) => ({
-    type: metadata.type,
-    origin: metadata.origin || 'N/A',
-    strength: metadata.roast || 'N/A',
-    variety: metadata.variety || 'N/A',
-  });
-
-  return products
-    .map((product) => {
-      const metadata = filterMetadata(product.metadata);
-      return `${product.name}, ${metadata.type}, ${product.description}, ${product.metadata.price_usd}, ${metadata.origin}, ${metadata.strength}, ${metadata.variety}
-      )}`;
-    })
-    .join('\n');
-};
-
 type FirestoreMessage = {
   prompt: string;
   response: string;
@@ -40,24 +21,10 @@ type Message = {
   };
 };
 
-function firestoreMessageToMessage(firestoreMessage: FirestoreMessage): Message[] {
-  return [
-    {
-      text: firestoreMessage.prompt,
-      user: {
-        id: 'user',
-        name: 'User',
-      },
-    },
-    {
-      text: firestoreMessage.response,
-      user: {
-        id: 'karabot',
-        name: 'Karabot',
-      },
-    },
-  ];
-}
+const firestoreMessageToMessage = ({ prompt, response }: FirestoreMessage): [Message, Message] => [
+  { text: prompt, user: { id: 'user', name: 'User' } },
+  { text: response, user: { id: 'karabot', name: 'Karabot' } },
+];
 
 export function Chat() {
   //   const user = useUser();
@@ -66,53 +33,32 @@ export function Chat() {
 
   const [messages, setMessages] = useState<Message[]>([]);
 
-  const [vectorSearchQuery, setVectorSearchQuery] = useState<string>('');
-  const results = useVectorSearch(vectorSearchQuery, 1);
   const chat = useChat('jacob');
-  const mutation = useChatMutation('jacob');
-  // const contextMutation = useChatContextMutation('jacob');
+  const chatMutation = useChatMutation('jacob');
 
-  //   useEffect(() => {
-  //     contextMutation.mutate();
-  //   });
-
-  //   const searchTerm = useSearchTermExtractor(
-  //     messages
-  //       .filter((m) => m.user.id === 'user')
-  //       .map((m) => m.text)
-  //       .join(' '),
-  //   );
-
-  //   if (searchTerm.isSuccess) {
-  //     console.log(searchTerm.data);
-  //   }
-  //   useEffect(() => {
-  //     contextMutation.mutate(results.data);
-  //   }, [vectorSearchQuery, results.data]);
-
-  //   useEffect(() => {
-  //     if (chat.isSuccess && chat.data) {
-  //       //@ts-ignore TODO: fix this
-  //       const transformedMessages = chat.data.map(firestoreMessageToMessage).flat();
-  //       setMessages(transformedMessages);
-  //     }
-  //   }, [chat.isSuccess, chat.data]);
+  useEffect(() => {
+    if (chat.isSuccess && chat.data) {
+      //@ts-ignore TODO: fix this
+      const transformedMessages = chat.data.map(firestoreMessageToMessage).flat();
+      setMessages(transformedMessages);
+    }
+  }, [chat.isSuccess, chat.data]);
 
   const handleOpenChat = () => {
     setIsOpen(!isOpen);
     if (isOpen) {
       //
-      //   send some initial context with past purchases
-      mutation.mutate({ prompt: null, contextUpdate: 'intial context' });
+      // set some initial context with past purchases
+      chatMutation.mutate({});
     }
   };
 
   const handleSendMessage = (text: string) => {
     // build context from past purchases and current vector search results
 
-    // update context
+    const newVectorSearchQuery = [...messages.map((message) => message.text), text].join('\n');
 
-    mutation.mutate({ prompt: text, contextUpdate: 'new context' });
+    chatMutation.mutate({ prompt: text, searchQuery: text });
   };
 
   return (
