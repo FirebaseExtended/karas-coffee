@@ -16,7 +16,7 @@
 
 import { initializeApp } from 'firebase/app';
 // import { getAnalytics } from 'firebase/analytics';
-import { getAuth } from 'firebase/auth';
+import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import { getFirestore, collection, CollectionReference, connectFirestoreEmulator } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
@@ -53,6 +53,8 @@ export const functions = getFunctions(app);
 
 connectFunctionsEmulator(functions, 'localhost', 5001);
 
+connectAuthEmulator(auth, 'http://localhost:9099');
+
 export const collections = {
   products: collection(firestore, 'products').withConverter(productConverter),
   customers: collection(firestore, 'customers').withConverter(customerConverter),
@@ -63,6 +65,7 @@ export const collections = {
   payments: (customerId: string): CollectionReference => collection(firestore, 'customers', customerId, 'payments'),
   subscriptions: (customerId: string): CollectionReference<Subscription> =>
     collection(firestore, 'customers', customerId, 'subscriptions').withConverter(subscriptionConverter),
+  purchaseHistory: (customerId: string) => collection(firestore, 'customers', customerId, 'purchaseHistory'),
   invoices: (customerId: string, subscriptionId: string): CollectionReference => {
     return collection(collections.subscriptions(customerId), subscriptionId, 'invoices');
   },

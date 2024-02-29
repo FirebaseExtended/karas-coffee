@@ -15,6 +15,7 @@
  */
 
 import { Timestamp } from '@firebase/firestore';
+import { CartItem } from './hooks/useCart';
 
 export type ProductType = 'swag' | 'coffee' | 'subscription';
 
@@ -138,6 +139,7 @@ export interface Session {
   error?: {
     message: string;
   };
+  cart?: CartItem[];
 }
 
 export interface Subscription {

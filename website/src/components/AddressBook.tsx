@@ -170,7 +170,8 @@ function AddressSelection({
 
   const isPending = !address.validation;
   const isValid = address.validation?.status === 'verified' || address.validation?.status === 'warning';
-  const isSelectable = !isPending && isValid && !isSelected;
+  // const isSelectable = !isPending && isValid && !isSelected;
+  const isSelectable = !isSelected;
 
   return (
     <div
@@ -194,18 +195,19 @@ function AddressSelection({
         <div>
           {address.address.stateProvince}, {address.address.countryCode}
         </div>
-        {isPending && (
+        {/* {isPending && (
           <div className="flex items-center space-x-2 bg-yellow-500/10 p-2 rounded border border-yellow-500 text-yellow-500 text-xs mt-4">
             <Spinner size="sm" />
             <div>Address is being validated...</div>
           </div>
-        )}
-        {!isPending && !isValid && (
-          <div className="flex items-center space-x-2 bg-red-500/10 p-2 rounded border border-red-500 text-red-500 text-xs mt-4">
-            <ExclamationIcon className="w-5 h-5" />
-            <div>Address could not be validated.</div>
-          </div>
-        )}
+        )} */}
+        {true ||
+          (!isPending && !isValid && (
+            <div className="flex items-center space-x-2 bg-red-500/10 p-2 rounded border border-red-500 text-red-500 text-xs mt-4">
+              <ExclamationIcon className="w-5 h-5" />
+              <div>Address could not be validated.</div>
+            </div>
+          ))}
       </div>
       <div
         role="button"

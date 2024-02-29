@@ -15,12 +15,13 @@
  */
 
 import { useCallback, useState } from 'react';
-import { doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore';
+import { addDoc, doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
 
 import { collections } from '../firebase';
 import { useUser } from './useUser';
 import { Session } from '../types';
+import { CartItem } from './useCart';
 
 export function useCheckout(): {
   trigger: (session: Omit<Session, 'url' | 'customer'>) => void;
@@ -40,12 +41,27 @@ export function useCheckout(): {
         return navigate(`/signin?redirect=${window.location.pathname}`);
       }
 
+      console.log('trigger', session);
+
       setLoading(true);
       const collection = collections.sessions(uid);
       const ref = doc(collection);
 
       try {
         const customer = await getDoc(doc(collections.customers, uid));
+
+        const purchaseHistory = collections.purchaseHistory(uid);
+
+        if (session.cart) {
+          for (const item of session.cart) {
+            await addDoc(purchaseHistory, {
+              ...item,
+              quantity: item.quantity,
+              created: new Date().toISOString(),
+            });
+          }
+        }
+
         const { stripe_id } = customer.data() ?? {};
 
         if (!stripe_id) {

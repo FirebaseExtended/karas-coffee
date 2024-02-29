@@ -24,7 +24,7 @@ import { useUser } from './useUser';
 import { Product, Review } from '../types';
 import { httpsCallable } from 'firebase/functions';
 
-export function useChatMutation(customerId: string): UseMutationResult<any, Error, any> {
+export function useChatMutation(): UseMutationResult<any, Error, any> {
   const client = useQueryClient();
   const user = useUser();
 
@@ -32,13 +32,16 @@ export function useChatMutation(customerId: string): UseMutationResult<any, Erro
     async ({ prompt, searchQuery }: { prompt?: string; searchQuery?: string }) => {
       // Soft validation - the Firestore security rules ensure they are
       // authenticated.
-      //   if (!user.data) {
-      //     throw new Error('This mutation requires authentication.');
-      //   }
-      // const userData = user.data;
-      const documentRef = doc(firestore, 'customers', customerId);
+      if (!user.data) {
+        throw new Error('This mutation requires authentication.');
+      }
+      const uid = user.data.uid;
+      const documentRef = doc(firestore, 'customers', uid);
+      const purchaseHistory = (await getDocs(query(collections.purchaseHistory(uid)))).docs.map(
+        (doc) => doc.data() as Product,
+      );
 
-      let context: string = await getContext({});
+      let context: string = await getContext({ purchaseHistory });
 
       if (searchQuery) {
         const vectorSearch = httpsCallable(functions, 'ext-firestore-vector-search-queryCallable');
@@ -55,29 +58,25 @@ export function useChatMutation(customerId: string): UseMutationResult<any, Erro
 
         const vectorSearchProducts = await getDocs(q);
 
-        console.log(
-          'SEARCH PRODUCTS',
-          vectorSearchProducts.docs.map((doc) => doc.data()),
-        );
-
         context = await getContext({
           vectorSearchResults: vectorSearchProducts.docs.map((doc) => doc.data() as Product),
+          purchaseHistory: purchaseHistory,
         });
       }
       // update context before proceeding
-      await updateDoc(doc(firestore, 'customers', customerId), {
+      await setDoc(doc(firestore, 'customers', uid), {
         context,
       });
 
       if (prompt) {
-        await addDoc(collections.chat(customerId), {
+        await addDoc(collections.chat(uid), {
           prompt,
         });
       }
 
       if (!prompt && !searchQuery) {
         // clear chat collection
-        const chatCollection = await getDocs(collections.chat(customerId));
+        const chatCollection = await getDocs(collections.chat(uid));
 
         chatCollection.forEach(async (doc) => {
           await deleteDoc(doc.ref);
@@ -88,51 +87,70 @@ export function useChatMutation(customerId: string): UseMutationResult<any, Erro
     },
     {
       onSuccess(reviewId) {
-        client.invalidateQueries(['chat', customerId]);
+        client.invalidateQueries(['chat', user.data?.uid]);
       },
     },
   );
 }
 
-async function getContext({ vectorSearchResults }: { vectorSearchResults?: Product[] }) {
-  let context = `
-  You are an AI customer assistant for a business called Kara's Coffee.
-  Your name is Karabot.
-  You will helpful and friendly to customers.
-  Your job is to help customers find the best products to suit their needs.
-  You will also help customers with any questions they have about the products.
-  
-  It is very important that you do not give the customer any incorrect information. 
-  \n
-  `;
-  // TODO: make sure this info is correct
-  const noFurtherInformationAvailableContext = `
-  Currently we have no information on this customer. Ask a clarifying question to see what product they might be interested in.
+async function getContext({
+  vectorSearchResults,
+  purchaseHistory,
+}: {
+  vectorSearchResults?: Product[];
+  purchaseHistory?: Product[];
+}) {
+  let context = `You are an AI customer assistant for a business called Kara's Coffee. \\n
+  Your name is Karabot. \\n
+  You will be helpful and friendly to customers. \\n
+  Your job is to help customers find the best products to suit their needs and answer any questions they have about our products accurately. \\n
+  Always ensure the information you provide is accurate and refrain from guessing. \\n
   `;
 
   if (vectorSearchResults && vectorSearchResults.length > 0) {
     const formattedVectorSearchResults = formatProducts(vectorSearchResults);
 
-    const vectorSearchResultsContext = `
-    Here are the products that match the customers search:
-
-    NAME,TYPE,DESCRIPTION,PRICE,ORIGIN,STRENGTH,VARIETY
-    ${formattedVectorSearchResults}
+    context += `
+    Here are the products that match the customer's search: \\n
+    ---\\n
+    NAME, TYPE, DESCRIPTION, PRICE, ORIGIN, STRENGTH, VARIETY \\n
+    ${formattedVectorSearchResults}\\n
+    ---\\n
     `;
-
-    context += vectorSearchResultsContext;
-  } else {
-    context += noFurtherInformationAvailableContext;
   }
 
-  const suffix = `
-  Do not provide information about these products that is not available in the above CSV(s), for example if a customer asks "what color is the product?" and
-  the color is not described anywhere in the product's row, then you **must** answer "I'm sorry, I don't have that information".
+  if (purchaseHistory && purchaseHistory.length > 0) {
+    const formattedPurchaseHistory = formatProducts(purchaseHistory);
 
-  If a product is of type "subscription", then the price is per month.
+    context += `
+    \\n
+    These are the customers previous purchases: \\n
+    ---\\n
+    NAME, TYPE, DESCRIPTION, PRICE, ORIGIN, STRENGTH, VARIETY \\n
+    ${formattedPurchaseHistory} \\n
+    ---\\n
+    `;
+  }
+
+  if ((!vectorSearchResults || vectorSearchResults.length == 0) && (!purchaseHistory || purchaseHistory.length == 0)) {
+    context += `
+    Currently, we have no specific information about the customer's preferences. Ask the customer to tell you more about the types of coffee or products they are interested in.
+    `;
+  }
+
+  context += `
+  If a customer asks about details not mentioned here, such as color, kindly respond with, "I'm sorry, I don't have that information. Can I assist you with other details like the coffee's origin or strength?" Offer alternative help or suggest related products. \\n
+
+  If the product is a subscription, remember that the listed price is per month. \\n
+
+  When you reply, reply **ONLY** in plain text please. Do not use markdown or CSV in your messages to the customer. \\n
+
+  Always ensure the information you provide is accurate and refrain from guessing. Do not mention any products that are not listed in this message.\\n
+
+  The categories of products we sell are coffee beans, coffee machines, and coffee subscriptions. We do not sell grinders. If we sell an item, it will be listed in this conversation already.\\n
+
+  The conversation will start imminently. Prepare to be engaging and informative. \\n
   `;
-
-  context += suffix;
 
   return context;
 }
@@ -147,4 +165,4 @@ const formatProducts = (products: Product[]) =>
           metadata.type !== 'coffee' ? 'N/A' : metadata.variety
         }`,
     )
-    .join('\n');
+    .join('\\n');

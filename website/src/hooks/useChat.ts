@@ -24,10 +24,12 @@ import { collections, firestore, storage } from '../firebase';
 import { Review } from '../types';
 import { useUser } from './useUser';
 
-export function useChat(customerId: string): UseQueryResult<Review[]> {
+export function useChat(): UseQueryResult<Review[]> {
   const user = useUser();
+  // Soft validation - the Firestore security rules ensure they are
+  // authenticated.
 
-  const collection = collections.chat(customerId);
+  const collection = collections.chat(user.data?.uid || 'test');
 
   const constraints: QueryConstraint[] = [];
 
@@ -38,7 +40,7 @@ export function useChat(customerId: string): UseQueryResult<Review[]> {
   // For this example, only show the users own reviews.
 
   return useFirestoreQueryData(
-    ['chat', customerId],
+    ['chat', user.data?.uid],
     query(collection, ...constraints),
     {
       subscribe: true,

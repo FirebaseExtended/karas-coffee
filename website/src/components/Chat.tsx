@@ -30,12 +30,16 @@ const firestoreMessageToMessage = ({ prompt, response }: FirestoreMessage): [Mes
 export function Chat() {
   const user = useUser();
 
+  useEffect(() => {
+    console.log(user.data);
+  }, [user.data, user.isSuccess]);
+
   const [isOpen, setIsOpen] = useState(true);
 
   const [messages, setMessages] = useState<Message[]>([]);
 
   const chat = useChat('jacob');
-  const chatMutation = useChatMutation('jacob');
+  const chatMutation = useChatMutation();
 
   useEffect(() => {
     if (chat.isSuccess && chat.data) {
@@ -47,10 +51,10 @@ export function Chat() {
 
   const handleOpenChat = () => {
     setIsOpen(!isOpen);
+    chatMutation.mutate({});
     if (isOpen && user.data && user.data.uid) {
       //
       // set some initial context with past purchases
-      chatMutation.mutate({});
     }
   };
 
@@ -74,30 +78,18 @@ export function Chat() {
       >
         <MinChatUiProvider theme="#6ea9d7" colorSet={myColorSet}>
           <MessageContainer>
-            <MessageList
-              currentUserId="user"
-              messages={messages}
-              customEmptyMessagesComponent={() => UnauthenticatedChat(user.data)}
-            />
+            <MessageList currentUserId="user" messages={messages} />
             <MessageInput
               placeholder="Type message here"
               showSendButton
               showAttachButton={false}
               onSendMessage={handleSendMessage}
-              disabled={!!user.data && !!user.data.uid}
             />
           </MessageContainer>
         </MinChatUiProvider>
       </div>
     </div>
   );
-}
-
-function UnauthenticatedChat(user?: User) {
-  if (user) {
-    <div>No messages yet.</div>;
-  }
-  return <div className="text-white">Chat is disabled for unauthenticated users</div>;
 }
 
 const colors = {
