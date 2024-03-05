@@ -42,6 +42,7 @@ export function Chat() {
     if (chat.isSuccess && chat.data) {
       //@ts-ignore TODO: fix this
       const transformedMessages = chat.data.map(firestoreMessageToMessage).flat();
+      console.log(messages, transformedMessages);
       setMessages(transformedMessages);
     }
   }, [chat.isSuccess, chat.data]);
@@ -62,6 +63,12 @@ export function Chat() {
     // const newVectorSearchQuery = [...messages.map((message) => message.text), text].join('\n');
 
     chatMutation.mutate({ prompt: text, searchQuery: text });
+  };
+
+  const isTyping = () => {
+    const lastMessage = messages[messages.length - 1];
+
+    return lastMessage?.user.id === 'karabot' && lastMessage.text === undefined;
   };
 
   return (
@@ -93,10 +100,10 @@ export function Chat() {
           <MessageContainer>
             <MessageList
               currentUserId="user"
-              messages={messages}
+              messages={messages.filter((m) => !!m.text)}
               customEmptyMessagesComponent={emptyMessageComponent(user.data)}
-              customTypingIndicatorComponent={() => <div>Typing...</div>}
-              showTypingIndicator={true}
+              // customTypingIndicatorComponent={() => <div>Typing...</div>}
+              showTypingIndicator={isTyping()}
             />
             <MessageInput
               placeholder="Type message here"
