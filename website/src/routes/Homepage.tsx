@@ -40,6 +40,7 @@ export function Homepage() {
       {!user.data && <Subscribe />}
       <Shop title="Coffee Shop" type="coffee" />
       <Shop title="Swag Shop" type="swag" />
+      <Chat />
     </>
   );
 }
@@ -163,7 +164,6 @@ function Shop({ title, type }: ShopProps) {
         {!products.isSuccess && emptyArray(4).map((_, i) => <ProductCardSkeleton key={i} />)}
         {products.isSuccess && products.data.map((product) => <ProductCard key={product.id} product={product} />)}
       </section>
-      <Chat />
     </div>
   );
 }

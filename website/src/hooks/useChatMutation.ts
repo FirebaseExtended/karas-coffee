@@ -21,12 +21,16 @@ import { ref, uploadBytes } from 'firebase/storage';
 
 import { collections, firestore, functions, storage } from '../firebase';
 import { useUser } from './useUser';
-import { Product, Review } from '../types';
+import { Product } from '../types';
 import { httpsCallable } from 'firebase/functions';
+import { usePurchaseHistory } from './usePurchaseHistory';
 
 export function useChatMutation(): UseMutationResult<any, Error, any> {
   const client = useQueryClient();
   const user = useUser();
+
+  const uid = user.data?.uid;
+  // const purchaseHistoryResult = usePurchaseHistory(['purchaseHistory', uid], uid);
 
   return useMutation(
     async ({ prompt, searchQuery }: { prompt?: string; searchQuery?: string }) => {
@@ -37,9 +41,12 @@ export function useChatMutation(): UseMutationResult<any, Error, any> {
       }
       const uid = user.data.uid;
       const documentRef = doc(firestore, 'customers', uid);
-      const purchaseHistory = (await getDocs(query(collections.purchaseHistory(uid)))).docs.map(
-        (doc) => doc.data() as Product,
-      );
+
+      let purchaseHistory: Product[] = [];
+
+      // if (purchaseHistoryResult.data) {
+      //   purchaseHistory = purchaseHistoryResult.data;
+      // }
 
       let context: string = await getContext({ purchaseHistory });
 
@@ -50,11 +57,9 @@ export function useChatMutation(): UseMutationResult<any, Error, any> {
           query: searchQuery,
           limit: 6,
         });
+        console.log('gets to here');
         // @ts-ignore
-        console.log('SEARCH RESULTS', data.ids);
-
-        // @ts-ignore
-        const q = query(collections.products, where('id', 'in', data.ids));
+        const q = data.ids ? query(collections.products) : query(collections.products, where('id', 'in', data.ids));
 
         const vectorSearchProducts = await getDocs(q);
 

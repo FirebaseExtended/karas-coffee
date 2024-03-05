@@ -65,7 +65,8 @@ export const collections = {
   payments: (customerId: string): CollectionReference => collection(firestore, 'customers', customerId, 'payments'),
   subscriptions: (customerId: string): CollectionReference<Subscription> =>
     collection(firestore, 'customers', customerId, 'subscriptions').withConverter(subscriptionConverter),
-  purchaseHistory: (customerId: string) => collection(firestore, 'customers', customerId, 'purchaseHistory'),
+  purchaseHistory: (customerId: string) =>
+    collection(firestore, 'customers', customerId, 'purchaseHistory').withConverter(productConverter),
   invoices: (customerId: string, subscriptionId: string): CollectionReference => {
     return collection(collections.subscriptions(customerId), subscriptionId, 'invoices');
   },

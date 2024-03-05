@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { MinChatUiProvider, MessageInput, MessageContainer, MessageList, MessageHeader } from '@minchat/react-chat-ui';
+import { MinChatUiProvider, MessageInput, MessageContainer, MessageList } from '@minchat/react-chat-ui';
 import { useChat } from '../hooks/useChat';
 import { useUser } from '../hooks/useUser';
 import { useChatMutation } from '../hooks/useChatMutation';
-import { useChatContextMutation } from '../hooks/useChatContextMutation';
-import { useVectorSearch } from '../hooks/useVectorSearch';
-import { Product } from '../types';
-import { useSearchTermExtractor } from '../hooks/useSearchTermExtractor';
 import { User } from 'firebase/auth';
+import { Link } from 'react-router-dom';
 
 type FirestoreMessage = {
   prompt: string;
@@ -38,7 +35,7 @@ export function Chat() {
 
   const [messages, setMessages] = useState<Message[]>([]);
 
-  const chat = useChat('jacob');
+  const chat = useChat();
   const chatMutation = useChatMutation();
 
   useEffect(() => {
@@ -59,6 +56,7 @@ export function Chat() {
   };
 
   const handleSendMessage = (text: string) => {
+    console.log('handleSendMessage', text);
     // build context from past purchases and current vector search results
 
     // const newVectorSearchQuery = [...messages.map((message) => message.text), text].join('\n');
@@ -68,22 +66,44 @@ export function Chat() {
 
   return (
     <div>
-      <button className="fixed top-1/2 left-1/2 bg-green-100 p-4 rounded" onClick={handleOpenChat}>
-        {isOpen ? 'Open Chat' : 'Close Chat'}
-      </button>
       <div
-        className={`w-1/3 fixed bg-gray-300 h-[calc(100vh-5rem)] rounded top-20 -right-3 z-1000 p-2 transition duration-700 ${
+        className={` w-1/3 fixed bg-gray-300 h-[calc(100vh-5rem)] rounded top-20 -right-3 z-1000 p-2 transition duration-700 ${
           !isOpen ? '' : 'translate-x-[100%]'
         }`}
       >
+        <div className="flex flex-col items-center absolute left-[-18%] top-1/2">
+          <button
+            className={`bg-gray-900 border-2 border-gray-300 border-solid hover:opacity-50 rounded-full  bg-green-100 p-4 rounded ${
+              isOpen ? '' : ''
+            }`}
+            onClick={handleOpenChat}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className={`text-gray-300 h-6 w-6 transform ${isOpen ? 'rotate-90' : '-rotate-90'}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
         <MinChatUiProvider theme="#6ea9d7" colorSet={myColorSet}>
           <MessageContainer>
-            <MessageList currentUserId="user" messages={messages} />
+            <MessageList
+              currentUserId="user"
+              messages={messages}
+              customEmptyMessagesComponent={emptyMessageComponent(user.data)}
+              customTypingIndicatorComponent={() => <div>Typing...</div>}
+              showTypingIndicator={true}
+            />
             <MessageInput
               placeholder="Type message here"
               showSendButton
               showAttachButton={false}
               onSendMessage={handleSendMessage}
+              disabled={!user.isSuccess || !user.data}
             />
           </MessageContainer>
         </MinChatUiProvider>
@@ -92,6 +112,20 @@ export function Chat() {
   );
 }
 
+const emptyMessageComponent = (user?: User) => {
+  if (!user || !user.uid) {
+    return (
+      <p className="text-white top-1/2 absolute left-1/2 -translate-x-1/2 -translate-y-1/2">
+        Please{' '}
+        <Link to="/signin" className="hover:underline text-indigo-700">
+          Sign In
+        </Link>{' '}
+        to use this chat.
+      </p>
+    );
+  }
+  return <p className="text-white top-1/2 absolute left-1/2 -translate-x-1/2 -translate-y-1/2">No messages yet.</p>;
+};
 const colors = {
   // Theme Colors
   themeDark: '#111827',
