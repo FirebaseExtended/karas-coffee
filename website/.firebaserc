@@ -1,5 +1,25 @@
 {
   "projects": {
     "default": "fir-invertase-vector-03"
+  },
+  "targets": {},
+  "etags": {
+    "karas-coffee-fvs-01": {
+      "extensionInstances": {
+        "storage-resize-images": "16edaa0ed09d8c966ca89483a4f48386116e09be7426626d637dde75c7d54b56",
+        "firestore-shorten-urls-bitly": "c0ce9626b2dff00ccb011cef51db053edd32fa5e67d83a5be92acafbfad3dc5a",
+        "purchase-labels": "b87cadbe5061e2c0739c7095565999b9909c6512bf04b428c45b6c18d87d1d44",
+        "firestore-genai-chatbot": "ab464612c4cc9ce378b4f9dfa01999345101f7c4bb983b7c874bff45ae0c0e40",
+        "firestore-send-email": "a4985a12c42586dde1aded2e7ddffc94daa999b727618f72fe5bf60c0a6b3019",
+        "send-message": "ee48da884d06db01160c9d59f621fb1894dee57ba77d055e7bb5c30440c3fd88",
+        "firestore-bigquery-export": "799c799e586c81f3624e1075a67b9c7ee8cfca45a39da60e8d6e742aa737e205",
+        "calculate-rates": "bb214fac00007c018787d1b3fff4d45cc7aa048785c29350cf948cab188e5fee",
+        "delete-user-data": "b558c7cda3ffa864bc835769e0fdddcfc37408512159f0e253255304ff774839",
+        "firestore-stripe-payments": "d5705e2a679a23d5763b56bb278a7861b54fb4c83720a344d0e0c8936b98b698",
+        "firestore-vector-search": "a300ad173cbb51aabd0d54d5627d87785bc944e5b101e184480dd39784503718",
+        "validate-addresses": "aa81d40f30c4266b1212555959b34cc921f09ca9547988540908c3e70d5b6df1",
+        "mailchimp-firebase-sync": "6c28d50fef8cf0cc8d814b491705505dbd09aa1b05b1d34aeb497ac143febb4a"
+      }
+    }
   }
 }

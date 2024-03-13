@@ -32,7 +32,6 @@ export function Header(props: HeaderProps) {
   const location = useLocation();
 
   const openChat = () => {
-    console.log('clicked');
     return props.setChatOpenState();
   };
 

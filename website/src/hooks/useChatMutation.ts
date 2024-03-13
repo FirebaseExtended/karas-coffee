@@ -37,7 +37,7 @@ export function useChatMutation(): UseMutationResult<any, Error, any> {
       // Soft validation - the Firestore security rules ensure they are
       // authenticated.
       if (!user.data) {
-        throw new Error('This mutation requires authentication.');
+        return;
       }
       const uid = user.data.uid;
       const documentRef = doc(firestore, 'customers', uid);
@@ -47,7 +47,6 @@ export function useChatMutation(): UseMutationResult<any, Error, any> {
       if (purchaseHistoryResult.data) {
         purchaseHistory = purchaseHistoryResult.data;
       }
-      console.log('purchaseHistory', purchaseHistory);
 
       let context: string = await getContext({ purchaseHistory });
 
@@ -91,7 +90,7 @@ export function useChatMutation(): UseMutationResult<any, Error, any> {
       return documentRef.id;
     },
     {
-      onSuccess(reviewId) {
+      onSuccess(_reviewId) {
         client.invalidateQueries(['chat', user.data?.uid]);
       },
     },

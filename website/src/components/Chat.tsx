@@ -5,7 +5,6 @@ import { useUser } from '../hooks/useUser';
 import { useChatMutation } from '../hooks/useChatMutation';
 import { User } from 'firebase/auth';
 import { Link, useLocation } from 'react-router-dom';
-import { chatDisabledRoutes } from './Header';
 type FirestoreMessage = {
   prompt: string;
   response: string;
@@ -48,7 +47,9 @@ export function Chat({ isOpen }: ChatProps) {
 
   useEffect(() => {
     if (!isOpen) {
-      chatMutation.mutate({});
+      try {
+        chatMutation.mutate({});
+      } catch (e) {}
     }
   }, [isOpen]);
 
@@ -70,7 +71,7 @@ export function Chat({ isOpen }: ChatProps) {
     <div className={['/signin', '/forgot-password', '/register'].includes(location.pathname) ? 'hidden' : ''}>
       <div
         className={` w-1/3 fixed bg-gray-300 h-[calc(100vh-5rem)] rounded top-20 -right-3 z-1000 p-2 transition duration-700 ${
-          !isOpen ? '' : 'translate-x-[100%]'
+          isOpen ? 'translate-x-[0]' : 'translate-x-[100%]'
         }`}
       >
         <MinChatUiProvider theme="#6ea9d7" colorSet={myColorSet}>

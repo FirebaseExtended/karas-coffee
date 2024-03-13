@@ -70,8 +70,19 @@ const UnifiedSearch = ({ query, conciergeEnabled }: { query: string; conciergeEn
 
   const results = useCustomSearch(debouncedQuery, 3);
 
-  if (results.isLoading) return <div>Loading...</div>;
-  if (results.isError) return <div>Error: {results.error.message}</div>;
+  if (results.isLoading)
+    return (
+      <div className="absolute z-10 mt-16 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]">
+        <RowSkeleton />
+        <RowSkeleton />
+      </div>
+    );
+  if (results.isError)
+    return (
+      <div className="absolute z-10 mt-16 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]">
+        <div className="flex items-center justify-center p-20 text-gray-600">Error with search!</div>
+      </div>
+    );
   const vectorSearchHits = results.data;
 
   const hits = conciergeEnabled ? vectorSearchHits : algHits.map((h) => ({ ...h, id: h.objectID }));
@@ -207,5 +218,21 @@ const Row = ({ hit }: { hit: Hit<Product> }) => {
     </Link>
   ) : (
     <></>
+  );
+};
+
+const RowSkeleton = () => {
+  return (
+    <div className="flex items-center px-4 py-4 hover:bg-gray-50 animate-pulse">
+      <div className="flex-shrink-0 w-16 h-16 mr-4 bg-gray-300 rounded"></div>
+      <div>
+        <div className="flex items-center text-lg font-semibold">
+          <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+          <div className="h-4 bg-gray-300 rounded w-1/4 ml-auto"></div>
+        </div>
+        <div className="mt-2 h-2 bg-gray-300 rounded w-5/6"></div>
+        <div className="mt-1 h-2 bg-gray-300 rounded w-4/6"></div>
+      </div>
+    </div>
   );
 };

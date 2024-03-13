@@ -28,7 +28,6 @@
     }
   },
   "extensions": {
-    "firestore-vector-search": "../firestore-vector-search",
     "firestore-genai-chatbot": "../firestore-genai-chatbot"
   }
 }
