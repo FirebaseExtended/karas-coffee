@@ -25,14 +25,10 @@
     },
     "hosting": {
       "port": 5002
-    },
-    "auth": {
-      "port": 9099
     }
   },
   "extensions": {
     "firestore-vector-search": "../firestore-vector-search",
-    "firestore-genai-chatbot": "../firestore-genai-chatbot",
-    "firestore-multimodal-genai": "../firestore-multimodal-genai"
+    "firestore-genai-chatbot": "../firestore-genai-chatbot"
   }
 }

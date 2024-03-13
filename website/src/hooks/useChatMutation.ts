@@ -30,7 +30,7 @@ export function useChatMutation(): UseMutationResult<any, Error, any> {
   const user = useUser();
 
   const uid = user.data?.uid;
-  // const purchaseHistoryResult = usePurchaseHistory(['purchaseHistory', uid], uid);
+  const purchaseHistoryResult = usePurchaseHistory(['purchaseHistory', uid], uid);
 
   return useMutation(
     async ({ prompt, searchQuery }: { prompt?: string; searchQuery?: string }) => {
@@ -44,9 +44,10 @@ export function useChatMutation(): UseMutationResult<any, Error, any> {
 
       let purchaseHistory: Product[] = [];
 
-      // if (purchaseHistoryResult.data) {
-      //   purchaseHistory = purchaseHistoryResult.data;
-      // }
+      if (purchaseHistoryResult.data) {
+        purchaseHistory = purchaseHistoryResult.data;
+      }
+      console.log('purchaseHistory', purchaseHistory);
 
       let context: string = await getContext({ purchaseHistory });
 
@@ -57,7 +58,6 @@ export function useChatMutation(): UseMutationResult<any, Error, any> {
           query: searchQuery,
           limit: 6,
         });
-        console.log('gets to here');
         // @ts-ignore
         const q = data.ids ? query(collections.products) : query(collections.products, where('id', 'in', data.ids));
 
@@ -105,11 +105,14 @@ async function getContext({
   vectorSearchResults?: Product[];
   purchaseHistory?: Product[];
 }) {
+  const currentRoute = window.location.pathname;
+
   let context = `You are an AI customer assistant for a business called Kara's Coffee. \\n
   Your name is Karabot. \\n
   You will be helpful and friendly to customers. \\n
   Your job is to help customers find the best products to suit their needs and answer any questions they have about our products accurately. \\n
   Always ensure the information you provide is accurate and refrain from guessing. \\n
+  The customer is currently viewing the ${currentRoute} page. \\n
   `;
 
   if (vectorSearchResults && vectorSearchResults.length > 0) {

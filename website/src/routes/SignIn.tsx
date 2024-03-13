@@ -17,7 +17,7 @@
 import React from 'react';
 import { FormikErrors, useFormik } from 'formik';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useAuthSignInWithEmailAndPassword } from '@react-query-firebase/auth';
+import { useAuthSignInAnonymously, useAuthSignInWithEmailAndPassword } from '@react-query-firebase/auth';
 
 import { Card } from '../components/Card';
 import { Input, Error, Divider } from '../components/Form';
@@ -33,6 +33,12 @@ type FormValues = {
 export function SignIn() {
   const navigate = useNavigate();
   const signIn = useAuthSignInWithEmailAndPassword(auth, {
+    onSuccess() {
+      navigate(redirect || '/');
+    },
+  });
+
+  const signInAnonymously = useAuthSignInAnonymously(auth, {
     onSuccess() {
       navigate(redirect || '/');
     },
@@ -116,6 +122,15 @@ export function SignIn() {
             reset every 24 hours.
           </p>
         </div>
+        <Divider>Or sign in anonymously</Divider>
+        <Button
+          onClick={() => {
+            signInAnonymously.mutate({ email: '', password: '' });
+          }}
+          loading={signIn.isLoading}
+        >
+          Sign in Anonymously
+        </Button>
       </Card>
     </section>
   );

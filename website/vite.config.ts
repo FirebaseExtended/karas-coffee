@@ -24,7 +24,7 @@ export default defineConfig({
     // proxy: {
     //   // Enables the same proxy as Firebase Hosting creates, but for local development.
     //   '/bundles/shop':
-    //     'https://us-central1-fir-vector-invertase-03.cloudfunctions.net/ext-firestore-bundle-server-serve/shop',
+    //     'https://us-central1-karas-coffee-fvs-01.cloudfunctions.net/ext-firestore-bundle-server-serve/shop',
     // },
   },
 });

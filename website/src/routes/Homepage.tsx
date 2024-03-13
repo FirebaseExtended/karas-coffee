@@ -40,7 +40,6 @@ export function Homepage() {
       {!user.data && <Subscribe />}
       <Shop title="Coffee Shop" type="coffee" />
       <Shop title="Swag Shop" type="swag" />
-      <Chat />
     </>
   );
 }

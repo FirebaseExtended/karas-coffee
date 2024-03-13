@@ -20,7 +20,7 @@ const fs = require('fs');
 const path = require('path');
 
 admin.initializeApp({
-  projectId: 'fir-vector-invertase-03', // Replace with your Firestore project ID
+  projectId: 'karas-coffee-fvs-01', // Replace with your Firestore project ID
 });
 
 const db = admin.firestore();

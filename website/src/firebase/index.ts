@@ -30,15 +30,17 @@ import {
   subscriptionConverter,
   contentConverter,
   addressConverter,
+  purchaseHistoryConverter,
 } from './converters';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCEtg_FqMZAQ8zTMG34-EgUyv-x5rS9Ibg',
-  authDomain: 'fir-vector-invertase-03.firebaseapp.com',
-  projectId: 'fir-vector-invertase-03',
-  storageBucket: 'fir-vector-invertase-03.appspot.com',
-  messagingSenderId: '67051307990',
-  appId: '1:67051307990:web:a62c5d554f7d028a2b9a77',
+  apiKey: 'AIzaSyBLIkO1bg0Z-O3oTpdJFjXnvWx68iaTt0U',
+  authDomain: 'karas-coffee-fvs-01.firebaseapp.com',
+  projectId: 'karas-coffee-fvs-01',
+  storageBucket: 'karas-coffee-fvs-01.appspot.com',
+  messagingSenderId: '1023289608637',
+  appId: '1:1023289608637:web:f9050a9d0673d610216ad4',
+  measurementId: 'G-YPCM9DSGC4',
 };
 
 export const app = initializeApp(firebaseConfig);
@@ -46,14 +48,13 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const firestore = getFirestore(app);
 
-connectFirestoreEmulator(firestore, 'localhost', 8080);
-
 export const storage = getStorage(app);
 export const functions = getFunctions(app);
 
-connectFunctionsEmulator(functions, 'localhost', 5001);
-
-connectAuthEmulator(auth, 'http://localhost:9099');
+if (process.env.NODE_ENV === 'development') {
+  connectFirestoreEmulator(firestore, 'localhost', 8080);
+  connectFunctionsEmulator(functions, 'localhost', 5001);
+}
 
 export const collections = {
   products: collection(firestore, 'products').withConverter(productConverter),
@@ -66,7 +67,7 @@ export const collections = {
   subscriptions: (customerId: string): CollectionReference<Subscription> =>
     collection(firestore, 'customers', customerId, 'subscriptions').withConverter(subscriptionConverter),
   purchaseHistory: (customerId: string) =>
-    collection(firestore, 'customers', customerId, 'purchaseHistory').withConverter(productConverter),
+    collection(firestore, 'customers', customerId, 'purchaseHistory').withConverter(purchaseHistoryConverter),
   invoices: (customerId: string, subscriptionId: string): CollectionReference => {
     return collection(collections.subscriptions(customerId), subscriptionId, 'invoices');
   },

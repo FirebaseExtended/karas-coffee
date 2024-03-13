@@ -25,9 +25,9 @@ const fs = require('fs');
 
 // const firebaseConfig = {
 //   apiKey: 'AIzaSyCEtg_FqMZAQ8zTMG34-EgUyv-x5rS9Ibg',
-//   authDomain: 'fir-vector-invertase-03.firebaseapp.com',
-//   projectId: 'fir-vector-invertase-03',
-//   storageBucket: 'fir-vector-invertase-03.appspot.com',
+//   authDomain: 'karas-coffee-fvs-01.firebaseapp.com',
+//   projectId: 'karas-coffee-fvs-01',
+//   storageBucket: 'karas-coffee-fvs-01.appspot.com',
 //   messagingSenderId: '67051307990',
 //   appId: '1:67051307990:web:a62c5d554f7d028a2b9a77',
 // };

@@ -21,7 +21,8 @@ import { useNavigate } from 'react-router';
 import { collections } from '../firebase';
 import { useUser } from './useUser';
 import { Session } from '../types';
-import { CartItem } from './useCart';
+import { CartItem, useCart } from './useCart';
+import { useQueryClient } from 'react-query';
 
 export function useCheckout(): {
   trigger: (session: Omit<Session, 'url' | 'customer'>) => void;
@@ -32,6 +33,8 @@ export function useCheckout(): {
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const user = useUser();
+  const client = useQueryClient();
+  const { addToCart, removeFromCart, getItem } = useCart();
 
   const uid = user.data?.uid;
 
@@ -40,8 +43,6 @@ export function useCheckout(): {
       if (!uid) {
         return navigate(`/signin?redirect=${window.location.pathname}`);
       }
-
-      console.log('trigger', session);
 
       setLoading(true);
       const collection = collections.sessions(uid);
@@ -54,12 +55,19 @@ export function useCheckout(): {
 
         if (session.cart) {
           for (const item of session.cart) {
-            await addDoc(purchaseHistory, {
-              ...item,
-              quantity: item.quantity,
-              created: new Date().toISOString(),
-            });
+            try {
+              await addDoc(purchaseHistory, {
+                ...item,
+                //@ts-ignore
+                quantity: item['quantity'],
+                created: new Date().toISOString(),
+              });
+              removeFromCart(item);
+            } catch (e) {
+              console.error(e);
+            }
           }
+          client.invalidateQueries(['purchaseHistory', uid]);
         }
 
         const { stripe_id } = customer.data() ?? {};

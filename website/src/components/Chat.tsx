@@ -4,8 +4,8 @@ import { useChat } from '../hooks/useChat';
 import { useUser } from '../hooks/useUser';
 import { useChatMutation } from '../hooks/useChatMutation';
 import { User } from 'firebase/auth';
-import { Link } from 'react-router-dom';
-
+import { Link, useLocation } from 'react-router-dom';
+import { chatDisabledRoutes } from './Header';
 type FirestoreMessage = {
   prompt: string;
   response: string;
@@ -24,14 +24,14 @@ const firestoreMessageToMessage = ({ prompt, response }: FirestoreMessage): [Mes
   { text: response, user: { id: 'karabot', name: 'Karabot' } },
 ];
 
-export function Chat() {
+interface ChatProps {
+  isOpen: boolean;
+}
+
+export function Chat({ isOpen }: ChatProps) {
   const user = useUser();
 
-  useEffect(() => {
-    console.log(user.data);
-  }, [user.data, user.isSuccess]);
-
-  const [isOpen, setIsOpen] = useState(true);
+  const location = useLocation();
 
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -42,22 +42,17 @@ export function Chat() {
     if (chat.isSuccess && chat.data) {
       //@ts-ignore TODO: fix this
       const transformedMessages = chat.data.map(firestoreMessageToMessage).flat();
-      console.log(messages, transformedMessages);
       setMessages(transformedMessages);
     }
   }, [chat.isSuccess, chat.data]);
 
-  const handleOpenChat = () => {
-    setIsOpen(!isOpen);
-    chatMutation.mutate({});
-    if (isOpen && user.data && user.data.uid) {
-      //
-      // set some initial context with past purchases
+  useEffect(() => {
+    if (!isOpen) {
+      chatMutation.mutate({});
     }
-  };
+  }, [isOpen]);
 
   const handleSendMessage = (text: string) => {
-    console.log('handleSendMessage', text);
     // build context from past purchases and current vector search results
 
     // const newVectorSearchQuery = [...messages.map((message) => message.text), text].join('\n');
@@ -72,30 +67,12 @@ export function Chat() {
   };
 
   return (
-    <div>
+    <div className={['/signin', '/forgot-password', '/register'].includes(location.pathname) ? 'hidden' : ''}>
       <div
         className={` w-1/3 fixed bg-gray-300 h-[calc(100vh-5rem)] rounded top-20 -right-3 z-1000 p-2 transition duration-700 ${
           !isOpen ? '' : 'translate-x-[100%]'
         }`}
       >
-        <div className="flex flex-col items-center absolute left-[-18%] top-1/2">
-          <button
-            className={`bg-gray-900 border-2 border-gray-300 border-solid hover:opacity-50 rounded-full  bg-green-100 p-4 rounded ${
-              isOpen ? '' : ''
-            }`}
-            onClick={handleOpenChat}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className={`text-gray-300 h-6 w-6 transform ${isOpen ? 'rotate-90' : '-rotate-90'}`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-        </div>
         <MinChatUiProvider theme="#6ea9d7" colorSet={myColorSet}>
           <MessageContainer>
             <MessageList

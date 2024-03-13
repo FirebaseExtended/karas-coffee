@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef, forwardRef } from 'react';
 import algoliasearch from 'algoliasearch/lite';
 import { InstantSearch, useHits, useSearchBox, Hits, Configure } from 'react-instantsearch';
 import { useVectorSearch as useCustomSearch } from '../hooks/useVectorSearch';
 import { Switch } from './Switch';
 import { Hit } from 'react-instantsearch-core';
-import { useFirestoreQueryData } from '@react-query-firebase/firestore';
-import { query as firestoreQuery, where } from 'firebase/firestore';
-import { collections } from '../firebase';
 import { Product } from '../types';
 import { Link } from 'react-router-dom';
 import { useDebounce } from '../hooks/useDebounce';
@@ -37,6 +34,7 @@ export const SearchPage = () => {
   const handleQueryChange = (query: string) => setQuery(query);
 
   const handleSwitch = (isOn: boolean) => {
+    setFocussed(true);
     setConciergeEnabled(isOn);
   };
 
@@ -51,23 +49,54 @@ export const SearchPage = () => {
           onFocus={() => setFocussed(true)}
           onBlur={() => {
             // Allow the link event to fire before triggering the blur event
-            setTimeout(() => {
-              setFocussed(false);
-            }, 100);
+            // setTimeout(() => {
+            setFocussed(false);
+            // }, 500);
           }}
         />
-        {focussed && (
-          <>{!conciergeEnabled ? <AlgoliaSearchComponent query={query} /> : <CustomSearchComponent query={query} />}</>
-        )}
+        {focussed && <UnifiedSearch query={query} conciergeEnabled={conciergeEnabled} />}
         <div className="p-2 items-center justify-center flex right-0 pr-4 absolute t-4 h-full">
-          <Switch onChange={handleSwitch} />
+          <Switch id="concierge-switch" onChange={handleSwitch} />
         </div>
       </InstantSearch>
     </div>
   );
 };
 
-const SearchInput = ({ onSearch, placeholder, handleQueryChange, onFocus, onBlur }: any) => {
+const UnifiedSearch = ({ query, conciergeEnabled }: { query: string; conciergeEnabled: boolean }) => {
+  // change the debounce time according to your needs
+  const debouncedQuery = useDebounce(query, 1000);
+  const { hits: algHits } = useHits<any>();
+
+  const results = useCustomSearch(debouncedQuery, 3);
+
+  if (results.isLoading) return <div>Loading...</div>;
+  if (results.isError) return <div>Error: {results.error.message}</div>;
+  const vectorSearchHits = results.data;
+
+  const hits = conciergeEnabled ? vectorSearchHits : algHits.map((h) => ({ ...h, id: h.objectID }));
+
+  if (!hits || hits.length === 0) {
+    return (
+      <div className="absolute z-10 mt-16 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]">
+        <div className="flex items-center justify-center p-20 text-gray-600">Sorry, no results were found.</div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="absolute z-10 mt-16 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]"
+      onClick={(e) => e.preventDefault()}
+    >
+      {hits.map((hit) => (
+        <Row key={hit.id} hit={hit as Hit<Product>} />
+      ))}
+    </div>
+  );
+};
+
+const SearchInput = ({ placeholder, handleQueryChange, onFocus, onBlur }: any) => {
   const { query, refine } = useSearchBox();
 
   const handleChange = (e: any) => {
@@ -110,9 +139,12 @@ const CustomSearchComponent = ({ query }: { query: string }) => {
     <div>
       {/* Adjusted for positioning of search results */}
       {hits && hits.length > 0 ? (
-        <div className="absolute z-10 mt-16 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]">
+        <div
+          className="absolute z-10 mt-16 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]"
+          onClick={(e) => e.preventDefault()}
+        >
           {hits.map((hit) => (
-            <Row key={hit.id} hit={hit} />
+            <Row key={hit.id} hit={hit as Hit<Product>} />
           ))}
         </div>
       ) : (
@@ -133,7 +165,10 @@ const AlgoliaSearchComponent = ({ query }: { query: string }) => {
       <Configure query={query} hitsPerPage={3} />
       {/* Adjusted for positioning of search results */}
       {hits && hits.length > 0 ? (
-        <div className="absolute z-10 mt-16 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]">
+        <div
+          onClick={(e) => e.preventDefault()}
+          className="absolute z-10 mt-16 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]"
+        >
           {hits.map((hit) => (
             <Row key={hit.objectID} hit={hit} />
           ))}
@@ -147,13 +182,17 @@ const AlgoliaSearchComponent = ({ query }: { query: string }) => {
   );
 };
 
-const Row = ({ hit }: { hit: Hit<Product> | Product }) => {
+const Row = ({ hit }: { hit: Hit<Product> }) => {
+  const id = hit.objectID || hit.id;
+
   const imageUrl = hit.images && hit.images.length > 0 ? hit.images[0] : 'defaultImageURL'; // Provide a default image URL or logic here
   return hit.metadata ? (
     <Link
-      to={`/product/${hit.id}`}
+      to={`/product/${id}`}
       className="flex items-center px-4 py-4 hover:bg-gray-50"
-      onClick={(e) => e.stopPropagation()}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
     >
       <div className="flex-shrink-0 w-16 mr-4">
         <img src={imageUrl} alt={hit.name} className="object-cover w-16 h-16 rounded" />

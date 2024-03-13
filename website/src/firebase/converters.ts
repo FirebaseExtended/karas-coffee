@@ -45,6 +45,50 @@ export const productConverter: FirestoreDataConverter<Product> = {
   },
 };
 
+export const purchaseHistoryConverter: FirestoreDataConverter<Product> = {
+  fromFirestore(snapshot): Product {
+    const data = snapshot.data();
+
+    return {
+      id: snapshot.id,
+      name: data.name || '',
+      role: data.role,
+      tax_code: data.tax_code,
+      active: !!data.active,
+      description: data.description || '',
+      images: data.images || [],
+      metadata: {
+        type: data.metadata?.type ?? '',
+        origin: data.metadata?.origin ?? '',
+        strength: data.metadata?.strength ?? '',
+        variety: data.metadata?.variety ?? '',
+        price: data.metadata?.price ?? '',
+        price_usd: data.metadata?.price_usd ?? '',
+        weight: data.metadata?.weight ?? '0g',
+      },
+    };
+  },
+  toFirestore(product: Product) {
+    return {
+      name: product.name,
+      role: product.role,
+      tax_code: product.tax_code,
+      active: product.active,
+      description: product.description,
+      images: product.images,
+      metadata: {
+        type: product.metadata.type,
+        origin: product.metadata.type === 'coffee' ? product.metadata.origin : undefined,
+        strength: product.metadata.type === 'coffee' ? product.metadata.strength : undefined,
+        variety: product.metadata.type === 'coffee' ? product.metadata.variety : undefined,
+        price: product.metadata.price,
+        price_usd: product.metadata.price_usd,
+        weight: product.metadata.weight,
+      },
+    };
+  },
+};
+
 export const reviewConverter: FirestoreDataConverter<Review> = {
   fromFirestore(snapshot): Review {
     const data = snapshot.data();
