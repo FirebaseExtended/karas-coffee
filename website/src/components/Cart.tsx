@@ -25,8 +25,10 @@ export function Cart() {
   const user = useUser();
   const { cart } = useCart();
 
+  const isAnon = user.data?.isAnonymous;
+
   // Require the user to sign-in to go to the checkout.
-  const href = !!user.data ? '/checkout' : '/signin?redirect=/checkout';
+  const href = !!user.data && !isAnon ? '/checkout' : '/signin?redirect=/checkout';
 
   return (
     <Link to={href} className="group relative w-10 h-10 flex items-center justify-center">

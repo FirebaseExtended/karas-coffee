@@ -17,7 +17,11 @@
 import React from 'react';
 import { FormikErrors, useFormik } from 'formik';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useAuthSignInAnonymously, useAuthSignInWithEmailAndPassword } from '@react-query-firebase/auth';
+import {
+  useAuthLinkWithCredential,
+  useAuthSignInAnonymously,
+  useAuthSignInWithEmailAndPassword,
+} from '@react-query-firebase/auth';
 
 import { Card } from '../components/Card';
 import { Input, Error, Divider } from '../components/Form';
@@ -43,6 +47,8 @@ export function SignIn() {
       navigate(redirect || '/');
     },
   });
+
+  const linkMutation = useAuthLinkWithCredential();
 
   const [params] = useSearchParams();
   const redirect = params.get('redirect');
@@ -122,7 +128,7 @@ export function SignIn() {
             reset every 24 hours.
           </p>
         </div>
-        <Divider>Or sign in anonymously</Divider>
+        {/* <Divider>Or sign in anonymously</Divider>
         <Button
           onClick={() => {
             signInAnonymously.mutate({ email: '', password: '' });
@@ -130,7 +136,7 @@ export function SignIn() {
           loading={signIn.isLoading}
         >
           Sign in Anonymously
-        </Button>
+        </Button> */}
       </Card>
     </section>
   );

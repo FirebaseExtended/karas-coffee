@@ -26,13 +26,14 @@ import { App } from './App';
 import { loadBundle } from 'firebase/firestore';
 import { firestore } from './firebase';
 import { CookiePolicy } from './components/CookiePolicy';
-
+import { signInAnonymously } from 'firebase/auth';
+import { auth } from './firebase';
 const client = new QueryClient();
 
 async function bootstrap(): Promise<void> {
+  await signInAnonymously(auth);
   // Define any bundles to pre-load.
   // const bundles = await Promise.all([fetch('/bundles/shop')]);
-
   // // Load the bundles into Firestore.
   // await Promise.all(bundles.map((bundle) => loadBundle(firestore, bundle.body!)));
 }

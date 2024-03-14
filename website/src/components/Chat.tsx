@@ -8,6 +8,9 @@ import { Link, useLocation } from 'react-router-dom';
 type FirestoreMessage = {
   prompt: string;
   response: string;
+  status: {
+    state: 'ERROR' | 'COMPLETED' | 'PROCESSING';
+  };
 };
 
 type Message = {
@@ -18,10 +21,20 @@ type Message = {
   };
 };
 
-const firestoreMessageToMessage = ({ prompt, response }: FirestoreMessage): [Message, Message] => [
-  { text: prompt, user: { id: 'user', name: 'User' } },
-  { text: response, user: { id: 'karabot', name: 'Karabot' } },
-];
+const firestoreMessageToMessage = ({ prompt, response, status }: FirestoreMessage): [Message, Message] => {
+  let displayedResponse = response;
+
+  const state = status.state;
+
+  if (state === 'ERROR') {
+    displayedResponse = 'Sorry, I am not able to process your request at the moment. Please try again later.';
+  }
+
+  return [
+    { text: prompt, user: { id: 'user', name: 'User' } },
+    { text: displayedResponse, user: { id: 'karabot', name: 'Karabot' } },
+  ];
+};
 
 interface ChatProps {
   isOpen: boolean;
@@ -43,7 +56,7 @@ export function Chat({ isOpen }: ChatProps) {
       const transformedMessages = chat.data.map(firestoreMessageToMessage).flat();
       setMessages(transformedMessages);
     }
-  }, [chat.isSuccess, chat.data]);
+  }, [chat.isSuccess, chat.data, chat.isLoading]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -54,6 +67,16 @@ export function Chat({ isOpen }: ChatProps) {
   }, [isOpen]);
 
   const handleSendMessage = (text: string) => {
+    setMessages([
+      ...messages,
+      {
+        text,
+        user: {
+          id: 'user',
+          name: 'User',
+        },
+      },
+    ]);
     // build context from past purchases and current vector search results
 
     // const newVectorSearchQuery = [...messages.map((message) => message.text), text].join('\n');

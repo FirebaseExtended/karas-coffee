@@ -136,63 +136,6 @@ const SearchInput = ({ placeholder, handleQueryChange, onFocus, onBlur }: any) =
   );
 };
 
-const CustomSearchComponent = ({ query }: { query: string }) => {
-  // change the debounce time according to your needs
-  const debouncedQuery = useDebounce(query, 1000);
-
-  const results = useCustomSearch(debouncedQuery, 3);
-
-  if (results.isLoading) return <div>Loading...</div>;
-  if (results.isError) return <div>Error: {results.error.message}</div>;
-  const hits = results.data;
-
-  return (
-    <div>
-      {/* Adjusted for positioning of search results */}
-      {hits && hits.length > 0 ? (
-        <div
-          className="absolute z-10 mt-16 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]"
-          onClick={(e) => e.preventDefault()}
-        >
-          {hits.map((hit) => (
-            <Row key={hit.id} hit={hit as Hit<Product>} />
-          ))}
-        </div>
-      ) : (
-        <div className="absolute z-10 mt-16 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]">
-          <div className="flex items-center justify-center p-20 text-gray-600">Sorry, no results were found.</div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const AlgoliaSearchComponent = ({ query }: { query: string }) => {
-  const { hits } = useHits<any>();
-
-  // Ensure Configure is outside the conditional rendering to always apply the query configuration
-  return (
-    <>
-      <Configure query={query} hitsPerPage={3} />
-      {/* Adjusted for positioning of search results */}
-      {hits && hits.length > 0 ? (
-        <div
-          onClick={(e) => e.preventDefault()}
-          className="absolute z-10 mt-16 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]"
-        >
-          {hits.map((hit) => (
-            <Row key={hit.objectID} hit={hit} />
-          ))}
-        </div>
-      ) : (
-        <div className="absolute z-10 mt-16 border bg-white rounded shadow-xl w-[600px] max-h-[400px] overflow-y-auto transform translate-x-[-50%] left-[50%]">
-          <div className="flex items-center justify-center p-20 text-gray-600">Sorry, no results were found.</div>
-        </div>
-      )}
-    </>
-  );
-};
-
 const Row = ({ hit }: { hit: Hit<Product> }) => {
   const id = hit.objectID || hit.id;
 

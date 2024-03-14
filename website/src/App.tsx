@@ -48,6 +48,7 @@ export function App() {
   if (user.isLoading) {
     return <div />;
   }
+  const isAnon = user.data?.isAnonymous;
   return (
     <>
       <Header setChatOpenState={() => setChatOpened(!chatOpened)} />
@@ -77,7 +78,7 @@ export function App() {
               <Route path="checkout/shipping" element={<Shipping />} />
             </>
           )}
-          {!user.data && (
+          {(!user.data || isAnon) && (
             <>
               <Route path="signin" element={<SignIn />} />
               <Route path="register" element={<Register />} />

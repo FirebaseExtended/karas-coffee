@@ -17,13 +17,15 @@
 import React from 'react';
 import { FormikErrors, useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthCreateUserWithEmailAndPassword } from '@react-query-firebase/auth';
+import { useAuthCreateUserWithEmailAndPassword, useAuthLinkWithCredential } from '@react-query-firebase/auth';
 
 import { Card } from '../components/Card';
 import { Input, Error, Divider } from '../components/Form';
 import { SocialProviders } from '../components/SocialProviders';
 import { auth } from '../firebase';
 import { Button } from '../components/Button';
+import { EmailAuthProvider } from 'firebase/auth';
+import { useUser } from '../hooks/useUser';
 
 type FormValues = {
   email: string;
@@ -38,6 +40,8 @@ export function Register() {
       navigate('/');
     },
   });
+
+  const linkMutation = useAuthLinkWithCredential();
 
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -57,6 +61,15 @@ export function Register() {
         email: values.email,
         password: values.password,
       });
+
+      const credential = EmailAuthProvider.credential(values.email, values.password);
+
+      if (!auth.currentUser) {
+        console.log('no current user');
+        return;
+      }
+
+      linkMutation.mutate({ user: auth.currentUser, credential: credential });
     },
   });
 
