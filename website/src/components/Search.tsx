@@ -151,7 +151,7 @@ const Row = ({ hit }: { hit: Hit<Product> }) => {
       <div className="flex-shrink-0 w-16 mr-4">
         <img src={imageUrl} alt={hit.name} className="object-cover w-16 h-16 rounded" />
       </div>
-      <div>
+      <div className="w-full">
         <div className="flex items-center text-lg font-semibold">
           <h3 className="flex-grow">{hit.name}</h3>
           <div>{hit.metadata.price_usd}</div>

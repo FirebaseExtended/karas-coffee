@@ -9,7 +9,7 @@ export function useVectorSearch(queryString: string, limit: number) {
       query: string;
       limit: number;
     },
-    { ids: string[] }
+    string[]
   >(
     ['concierge', queryString],
     functions,
@@ -24,7 +24,7 @@ export function useVectorSearch(queryString: string, limit: number) {
     },
   );
 
-  const ids = vectorSearchResults.data?.ids;
+  const ids = vectorSearchResults.data;
 
   const q = ids ? query(collections.products, where('id', 'in', ids)) : query(collections.products);
 

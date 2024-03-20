@@ -232,7 +232,7 @@ type RecommendationsProps = {
 function Recommendations({ title, query, pid }: RecommendationsProps) {
   // todo: use vector search here
 
-  const products = useVectorSearch(query, 4);
+  const products = useVectorSearch(query, 5);
 
   if (products.isLoading || products.isError) {
     return (
@@ -252,7 +252,10 @@ function Recommendations({ title, query, pid }: RecommendationsProps) {
       <Heading>{title}</Heading>
       <section className="flex-row lg:grid lg:flex-col lg:grid-cols-4 lg:gap-x-6 lg:gap-y-12">
         {!products.isSuccess && emptyArray(4).map((_, i) => <ProductCardSkeleton key={i} />)}
-        {products.isSuccess && products.data.map((product) => <ProductCard key={product.id} product={product} />)}
+        {products.isSuccess &&
+          products.data
+            .filter((p) => p.id !== pid)
+            .map((product) => <ProductCard key={product.id} product={product} />)}
       </section>
     </div>
   );
