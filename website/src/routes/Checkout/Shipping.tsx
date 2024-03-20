@@ -26,6 +26,8 @@ import { useRatesCalculation } from '../../hooks/useRatesCalculation';
 import { ShippingRate, Address, Shipment } from '../../types';
 import { emptyArray } from '../../utils';
 import { Skeleton } from '../../components/Skeleton';
+import { useUser } from '../../hooks/useUser';
+import { Link } from 'react-router-dom';
 
 export function Shipping() {
   const { cart } = useCart();
@@ -34,7 +36,7 @@ export function Shipping() {
   const [address, setAddress] = useState<Address | null>(null);
   const [rate, setRate] = useState<ShippingRate | null>(null);
   const shipment = useRef<Shipment>();
-
+  const user = useUser();
   async function onPlaceOrder() {
     if (!address) return;
     if (!rate) return;
@@ -119,10 +121,18 @@ export function Shipping() {
                 </>
               }
             />
-
-            <Button disabled={!rate} loading={checkout.loading} onClick={onPlaceOrder}>
-              Place Order &rarr;
-            </Button>
+            {user.data && !user.data.isAnonymous ? (
+              <Button disabled={!rate || !user.data} loading={checkout.loading} onClick={onPlaceOrder}>
+                Place Order &rarr;
+              </Button>
+            ) : (
+              <Link
+                className="relative w-full flex justify-center py-1 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                to={'/signin?redirect=/checkout'}
+              >
+                Sign in to place order
+              </Link>
+            )}
           </div>
         </div>
       )}

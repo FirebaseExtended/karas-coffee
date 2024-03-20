@@ -77,10 +77,6 @@ export function Chat({ isOpen }: ChatProps) {
         },
       },
     ]);
-    // build context from past purchases and current vector search results
-
-    // const newVectorSearchQuery = [...messages.map((message) => message.text), text].join('\n');
-
     chatMutation.mutate({ prompt: text, searchQuery: text });
   };
 

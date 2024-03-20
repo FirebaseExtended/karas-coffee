@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-import * as functions from 'firebase-functions';
+import * as firebaseFunctions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 // @ts-expect-error No types for firebase-tools
 import * as firebase_tools from 'firebase-tools';
+
+const functions = firebaseFunctions.region('europe-west3');
 
 admin.initializeApp();
 
@@ -42,7 +44,7 @@ function deleteCollection(path: string): Promise<void> {
 }
 
 // Send a welcome email on user create.
-exports.onAuthCreate = functions.auth.user().onCreate(async (user: functions.auth.UserRecord) => {
+exports.onAuthCreate = functions.auth.user().onCreate(async (user: firebaseFunctions.auth.UserRecord) => {
   const collection = admin.firestore().collection('mail');
   await collection.add({ to: user.email, template: { name: 'welcome_email' } });
 });
@@ -54,7 +56,7 @@ exports.onPaymentCreated = functions.firestore
     const customerId = context.params.customerId;
     const user = await admin.auth().getUser(customerId);
     if (!user.phoneNumber) {
-      functions.logger.log('No phone number found for user, skipping sending update.', user.uid);
+      firebaseFunctions.logger.log('No phone number found for user, skipping sending update.', user.uid);
       return;
     }
     const message = {

@@ -28,6 +28,10 @@
     }
   },
   "extensions": {
-    "firestore-genai-chatbot": "../firestore-genai-chatbot"
+    "firestore-genai-chatbot": "../firestore-genai-chatbot",
+    "firestore-vector-search": "../firestore-vector-search"
+  },
+  "functions": {
+    "source": "../functions"
   }
 }

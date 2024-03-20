@@ -51,14 +51,17 @@ export function useChatMutation(): UseMutationResult<any, Error, any> {
       let context: string = await getContext({ purchaseHistory });
 
       if (searchQuery) {
-        const vectorSearch = httpsCallable(functions, 'ext-firestore-vector-search-queryCallable');
+        const vectorSearch = httpsCallable<{ query: string; limit: number }, string[]>(
+          functions,
+          'ext-firestore-vector-search-queryCallable',
+        );
 
         const { data } = await vectorSearch({
           query: searchQuery,
           limit: 6,
         });
-        // @ts-ignore
-        const q = data.ids ? query(collections.products) : query(collections.products, where('id', 'in', data.ids));
+        const q =
+          data && data.length > 0 ? query(collections.products, where('id', 'in', data)) : query(collections.products);
 
         const vectorSearchProducts = await getDocs(q);
 

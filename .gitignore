@@ -8,3 +8,5 @@ node_modules
 dist
 dist-ssr
 *.local
+firestore-vector-search
+firestore-genai-chatbot
