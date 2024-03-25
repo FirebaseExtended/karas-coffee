@@ -51,8 +51,8 @@ export const firestore = getFirestore(app);
 export const storage = getStorage(app);
 export const functions = getFunctions(app);
 
-// connectFirestoreEmulator(firestore, 'localhost', 8080);
-// connectFunctionsEmulator(functions, 'localhost', 5001);
+connectFirestoreEmulator(firestore, 'localhost', 8080);
+connectFunctionsEmulator(functions, 'localhost', 5001);
 
 export const collections = {
   products: collection(firestore, 'products').withConverter(productConverter),

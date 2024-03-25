@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 export const Switch = ({ onChange }: any) => {
   const [isOn, setIsOn] = useState(false);
 
-  const toggleSwitch = () => {
+  const toggleSwitch = (e: any) => {
+    e.stopPropagation();
     onChange(!isOn);
     setIsOn(!isOn);
   };
@@ -24,12 +25,14 @@ export const Switch = ({ onChange }: any) => {
           />
           {/* Switch background */}
           <div
+            id="conceirge-bg"
             className={`block w-10 h-5 rounded-full shadow-inner transition-bg duration-300 ${
               isOn ? 'bg-green-400' : 'bg-gray-300'
             }`}
           ></div>
           {/* Switch knob */}
           <div
+            id="conceirge-dot"
             className={`dot absolute left-0.5 top-0.5 bg-white w-4 h-4 rounded-full shadow transition-transform duration-300 ease-in-out ${
               isOn ? 'transform translate-x-full translate-x-[20px]' : '' // Adjusted translation distance
             }`}

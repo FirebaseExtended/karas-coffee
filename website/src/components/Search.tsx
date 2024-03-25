@@ -23,9 +23,12 @@ import { Hit } from 'react-instantsearch-core';
 import { Product } from '../types';
 import { Link } from 'react-router-dom';
 import { useDebounce } from '../hooks/useDebounce';
+import { useOnClickOutside } from '../hooks/useOnClickOutside';
 const searchClient = algoliasearch('Z7DKWT901V', 'c529b90d287423b1f926506fb74307ff');
 
 export const SearchPage = () => {
+  const myComponentRef = useRef<HTMLDivElement>(null);
+
   const [query, setQuery] = useState('');
   const [conciergeEnabled, setConciergeEnabled] = useState(false);
 
@@ -38,22 +41,31 @@ export const SearchPage = () => {
     setConciergeEnabled(isOn);
   };
 
+  const closeModal = (event: MouseEvent | TouchEvent) => {
+    if (
+      event.target instanceof HTMLElement &&
+      ['conceirge-switch', 'conceirge-dot', 'conceirge-bg'].includes(event.target.id)
+    ) {
+      return;
+    }
+    setTimeout(() => setFocussed(false), 300);
+  };
+
+  useOnClickOutside<HTMLDivElement>(myComponentRef, closeModal);
+
   return (
     <div
       className={`relative w-full max-w-[800px]  border rounded ${focussed ? 'border-gray-500' : ''} grid grid-cols-4`}
     >
       <InstantSearch searchClient={searchClient} indexName="products">
-        <SearchInput
-          handleQueryChange={handleQueryChange}
-          placeholder={conciergeEnabled ? 'Search...' : 'Search...'}
-          onFocus={() => setFocussed(true)}
-          onBlur={() => {
-            // Allow the link event to fire before triggering the blur event
-            // setTimeout(() => {
-            setFocussed(false);
-            // }, 500);
-          }}
-        />
+        <div className="w-full h-full bg-indigo-100 col-span-3" ref={myComponentRef}>
+          <SearchInput
+            className="w-full h-full"
+            handleQueryChange={handleQueryChange}
+            placeholder={conciergeEnabled ? 'Search...' : 'Search...'}
+            onFocus={() => setFocussed(true)}
+          />
+        </div>
         {focussed && <UnifiedSearch query={query} conciergeEnabled={conciergeEnabled} />}
         <div className="p-2 items-center justify-center flex right-0 pr-4 absolute t-4 h-full">
           <Switch id="concierge-switch" onChange={handleSwitch} />
@@ -131,7 +143,7 @@ const SearchInput = ({ placeholder, handleQueryChange, onFocus, onBlur }: any) =
       onFocus={onFocus}
       onBlur={onBlur}
       placeholder={placeholder}
-      className="relative col-span-3 p-2 pl-4 focus:outline-none"
+      className="relative w-full h-full p-2 pl-4 focus:outline-none"
     />
   );
 };
@@ -145,7 +157,7 @@ const Row = ({ hit }: { hit: Hit<Product> }) => {
       to={`/product/${id}`}
       className="flex items-center px-4 py-4 hover:bg-gray-50"
       onClick={(e) => {
-        e.stopPropagation();
+        // e.preventDefault();
       }}
     >
       <div className="flex-shrink-0 w-16 mr-4">

@@ -29,7 +29,7 @@ import { CookiePolicy } from './components/CookiePolicy';
 import { signInAnonymously } from 'firebase/auth';
 import { auth } from './firebase';
 const client = new QueryClient();
-
+import './styles/bouncing.css';
 async function bootstrap(): Promise<void> {
   await signInAnonymously(auth);
   // Define any bundles to pre-load.

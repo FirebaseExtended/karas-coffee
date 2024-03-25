@@ -88,6 +88,10 @@ export function useChatMutation(): UseMutationResult<any, Error, any> {
         chatCollection.forEach(async (doc) => {
           await deleteDoc(doc.ref);
         });
+
+        await addDoc(collections.chat(uid), {
+          prompt: 'Hi!',
+        });
       }
 
       return documentRef.id;
@@ -158,6 +162,8 @@ async function getContext({
   Always ensure the information you provide is accurate and refrain from guessing. Do not mention any products that are not listed in this message.\\n
 
   The categories of products we sell are coffee beans, coffee machines, and coffee subscriptions. We do not sell grinders. If we sell an item, it will be listed in this conversation already.\\n
+
+  Keep your replies concise and to the point. \\n
 
   The conversation will start imminently. Prepare to be engaging and informative. \\n
   `;

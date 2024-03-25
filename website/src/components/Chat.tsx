@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { MinChatUiProvider, MessageInput, MessageContainer, MessageList } from '@minchat/react-chat-ui';
+import { MinChatUI } from '@minchat/reactui';
+
 import { useChat } from '../hooks/useChat';
 import { useUser } from '../hooks/useUser';
 import { useChatMutation } from '../hooks/useChatMutation';
 import { User } from 'firebase/auth';
 import { Link, useLocation } from 'react-router-dom';
+import { Props } from '@minchat/react-chat-ui/dist/components/message-container';
+//@ts-expect-error
+import ReactAnimatedEllipsis from 'react-animated-ellipsis';
+import { AnimatedDots } from './AnimatedDots';
+
 type FirestoreMessage = {
   prompt: string;
   response: string;
@@ -21,13 +28,22 @@ type Message = {
   };
 };
 
-const firestoreMessageToMessage = ({ prompt, response, status }: FirestoreMessage): [Message, Message] => {
+const firestoreMessageToMessage = ({ prompt, response, status }: FirestoreMessage): [Message] | [Message, Message] => {
   let displayedResponse = response;
 
   const state = status.state;
 
   if (state === 'ERROR') {
     displayedResponse = 'Sorry, I am not able to process your request at the moment. Please try again later.';
+  }
+
+  if (!prompt) {
+    return [
+      {
+        text: displayedResponse,
+        user: { id: 'karabot', name: 'Karabot' },
+      },
+    ];
   }
 
   return [
@@ -79,29 +95,35 @@ export function Chat({ isOpen }: ChatProps) {
     ]);
     chatMutation.mutate({ prompt: text, searchQuery: text });
   };
+  const [, ...displayedMessages] = messages.filter((m) => !!m.text);
+
+  useEffect(() => {
+    const chatContainer = document.getElementById('chat-messages-container');
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+  }, [displayedMessages]);
 
   const isTyping = () => {
-    const lastMessage = messages[messages.length - 1];
-
-    return lastMessage?.user.id === 'karabot' && lastMessage.text === undefined;
+    const lastMessage = displayedMessages[displayedMessages.length - 1];
+    // return lastMessage?.user.id === 'karabot' && lastMessage.text === undefined;
+    return !lastMessage?.user || lastMessage?.user.id === 'user';
   };
 
   return (
     <div className={['/signin', '/forgot-password', '/register'].includes(location.pathname) ? 'hidden' : ''}>
       <div
-        className={` w-1/3 fixed bg-gray-300 h-[calc(100vh-5rem)] rounded top-20 -right-3 z-1000 p-2 transition duration-700 ${
+        className={`w-1/3 fixed bg-gray-300 h-[calc(100vh-5rem)] rounded top-20 -right-3 z-1000 p-2 transition duration-700 ${
           isOpen ? 'translate-x-[0]' : 'translate-x-[100%]'
         }`}
       >
-        <MinChatUiProvider theme="#6ea9d7" colorSet={myColorSet}>
-          <MessageContainer>
-            <MessageList
-              currentUserId="user"
-              messages={messages.filter((m) => !!m.text)}
-              customEmptyMessagesComponent={emptyMessageComponent(user.data)}
-              // customTypingIndicatorComponent={() => <div>Typing...</div>}
-              showTypingIndicator={isTyping()}
-            />
+        <div id="chat-container" className="w-full h-full flex flex-col">
+          <MinChatUiProvider theme="#6ea9d7" colorSet={myColorSet}>
+            {/* Chat message list container grows to fill available space, pushing input to bottom */}
+            <div id="chat-messages-container" className="flex-grow overflow-y-scroll bg-[#111827]">
+              <ChatMessagesList isTyping={isTyping()} messages={displayedMessages} />
+            </div>
+            {/* Message input stays at the bottom */}
             <MessageInput
               placeholder="Type message here"
               showSendButton
@@ -109,12 +131,36 @@ export function Chat({ isOpen }: ChatProps) {
               onSendMessage={handleSendMessage}
               disabled={!user.isSuccess || !user.data}
             />
-          </MessageContainer>
-        </MinChatUiProvider>
+          </MinChatUiProvider>
+        </div>
       </div>
     </div>
   );
 }
+
+const ChatMessagesList = ({ isTyping, messages }: { isTyping: boolean; messages: Message[] }) => {
+  return (
+    <div className="flex flex-col-reverse overflow-auto">
+      <ul className="space-y-2 p-4">
+        {messages.map((message, index) => (
+          <li
+            key={index}
+            className={`w-2/3  break-words bg-gray-800 text-white ${
+              message.user.id === 'user' ? 'ml-auto' : ''
+            } p-2 rounded-lg`}
+          >
+            {message.text}
+          </li>
+        ))}
+        {isTyping && (
+          <div className="w-full flex">
+            <AnimatedDots />
+          </div>
+        )}
+      </ul>
+    </div>
+  );
+};
 
 const emptyMessageComponent = (user?: User) => {
   if (!user || !user.uid) {
